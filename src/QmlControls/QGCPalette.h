@@ -104,6 +104,10 @@ public:
     Q_PROPERTY(bool         colorGroupEnabled   READ colorGroupEnabled  WRITE setColorGroupEnabled  NOTIFY paletteChanged)
     Q_PROPERTY(QStringList  colors              READ colors             CONSTANT)
 
+    DEFINE_QGC_COLOR(instrumentSky, setInstrumentSky)
+    DEFINE_QGC_COLOR(instrumentGround, setInstrumentGround)
+    DEFINE_QGC_COLOR(instrumentMark, setInstrumentMark)
+
     DEFINE_QGC_COLOR(window,                        setWindow)
     DEFINE_QGC_COLOR(windowTransparent,             setWindowTransparent)
     DEFINE_QGC_COLOR(windowPanel, setWindowPanel)

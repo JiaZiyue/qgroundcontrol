@@ -72,6 +72,14 @@ ColumnLayout {
                     step:           0.05
                 }
                 ListElement {
+                    title:          qsTr("比例增益 P (MC_ROLLRATE_P)")
+                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    param:          "MC_ROLLRATE_P"
+                    min:            0.01
+                    max:            0.5
+                    step:           0.01
+                }
+                ListElement {
                     title:          qsTr("Differential Gain (MC_ROLLRATE_D)")
                     description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
                     param:          "MC_ROLLRATE_D"
@@ -105,6 +113,14 @@ ColumnLayout {
                     step:           0.05
                 }
                 ListElement {
+                    title:          qsTr("比例增益 P (MC_PITCHRATE_P)")
+                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    param:          "MC_PITCHRATE_P"
+                    min:            0.01
+                    max:            0.6
+                    step:           0.01
+                }
+                ListElement {
                     title:          qsTr("Differential Gain (MC_PITCHRATE_D)")
                     description:    qsTr("Damping: increase to reduce overshoots and oscillations, but not higher than really needed.")
                     param:          "MC_PITCHRATE_D"
@@ -136,6 +152,14 @@ ColumnLayout {
                     min:            0.3
                     max:            3
                     step:           0.05
+                }
+                ListElement {
+                    title:          qsTr("比例增益 P (MC_YAWRATE_P)")
+                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    param:          "MC_YAWRATE_P"
+                    min:            0.0
+                    max:            0.6
+                    step:           0.01
                 }
                 ListElement {
                     title:          qsTr("Integral Gain (MC_YAWRATE_I)")

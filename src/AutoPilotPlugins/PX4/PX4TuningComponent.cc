@@ -3,7 +3,7 @@
 #include "Vehicle.h"
 
 PX4TuningComponent::PX4TuningComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownTuningVehicleComponent, parent)
     , _name(tr("PID Tuning"))
 {
 }

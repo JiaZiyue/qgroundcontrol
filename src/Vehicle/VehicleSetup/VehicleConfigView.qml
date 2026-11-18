@@ -230,6 +230,57 @@ Rectangle {
         }
     }
 
+    property bool navigationVisible: true
+    property string _configuratorPage: ""
+
+    function showConfiguratorPage(page) {
+        if (!mainWindow.allowViewSwitch()) {
+            return
+        }
+        _configuratorPage = page
+        _showConfiguratorPage()
+    }
+
+    function _showConfiguratorPage() {
+        if (!_fullParameterVehicleAvailable) {
+            _showSummaryPanel()
+            return
+        }
+        const componentTypes = {
+            airframe: AutoPilotPlugin.KnownAirframeVehicleComponent,
+            motors: AutoPilotPlugin.KnownMotorVehicleComponent,
+            radio: AutoPilotPlugin.KnownRadioVehicleComponent,
+            imu: AutoPilotPlugin.KnownSensorsVehicleComponent,
+            compass: AutoPilotPlugin.KnownSensorsVehicleComponent,
+            ports: AutoPilotPlugin.KnownPortsVehicleComponent,
+            tuning: AutoPilotPlugin.KnownTuningVehicleComponent
+        }
+        const type = componentTypes[_configuratorPage]
+        const component = type !== undefined ? _activeVehicle.autopilotPlugin.findKnownVehicleComponent(type) : null
+        if (component && component.setupSource.toString() !== "") {
+            showVehicleComponentPanel(component)
+            return
+        }
+        const filters = {
+            airframe: "^(FRAME|SYS_AUTOSTART)",
+            motors: "^(SERVO|PWM_|MOT_)",
+            radio: "^RC",
+            ports: "^(SERIAL|MAV_[0-9]|SER_[0-9])",
+            tuning: "^(MC_|FW_|ATC_|PSC_)",
+            ekf: "^(EKF|EK2|EK3|AHRS)",
+            imu: "^(CAL_|INS_|SENS_BOARD)",
+            compass: "^(CAL_MAG|COMPASS)",
+            gps: "^(GPS|SENS_GPS|SER_GPS)",
+            vision: "^(EKF2_EV|EKF2_EVP|EKF2_EVV|EKF2_EVA|VISO|VICON)",
+            flow: "^(SENS_FLOW|SENS_EN_PX4FLOW|EKF2_OF|FLOW)",
+            range: "^(SENS_EN_|SENS_TF|SENS_SF|SENS_VL|RNGFND|EKF2_RNG)"
+        }
+        showParametersPanel()
+        if (panelLoader.item) {
+            panelLoader.item.searchFilterText = filters[_configuratorPage] || ""
+        }
+    }
+
     function showParametersPanel() {
         showPanel("parameters", "qrc:/qml/QGroundControl/VehicleSetup/SetupParameterEditor.qml")
     }
@@ -263,6 +314,9 @@ Rectangle {
         function onParameterReadyVehicleAvailableChanged(parametersReady) {
             if (parametersReady || _selectedSpecial === "summary" || _selectedSpecial !== "firmware") {
                 _showSummaryPanel()
+                if (_configuratorPage !== "") {
+                    _showConfiguratorPage()
+                }
             }
         }
     }
@@ -380,7 +434,8 @@ Rectangle {
 
     ColumnLayout {
         id:                 leftPanel
-        width:              Math.max(buttonColumn.implicitWidth, _fullListWidth, ScreenTools.isMobile ? 0 : ScreenTools.defaultFontPixelWidth * 22)
+        visible:            vehicleConfigView.navigationVisible
+        width:              visible ? Math.max(buttonColumn.implicitWidth, _fullListWidth, ScreenTools.isMobile ? 0 : ScreenTools.defaultFontPixelWidth * 22) : 0
         anchors.topMargin:  _verticalMargin * 1.5
         anchors.bottomMargin: _verticalMargin * 1.5
         anchors.top:        parent.top
@@ -617,7 +672,7 @@ Rectangle {
         objectName:             "vehicleConfig_panelLoader"
         anchors.topMargin:      _verticalMargin
         anchors.bottomMargin:   _verticalMargin
-        anchors.leftMargin:     _horizontalMargin * 4
+        anchors.leftMargin:     vehicleConfigView.navigationVisible ? _horizontalMargin * 4 : _horizontalMargin
         anchors.rightMargin:    _horizontalMargin
         anchors.left:           leftPanel.right
         anchors.right:          parent.right

@@ -41,6 +41,8 @@ QString _px4NavStateName(int state)
     case 20: return QStringLiteral("Precision Land");
     case 21: return QStringLiteral("Orbit");
     case 22: return QStringLiteral("VTOL Takeoff");
+    case 23:
+        return QStringLiteral("T-DT Collision");
     default: return QStringLiteral("Mode %1").arg(state);
     }
 }

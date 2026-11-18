@@ -37,6 +37,9 @@ void QGCPalette::_buildMap()
     //                                      Light                 Dark
     //                                      Disabled   Enabled    Disabled   Enabled
     // Surfaces nest window -> windowPanel -> windowCard; windowInset is for input wells inside any of them
+    DECLARE_QGC_COLOR(instrumentSky,        "#508fd6", "#508fd6", "#508fd6", "#508fd6")
+    DECLARE_QGC_COLOR(instrumentGround,     "#1c2638", "#1c2638", "#1c2638", "#1c2638")
+    DECLARE_QGC_COLOR(instrumentMark,       "#00ccea", "#00ccea", "#00ccea", "#00ccea")
     DECLARE_QGC_COLOR(window,               "#f2f3f5", "#f2f3f5", "#0b0d10", "#0b0d10")
     DECLARE_QGC_COLOR(windowTransparent,    "#ccf2f3f5", "#ccf2f3f5", "#cc0b0d10", "#cc0b0d10")
     DECLARE_QGC_COLOR(windowPanel,          "#ffffff", "#ffffff", "#121519", "#121519")

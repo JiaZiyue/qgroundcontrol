@@ -30,6 +30,7 @@ class OnboardLogController : public QObject
     Q_PROPERTY(bool               allLogsSelected      READ allLogsSelected                                     NOTIFY selectionChanged)
     Q_PROPERTY(int                selectedCount        READ selectedCount                                       NOTIFY selectionChanged)
     Q_PROPERTY(bool               sortAscending        READ sortAscending          WRITE setSortAscending       NOTIFY sortAscendingChanged)
+    Q_PROPERTY(bool sortById READ sortById WRITE setSortById NOTIFY sortByIdChanged)
     Q_PROPERTY(bool               compressLogs         READ compressLogs           WRITE setCompressLogs        NOTIFY compressLogsChanged)
     Q_PROPERTY(bool               compressing          READ compressing                                         NOTIFY compressingChanged)
     Q_PROPERTY(float              compressionProgress  READ compressionProgress                                 NOTIFY compressionProgressChanged)
@@ -59,6 +60,10 @@ public:
     bool sortAscending() const { return _sortAscending; }
     void setSortAscending(bool ascending);
 
+    bool sortById() const { return _sortById; }
+
+    void setSortById(bool byId);
+
     /// Transport currently used to list/download logs: "messages" (LOG_* messages) or "ftp" (MAVLink FTP)
     QString transport() const { return (_transport == Transport::Ftp) ? QStringLiteral("ftp") : QStringLiteral("messages"); }
 
@@ -75,6 +80,7 @@ signals:
     void selectionChanged();
     void compressLogsChanged();
     void sortAscendingChanged();
+    void sortByIdChanged();
     void compressingChanged();
     void compressionProgressChanged();
     void compressionComplete(const QString &outputPath, const QString &error);
@@ -151,6 +157,7 @@ private:
     bool _compressing = false;
     float _compressionProgress = 0.0F;
     bool _sortAscending = false;
+    bool _sortById = false;
 
     Transport _transport = Transport::Messages;
     bool _ftpDisabled = false;    ///< Set after an FTP failure; subsequent refreshes use the message transport

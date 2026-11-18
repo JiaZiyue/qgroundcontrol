@@ -18,7 +18,30 @@ qt_add_qml_module(QGroundControlModule
     RESOURCE_PREFIX /qml
     QML_FILES
         MainWindow/MainWindow.qml
+        MainWindow/ConfiguratorConnectionControl.qml
+        MainWindow/ConfiguratorParametersView.qml
+        MainWindow/ConfiguratorAttitude.qml
+        MainWindow/ConfiguratorStatusBar.qml
+        MainWindow/ConfiguratorGpsTrack.qml
+        MainWindow/ConfiguratorSensorPlots.qml
+        MainWindow/ConfiguratorTelemetryPlot.qml
+        MainWindow/ConfiguratorToolsView.qml
+        MainWindow/ConfiguratorView.qml
+        MainWindow/ConfiguratorSettingsView.qml
+        MainWindow/DashboardView.qml
+        MainWindow/DashboardChannelMonitor.qml
         MainWindow/MainWindowSavedState.qml
+    RESOURCES
+        MainWindow/Images/dashboard.svg
+        MainWindow/Images/settings.svg
+        MainWindow/Images/sensors.svg
+        MainWindow/Images/parameters.svg
+        MainWindow/Images/messages.svg
+        MainWindow/Images/mission.svg
+        MainWindow/Images/logs.svg
+        MainWindow/Images/waveforms.svg
+        MainWindow/Images/firmware.svg
+        MainWindow/Images/hardware.svg
     IMPORTS
         QGC
     NO_PLUGIN

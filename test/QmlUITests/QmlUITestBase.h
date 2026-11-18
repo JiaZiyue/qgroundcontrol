@@ -61,7 +61,8 @@ protected:
     /// first-run prompts, registers image providers, and waits for the window
     /// to be exposed. Uses QVERIFY internally — check QTest::currentTestFailed()
     /// on return to propagate failures to the calling test slot.
-    void startUI();
+    /// Existing view tests start in Fly; pass false to test the default dashboard.
+    void startUI(bool showFlyView = true);
 
     /// Makes the next startUI() load \a replacement wherever the UI loads \a original, so a test can stand in
     /// for a QML file which custom builds override. Overrides are cleared after each test.

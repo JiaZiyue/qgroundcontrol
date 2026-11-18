@@ -1,14 +1,23 @@
 #include "TopLevelViewsTest.h"
 
-#include <QtCore/QScopeGuard>
-#include <QtQuick/QQuickItem>
-#include <QtTest/QTest>
-
 #include <algorithm>
 
+#include <QtCore/QScopeGuard>
+#include <QtQuick/QQuickItem>
+#include <QtQuick/QQuickWindow>
+#include <QtTest/QTest>
+
+#include "AppSettings.h"
 #include "Fact.h"
+#include "LinkManager.h"
+#include "MockConfiguration.h"
+#include "MockLink.h"
+#include "ParameterEditorController.h"
+#include "ParameterManager.h"
 #include "ScreenToolsController.h"
 #include "SettingsManager.h"
+#include "Vehicle.h"
+#include "VehicleGPSFactGroup.h"
 #include "VideoSettings.h"
 
 UT_REGISTER_TEST(TopLevelViewsTest, TestLabel::Integration)
@@ -121,6 +130,216 @@ QQuickItem* TopLevelViewsTest::_clickSettingsButton(const QString& pageName)
         return nullptr;
     }
     return button;
+}
+
+void TopLevelViewsTest::_testVideoNavigation()
+{
+    startUI(false);
+    if (QTest::currentTestFailed()) {
+        return;
+    }
+    _window->resize(1600, 1000);
+    for (const QString& page : {QStringLiteral("messages"), QStringLiteral("logs"), QStringLiteral("waveforms"),
+                                QStringLiteral("hardware")}) {
+        QVERIFY(clickButton(QStringLiteral("sidebar_") + page));
+        QVERIFY(verifyPrimary(QStringLiteral("sidebar_") + page, true, page));
+    }
+    QVERIFY(clickButton(QStringLiteral("sidebar_logs")));
+    QVERIFY(clickButton(QStringLiteral("configurator_toolTab_1")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("logViewer_open")));
+    QVERIFY(clickButton(QStringLiteral("sidebar_mission")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_plan")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("sidebar_dashboard")));
+    QVERIFY(clickButton(QStringLiteral("sidebar_dashboard")));
+    QVERIFY(!findVisibleItem(_rootItem, QStringLiteral("mainView_plan"), 0));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("connection_selector")));
+}
+
+void TopLevelViewsTest::_testManualConnection()
+{
+    startUI(false);
+    if (QTest::currentTestFailed()) {
+        return;
+    }
+    _window->resize(1600, 1000);
+    auto* const rawConfig = new MockConfiguration(QStringLiteral("Manual connection test"));
+    rawConfig->setDynamic(true);
+    const auto config = LinkManager::instance()->addConfiguration(rawConfig);
+    const auto cleanup = qScopeGuard([config] {
+        LinkManager::instance()->disconnectLinkConfiguration(config.get());
+        LinkManager::instance()->removeConfiguration(config.get());
+    });
+    QVERIFY(clickButton(QStringLiteral("connection_toggle")));
+    QVERIFY(clickButton(QStringLiteral("connection_option_Manual connection test")));
+    QVERIFY(verifyText(QStringLiteral("connection_selector"), config->name(), QStringLiteral("Selected link")));
+    QTRY_VERIFY_WITH_TIMEOUT(config->linkActive(), TestTimeout::mediumMs());
+    QVERIFY(
+        verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("断开"), QStringLiteral("Connected link")));
+    QVERIFY(clickButton(QStringLiteral("connection_toggle")));
+    QTRY_VERIFY_WITH_TIMEOUT(!config->linkActive(), TestTimeout::mediumMs());
+    QVERIFY(config->suppressAutoReconnect());
+    QVERIFY(verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("连接"),
+                       QStringLiteral("Disconnected link")));
+}
+
+void TopLevelViewsTest::_testDashboard()
+{
+    startUI(false);
+    if (QTest::currentTestFailed()) {
+        return;
+    }
+
+    _window->resize(1600, 1000);
+    QTRY_COMPARE(_rootItem->width(), 1600);
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_dashboard")));
+    QVERIFY(!findVisibleItem(_rootItem, QStringLiteral("mainView_fly"), 0));
+    QVERIFY(clickButtonScrolled(QStringLiteral("dashboard_sensor_3"), QStringLiteral("dashboard_scroll")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("dashboard_sensorDetails")));
+    QTest::keyClick(_window, Qt::Key_Escape);
+
+    QVERIFY(clickButtonScrolled(QStringLiteral("dashboard_quick_0"), QStringLiteral("dashboard_scroll")));
+    QQuickItem* const selector = findVisibleItem(_rootItem, QStringLiteral("dashboard_quickSelector"));
+    QVERIFY(selector);
+    QVERIFY(selector->setProperty("currentIndex", 10));
+    QObject* const dialog = _window->findChild<QObject*>(QStringLiteral("dashboard_quickDialog"));
+    QVERIFY(dialog);
+    QVERIFY(QMetaObject::invokeMethod(dialog, "accept"));
+    QVERIFY(verifyText(QStringLiteral("dashboard_quick_0"), QString::fromUtf8("油门百分比"),
+                       QStringLiteral("Quick telemetry selection")));
+    QVERIFY(clickToolSelectDropdownButton(QStringLiteral("toolbar_viewFly")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_fly")));
+    QVERIFY(clickToolSelectDropdownButton(QStringLiteral("toolbar_viewDashboard")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_dashboard")));
+}
+
+void TopLevelViewsTest::_testConfiguratorSidebar()
+{
+    startUI(false);
+    if (QTest::currentTestFailed()) {
+        return;
+    }
+    _window->resize(1600, 1000);
+    QVERIFY(clickButton(QStringLiteral("sidebar_settings")));
+    for (const QString& page : {QStringLiteral("airframe"), QStringLiteral("motors"), QStringLiteral("radio"),
+                                QStringLiteral("ports"), QStringLiteral("tuning"), QStringLiteral("ekf")}) {
+        QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
+        QVERIFY(verifyPrimary(QStringLiteral("configurator_tab_") + page, true, page));
+    }
+    QVERIFY(clickButton(QStringLiteral("sidebar_sensors")));
+    for (const QString& page : {QStringLiteral("imu"), QStringLiteral("compass"), QStringLiteral("gps"),
+                                QStringLiteral("vision"), QStringLiteral("flow"), QStringLiteral("range")}) {
+        QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
+        QVERIFY(verifyPrimary(QStringLiteral("configurator_tab_") + page, true, page));
+    }
+    QVERIFY(clickButton(QStringLiteral("sidebar_parameters")));
+    QVERIFY(verifyPrimary(QStringLiteral("sidebar_parameters"), true, QStringLiteral("Parameters navigation")));
+    QVERIFY(clickButton(QStringLiteral("sidebar_dashboard")));
+    QVERIFY(findVisibleItem(_rootItem, QStringLiteral("dashboard_quick_0")));
+}
+
+void TopLevelViewsTest::_testDashboardVehicleLifetime_data()
+{
+    QTest::addColumn<bool>("px4");
+    QTest::newRow("PX4") << true;
+    QTest::newRow("ArduPilot") << false;
+}
+
+void TopLevelViewsTest::_testDashboardVehicleLifetime()
+{
+    QFETCH(bool, px4);
+    runWithMockLink(
+        [px4] { return px4 ? MockLink::startPX4MockLink() : MockLink::startAPMArduCopterMockLink(); },
+        [this](QPointer<MockLink> mockLink, Vehicle* vehicle) {
+            const QPointer<Fact> roll = vehicle->roll();
+            const QPointer<Fact> satellites = vehicle->gpsFactGroup()->count();
+            QVERIFY(QMetaObject::invokeMethod(_window, "showDashboardView"));
+            QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_dashboard")));
+            _window->resize(1600, 1000);
+            QTRY_COMPARE(_rootItem->width(), 1600);
+            QVERIFY(verifyText(QStringLiteral("connection_selector"), mockLink->linkConfiguration()->name(),
+                               QStringLiteral("Automatically selected active link")));
+            QVERIFY(verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("断开"),
+                               QStringLiteral("Active link state")));
+            Fact* const indoorPalette = SettingsManager::instance()->appSettings()->indoorPalette();
+            const QVariant oldPalette = indoorPalette->rawValue();
+            const auto restorePalette =
+                qScopeGuard([indoorPalette, oldPalette] { indoorPalette->setRawValue(oldPalette); });
+            if (qEnvironmentVariableIsSet("QGC_REFERENCE_CAPTURE")) {
+                indoorPalette->setRawValue(0);
+                _window->grabWindow().save(qEnvironmentVariable("QGC_REFERENCE_CAPTURE") +
+                                           QStringLiteral("-dashboard.png"));
+            }
+            QVERIFY(clickButton(QStringLiteral("sidebar_settings")));
+            for (const QString& page : {QStringLiteral("airframe"), QStringLiteral("motors"), QStringLiteral("radio"),
+                                        QStringLiteral("ports"), QStringLiteral("tuning"), QStringLiteral("ekf")}) {
+                QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
+            }
+            QQuickItem* const config = findVisibleItem(_rootItem, QStringLiteral("configurator_vehicleConfig"));
+            QVERIFY(config);
+            QCOMPARE(config->property("_selectedSpecial").toString(), QStringLiteral("parameters"));
+            QVERIFY(clickButton(QStringLiteral("sidebar_sensors")));
+            QQuickItem* const accelerationPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_acceleration"));
+            QVERIFY(accelerationPlot);
+            mavlink_scaled_imu_t imu{};
+            imu.xacc = 1000;
+            imu.yacc = -1000;
+            imu.xgyro = 1000;
+            mavlink_message_t imuMessage{};
+            mavlink_msg_scaled_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                               &imuMessage, &imu);
+            mockLink->respondWithMavlinkMessage(imuMessage);
+            QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
+            if (qEnvironmentVariableIsSet("QGC_REFERENCE_CAPTURE")) {
+                _window->grabWindow().save(qEnvironmentVariable("QGC_REFERENCE_CAPTURE") +
+                                           QStringLiteral("-sensors.png"));
+            }
+            QVERIFY(accelerationPlot->setProperty("paused", true));
+            QVERIFY(QMetaObject::invokeMethod(accelerationPlot, "clear"));
+            QCOMPARE(accelerationPlot->property("sampleCount").toInt(), 0);
+            QVERIFY(accelerationPlot->setProperty("paused", false));
+            QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
+            for (const QString& page : {QStringLiteral("compass"), QStringLiteral("gps"), QStringLiteral("vision"),
+                                        QStringLiteral("flow"), QStringLiteral("range")}) {
+                QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
+            }
+            QVERIFY(clickButton(QStringLiteral("sidebar_parameters")));
+            QQuickItem* const editor = findVisibleItem(_rootItem, QStringLiteral("configurator_parameters"));
+            QVERIFY(editor);
+            QVERIFY(editor->property("functionalDirectory").toBool());
+            auto* const controller =
+                qobject_cast<ParameterEditorController*>(editor->property("_controller").value<QObject*>());
+            QVERIFY(controller);
+            auto* const category = qobject_cast<ParameterEditorCategory*>(controller->currentCategory());
+            QVERIFY(category);
+            QVERIFY(category->groups.count() > 0);
+            auto* const group = category->groups.value<ParameterEditorGroup*>(category->groups.count() - 1);
+            QVERIFY(group);
+            QVERIFY(clickButtonScrolled(QStringLiteral("parameterDirectory_group_") + group->name,
+                                        QStringLiteral("parameterDirectory_scroll")));
+            QCOMPARE(controller->currentGroup(), group);
+            auto* const parameters = vehicle->parameterManager();
+            if (parameters->parameterExists(-1, QStringLiteral("SDLOG_MODE"))) {
+                QVERIFY(clickButton(QStringLiteral("sidebar_logs")));
+                QQuickItem* const logMode = findVisibleItem(_rootItem, QStringLiteral("configurator_logMode"));
+                QVERIFY(logMode);
+                QCOMPARE(logMode->property("fact").value<QObject*>(),
+                         parameters->getParameter(-1, QStringLiteral("SDLOG_MODE")));
+                QVERIFY(logMode->isEnabled());
+                QVERIFY(logMode->property("count").toInt() > 0);
+            }
+            QVERIFY(clickButton(QStringLiteral("sidebar_messages")));
+            QVERIFY(clickButton(QStringLiteral("configurator_toolTab_1")));
+            QVERIFY(findVisibleItem(_rootItem, QStringLiteral("configurator_toolContent")));
+            QVERIFY(clickButton(QStringLiteral("configurator_toolTab_2")));
+            QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mavlinkConsole_page")));
+            QVERIFY(clickButton(QStringLiteral("sidebar_waveforms")));
+            QVERIFY(clickButton(QStringLiteral("configurator_toolTab_1")));
+            QVERIFY(findVisibleItem(_rootItem, QStringLiteral("configurator_toolContent")));
+            closeUIWindow();
+            destroyUIEngine();
+            QVERIFY2(roll, "Closing the dashboard destroyed a vehicle-owned Fact");
+            QVERIFY2(satellites, "Closing the dashboard destroyed a GPS Fact");
+        });
 }
 
 void TopLevelViewsTest::_testNavigateViews()

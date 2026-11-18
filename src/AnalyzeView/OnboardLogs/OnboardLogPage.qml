@@ -16,6 +16,11 @@ AnalyzePage {
 
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
+    function sortByLogId() {
+        OnboardLogController.sortById = true
+        OnboardLogController.sortAscending = true
+    }
+
     function _updateNavigationBlocked() {
         if (OnboardLogController.downloadingLogs) {
             globals.navigationBlockedReason = qsTr("Wait for the log download to complete or cancel it first")
@@ -30,7 +35,10 @@ AnalyzePage {
     }
 
     Component.onCompleted: _updateNavigationBlocked()
-    Component.onDestruction: globals.navigationBlockedReason = ""
+    Component.onDestruction: {
+        globals.navigationBlockedReason = ""
+        OnboardLogController.sortById = false
+    }
 
     Component {
         id: pageComponent
@@ -199,7 +207,7 @@ AnalyzePage {
                     objectName: "onboardLog_sortButton"
                     Layout.fillWidth: true
                     enabled: onboardLogPage._actionsAllowed && (OnboardLogController.model.count > 1)
-                    text: OnboardLogController.sortAscending ? qsTr("Sort Descending") : qsTr("Sort Ascending")
+                    text: OnboardLogController.sortById ? (OnboardLogController.sortAscending ? qsTr("编号降序") : qsTr("编号升序")) : (OnboardLogController.sortAscending ? qsTr("Sort Descending") : qsTr("Sort Ascending"))
                     onClicked: OnboardLogController.toggleSortByDate()
                 }
 

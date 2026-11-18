@@ -6,7 +6,7 @@
 #include "Vehicle.h"
 
 PX4SerialPortsComponent::PX4SerialPortsComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownPortsVehicleComponent, parent)
     , _name(tr("Ports"))
 {}
 

@@ -47,12 +47,10 @@ QList<SerialPortManager::Port> SerialPortManager::_enumeratePorts()
         port.systemLocation = info.systemLocation().trimmed();
         port.portName = info.portName().trimmed();
         port.displayName = port.portName;
-#ifdef Q_OS_ANDROID
         const QString label = port.description.isEmpty() ? info.manufacturer() : port.description;
         if (!label.isEmpty()) {
             port.displayName = QStringLiteral("%1 (%2)").arg(label, port.portName);
         }
-#endif
         (void) info.getBoardInfo(port.boardType, port.boardName);
         port.bootloader = info.isBootloader();
         ports.append(port);

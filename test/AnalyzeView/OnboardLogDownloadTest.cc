@@ -783,6 +783,15 @@ void OnboardLogFtpDownloadTest::_ftpSortOrderTest()
     controller->toggleSortByDate();
     QVERIFY(!controller->sortAscending());
     QCOMPARE(model->value<QGCOnboardLogEntry*>(0)->time(), newerTime);
+
+    controller->setSortById(true);
+    controller->setSortAscending(true);
+    const uint firstId = model->value<QGCOnboardLogEntry*>(0)->id();
+    const uint secondId = model->value<QGCOnboardLogEntry*>(1)->id();
+    QVERIFY(firstId < secondId);
+    controller->toggleSortByDate();
+    QCOMPARE(model->value<QGCOnboardLogEntry*>(0)->id(), secondId);
+    QCOMPARE(model->value<QGCOnboardLogEntry*>(1)->id(), firstId);
 }
 
 void OnboardLogFtpDownloadTest::_ftpCancelDownloadTest()

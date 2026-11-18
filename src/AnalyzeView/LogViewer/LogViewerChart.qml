@@ -17,6 +17,8 @@ ColumnLayout {
     required property var logViewerController
 
     property bool xAxisShowLocalTime: false
+    readonly property real zoomMinimum: _base.zoomMinX
+    readonly property real zoomMaximum: _base.zoomMaxX
 
     spacing: ScreenTools.defaultFontPixelHeight * 0.5
 
@@ -581,7 +583,7 @@ ColumnLayout {
 
         QGCLabel {
             Layout.fillWidth: true
-            text: qsTr("Click to place cursor. Shift+drag to move cursor. Drag to zoom X-axis. Double-click to reset zoom.")
+            text: qsTr("Click to place cursor. Shift+drag to move cursor. Drag to zoom X-axis. Ctrl+wheel to zoom at pointer. Right-drag to pan. Double-click to reset zoom.")
         }
 
         QGCButton {

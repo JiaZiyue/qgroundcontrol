@@ -10,7 +10,7 @@
 static bool imageProviderAdded{false};
 
 ActuatorComponent::ActuatorComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownMotorVehicleComponent, parent)
     , _name(tr("Actuators"))
     , _actuators(*vehicle->actuators())
 {

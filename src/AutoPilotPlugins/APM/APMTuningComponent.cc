@@ -1,8 +1,8 @@
 #include "APMTuningComponent.h"
 #include "Vehicle.h"
 
-APMTuningComponent::APMTuningComponent(Vehicle *vehicle, AutoPilotPlugin *autopilot, QObject *parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+APMTuningComponent::APMTuningComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownTuningVehicleComponent, parent)
 {
 
 }

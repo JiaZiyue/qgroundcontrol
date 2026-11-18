@@ -67,6 +67,10 @@ LinkManager *LinkManager::instance()
 void LinkManager::init()
 {
     _autoConnectSettings = SettingsManager::instance()->autoConnectSettings();
+    _autoConnectSettings->autoConnectUDP()->setRawValue(false);
+    _autoConnectSettings->autoConnectPixhawk()->setRawValue(false);
+    _autoConnectSettings->autoConnectSiKRadio()->setRawValue(false);
+    _autoConnectSettings->autoConnectLibrePilot()->setRawValue(false);
 
 #ifndef QGC_NO_SERIAL_LINK
 #ifdef Q_OS_ANDROID
@@ -455,8 +459,7 @@ void LinkManager::loadLinkConfigurationList()
             }
 
             if (link) {
-                const bool autoConnect = settings.value(root + "/auto").toBool();
-                link->setAutoConnect(autoConnect);
+                link->setAutoConnect(false);
                 const bool highLatency = settings.value(root + "/high_latency").toBool();
                 link->setHighLatency(highLatency);
                 link->loadSettings(settings, root);

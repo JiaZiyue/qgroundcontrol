@@ -131,13 +131,37 @@ ApplicationWindow {
         return allowed
     }
 
+    function showDashboardView() {
+        dashboardView.settingsSelected = false
+        dashboardView.sensorsSelected = false
+        dashboardView.parametersSelected = false
+        dashboardView.extraPage = ""
+        dashboardView.visible = true
+        flyView.visible = false
+        planView.visible = false
+        toolDrawer.visible = false
+    }
+
+    function showConfiguratorPlanView() {
+        dashboardView.settingsSelected = false
+        dashboardView.sensorsSelected = false
+        dashboardView.parametersSelected = false
+        dashboardView.extraPage = "mission"
+        dashboardView.visible = true
+        flyView.visible = false
+        planView.visible = true
+        toolDrawer.visible = false
+    }
+
     function showPlanView() {
+        dashboardView.visible = false
         flyView.visible = false
         planView.visible = true
         toolDrawer.visible = false
     }
 
     function showFlyView() {
+        dashboardView.visible = false
         flyView.visible = true
         planView.visible = false
         toolDrawer.visible = false
@@ -152,11 +176,11 @@ ApplicationWindow {
     }
 
     function showAnalyzeTool() {
-        showTool(qsTr("Analyze Tools"), "qrc:/qml/QGroundControl/AnalyzeView/AnalyzeView.qml", "/qmlimages/Analyze.svg")
+        showTool(qsTr("分析工具"), "qrc:/qml/QGroundControl/AnalyzeView/AnalyzeView.qml", "/qmlimages/Analyze.svg")
     }
 
     function showVehicleConfig() {
-        showTool(qsTr("Vehicle Configuration"), "qrc:/qml/QGroundControl/VehicleSetup/VehicleConfigView.qml", "/qmlimages/Gears.svg")
+        showTool(qsTr("飞机配置"), "qrc:/qml/QGroundControl/VehicleSetup/VehicleConfigView.qml", "/qmlimages/Gears.svg")
     }
 
     function showVehicleConfigParametersPage() {
@@ -164,8 +188,21 @@ ApplicationWindow {
         toolDrawerLoader.item.showParametersPanel()
     }
 
+    function showVehicleComponentConfigPage(component) {
+        if (!component || !allowViewSwitch()) {
+            return
+        }
+        showVehicleConfig()
+        if (toolDrawerLoader.item) {
+            toolDrawerLoader.item.showVehicleComponentPanel(component)
+        }
+    }
+
     function showKnownVehicleComponentConfigPage(knownVehicleComponent) {
         showVehicleConfig()
+        if (!globals.activeVehicle) {
+            return
+        }
         let vehicleComponent = globals.activeVehicle.autopilotPlugin.findKnownVehicleComponent(knownVehicleComponent)
         if (vehicleComponent) {
             toolDrawerLoader.item.showVehicleComponentPanel(vehicleComponent)
@@ -173,7 +210,7 @@ ApplicationWindow {
     }
 
     function showSettingsTool(settingsPage = "") {
-        showTool(qsTr("Application Settings"), "qrc:/qml/QGroundControl/Controls/AppSettings.qml", "/res/QGCLogoWhite")
+        showTool(qsTr("应用设置"), "qrc:/qml/QGroundControl/Controls/AppSettings.qml", "/res/QGCLogoWhite")
         if (settingsPage !== "") {
             toolDrawerLoader.item.showSettingsPage(settingsPage)
         }
@@ -346,12 +383,33 @@ ApplicationWindow {
         objectName:             "mainView_fly"
         anchors.fill:           parent
         enabled:                !toolDrawer.visible
+        visible:                false
+    }
+
+    ConfiguratorView {
+        id: dashboardView
+        objectName: "mainView_dashboard"
+        anchors.fill: parent
+        enabled: !toolDrawer.visible
+        navigationHost: mainWindow
+        onExtraPageChanged: {
+            if (visible && extraPage !== "mission") {
+                planView.visible = false
+            }
+        }
+        onToolsRequested: mainWindow.showToolSelectDialog()
+        onFlyRequested: mainWindow.showFlyView()
+        onSetupRequested: mainWindow.showVehicleConfig()
+        onComponentRequested: (component) => mainWindow.showKnownVehicleComponentConfigPage(component)
     }
 
     PlanView {
         id:             planView
         objectName:     "mainView_plan"
         anchors.fill:   parent
+        anchors.leftMargin: dashboardView.visible && dashboardView.extraPage === "mission" ? dashboardView.sidebarWidth : 0
+        anchors.topMargin: dashboardView.visible && dashboardView.extraPage === "mission" ? dashboardView.contentTop : 0
+        anchors.bottomMargin: dashboardView.visible && dashboardView.extraPage === "mission" ? dashboardView.contentBottom : 0
         visible:        false
         enabled:        !toolDrawer.visible
     }

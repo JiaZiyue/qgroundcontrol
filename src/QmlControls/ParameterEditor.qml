@@ -10,17 +10,44 @@ import QGroundControl.FactControls
 Item {
     id:         _root
 
+    property bool functionalDirectory: false
+
+    property alias searchFilterText: searchText.text
+
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2
     property int    _rowWidth:          10 // Dynamic adjusted at runtime
     property bool   _searchFilter:      searchText.text.trim() != "" || controller.showModifiedOnly || controller.showFavoritesOnly  ///< true: showing results of search
     property var    _searchResults      ///< List of parameter names from search results
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    property bool   _showRCToParam:     _activeVehicle.px4Firmware
+    property bool   _showRCToParam:     _activeVehicle && _activeVehicle.px4Firmware
     property var    _appSettings:       QGroundControl.settingsManager.appSettings
     property var    _controller:        controller
     property var    _favorites:         controller.favoriteParameterNames
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
+
+    function directoryTitle(name) {
+        const titles = {
+            "Standard": qsTr("常用功能"), "Advanced": qsTr("高级功能"),
+            "Other": qsTr("其他功能"), "Miscellaneous": qsTr("其他功能"),
+            "Battery": qsTr("电池与电源"), "Battery Calibration": qsTr("电池校准"),
+            "Commander": qsTr("飞行状态与解锁"), "Flight Modes": qsTr("飞行模式"),
+            "Sensors": qsTr("传感器"), "Sensor Calibration": qsTr("传感器校准"),
+            "GPS": qsTr("卫星定位（GPS）"), "EKF2": qsTr("状态估计（EKF2）"),
+            "EKF3": qsTr("状态估计（EKF3）"), "Radio": qsTr("遥控器"),
+            "RC": qsTr("遥控器"), "Telemetry": qsTr("遥测通信"), "MAVLink": qsTr("MAVLink 通信"),
+            "Multicopter Attitude Control": qsTr("多旋翼姿态控制"),
+            "Multicopter Position Control": qsTr("多旋翼位置控制"),
+            "Multicopter Rate Control": qsTr("多旋翼角速度控制"),
+            "Fixed Wing Attitude Control": qsTr("固定翼姿态控制"),
+            "Fixed Wing Position Control": qsTr("固定翼位置控制"),
+            "Mission": qsTr("任务航线"), "Navigator": qsTr("导航"), "Geofence": qsTr("地理围栏"),
+            "Return Mode": qsTr("返航"), "Land Detector": qsTr("着陆检测"),
+            "Safety": qsTr("安全保护"), "Logging": qsTr("日志记录"), "Logger": qsTr("日志记录"),
+            "Camera": qsTr("相机"), "Gimbal": qsTr("云台"), "System": qsTr("系统设置")
+        }
+        return functionalDirectory ? (titles[name] || name) : name
+    }
 
     ParameterEditorController {
         id: controller
@@ -52,7 +79,7 @@ Item {
         }
         QGCMenuItem {
             text:           qsTr("Reset to vehicle's configuration defaults")
-            visible:        !_activeVehicle.apmFirmware
+            visible:        _activeVehicle && !_activeVehicle.apmFirmware
             onTriggered:    QGroundControl.showMessageDialog(_root, qsTr("Reset All"),
                                                          qsTr("Select Reset to reset all parameters to the vehicle's configuration defaults."),
                                                          Dialog.Cancel | Dialog.Reset,
@@ -154,12 +181,12 @@ Item {
 
             QGCTextField {
                 id:                     searchText
-                placeholderText:        qsTr("Search")
+                placeholderText:        (_root.functionalDirectory ? qsTr("搜索参数名称或功能说明…") : qsTr("Search"))
                 onDisplayTextChanged:   controller.searchText = displayText
             }
 
             QGCButton {
-                text: qsTr("Clear")
+                text: (_root.functionalDirectory ? qsTr("清除") : qsTr("Clear"))
                 onClicked: {
                     if(ScreenTools.isMobile) {
                         Qt.inputMethod.hide();
@@ -169,7 +196,7 @@ Item {
             }
 
             QGCCheckBox {
-                text:       qsTr("Hide read-only")
+                text:       (_root.functionalDirectory ? qsTr("隐藏只读参数") : qsTr("Hide read-only"))
                 checked:    controller.hideReadOnly
                 onClicked:  controller.hideReadOnly = checked
             }
@@ -178,7 +205,7 @@ Item {
         QGCButton {
             Layout.alignment:   Qt.AlignRight
             objectName:         "parameterEditor_toolsButton"
-            text:               qsTr("Tools")
+            text:               (_root.functionalDirectory ? qsTr("参数工具") : qsTr("Tools"))
             onClicked:          toolsMenu.popup()
         }
     }
@@ -197,9 +224,9 @@ Item {
             controller.showFavoritesOnly = (currentIndex === 2)
         }
 
-        QGCGroupBoxTab { title: qsTr("Full List") }
-        QGCGroupBoxTab { title: qsTr("Modified") }
-        QGCGroupBoxTab { title: qsTr("Favorites") }
+        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("全部参数") : qsTr("Full List")) }
+        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("已修改") : qsTr("Modified")) }
+        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("收藏") : qsTr("Favorites")) }
 
         Item {
             Layout.fillWidth:   true
@@ -208,7 +235,8 @@ Item {
             /// Group buttons
             QGCFlickable {
                 id :                groupScroll
-                width:              ScreenTools.defaultFontPixelWidth * 25
+                objectName:          "parameterDirectory_scroll"
+                width:              ScreenTools.defaultFontPixelWidth * (_root.functionalDirectory ? 32 : 25)
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
                 clip:               true
@@ -235,7 +263,7 @@ Item {
                                 id:             categoryHeader
                                 anchors.left:   parent.left
                                 anchors.right:  parent.right
-                                text:           object.name
+                                text:           _root.directoryTitle(object.name)
                                 checked:        object == controller.currentCategory
 
                                 onCheckedChanged: {
@@ -249,8 +277,9 @@ Item {
                                 model: categoryHeader.checked ? object.groups : 0
 
                                 QGCButton {
-                                    width:          ScreenTools.defaultFontPixelWidth * 25
-                                    text:           object.name
+                                    width:          groupScroll.width
+                                    text:           _root.directoryTitle(object.name) + (_root.functionalDirectory ? " (" + object.facts.rowCount + ")" : "")
+                                    objectName:     "parameterDirectory_group_" + object.name
                                     height:         _rowHeight
                                     checked:        object == controller.currentGroup
                                     autoExclusive:  true
@@ -286,7 +315,7 @@ Item {
                         anchors.left:           parent.left
                         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
                         anchors.verticalCenter: parent.verticalCenter
-                        text:                   display
+                        text:                   _root.functionalDirectory ? [qsTr("收藏"), qsTr("参数名称"), qsTr("当前值"), qsTr("功能说明")][column] : display
                         font.bold:              true
                     }
 

@@ -24,6 +24,31 @@ AnalyzePage {
             spacing: ScreenTools.defaultFontPixelHeight
 
             property string pendingBinFile: ""
+            property int additionalCharts: 0
+
+            function syncChartZoom(minX, maxX, source) {
+                if (source !== logViewerChart) logViewerChart.setSharedZoom(minX, maxX)
+                for (let i = 0; i < extraCharts.count; ++i) {
+                    const row = extraCharts.itemAt(i)
+                    const chart = row ? row.chart : null
+                    if (chart && chart !== source) chart.setSharedZoom(minX, maxX)
+                }
+                _mapTab._setSharedZoom(minX, maxX)
+                if (_altChart.visible) _altChart.setSharedZoom(minX, maxX)
+            }
+
+            function syncChartCursor(t, source) {
+                if (source !== logViewerChart) logViewerChart.setSharedCursor(t)
+                for (let i = 0; i < extraCharts.count; ++i) {
+                    const row = extraCharts.itemAt(i)
+                    const chart = row ? row.chart : null
+                    if (chart && chart !== source) chart.setSharedCursor(t)
+                }
+                _mapTab._markerVisible = true
+                _mapTab._markerCoord = logParser.gpsCoordAt(t)
+                _mapTab._sharedCursorT = t
+                if (_altChart.visible) _altChart.setSharedCursor(t)
+            }
 
             readonly property bool _xAxisShowLocalTime: QGroundControl.settingsManager.logViewerSettings.xAxisShowLocalTime.rawValue
 
@@ -37,6 +62,7 @@ AnalyzePage {
             Component.onDestruction: logParser.clear()
 
             function clearLoadedLogState(clearControllerState) {
+                additionalCharts = 0
                 replayController.isPlaying = false
                 replayController.link = null
                 logParser.clear()
@@ -111,33 +137,23 @@ AnalyzePage {
                 spacing: ScreenTools.defaultFontPixelWidth
 
                 QGCButton {
-                    text: qsTr("Open .bin")
-                    visible: QGroundControl.apmFirmwareSupported
-                    onClicked: {
-                        openDialog.nameFilters = ["DataFlash Logs (*.bin *.BIN *.log *.LOG)"]
-                        openDialog.openForLoad()
-                    }
+                    objectName: "logViewer_open"
+                    text: qsTr("Open")
+                    onClicked: openDialog.openForLoad()
                 }
 
                 QGCButton {
-                    text: qsTr("Open .ulg")
-                    onClicked: {
-                        openDialog.nameFilters = ["PX4 ULog Files (*.ulg *.ULG)"]
-                        openDialog.openForLoad()
-                    }
+                    objectName: "logViewer_addChart"
+                    text: qsTr("添加图表")
+                    enabled: isFirmwareLog && additionalCharts < 2
+                    onClicked: additionalCharts++
                 }
 
                 QGCButton {
-                    text: qsTr("Open .tlog")
-                    onClicked: {
-                        const activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
-                        if (activeVehicle && !activeVehicle.isOfflineEditingVehicle) {
-                            QGroundControl.showMessageDialog(logViewerPage, qsTr("Log Viewer"), qsTr("Close active vehicle connections before starting telemetry replay."))
-                            return
-                        }
-                        openDialog.nameFilters = ["Telemetry Logs (*.tlog *.TLOG)"]
-                        openDialog.openForLoad()
-                    }
+                    objectName: "logViewer_removeChart"
+                    text: qsTr("移除图表")
+                    enabled: additionalCharts > 0
+                    onClicked: additionalCharts--
                 }
 
                 QGCButton {
@@ -264,58 +280,104 @@ AnalyzePage {
                     title: qsTr("Charting")
                     Layout.fillHeight: true
 
-                    RowLayout {
+                    ColumnLayout {
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        spacing: ScreenTools.defaultFontPixelWidth
 
-                        // Left panel: stats + fields list
-                        LogViewerFieldsPanel {
-                            id: fieldsPanel
-                            Layout.fillHeight: true
-                            logParser: logParser
-                            logViewerController: logViewerController
-                            onClearSelectedRequested: logViewerChart.refreshBinChart()
-                        }
-
-                        // Right panel: chart + MAVLink inspector
-                        Rectangle {
+                        RowLayout {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            color: qgcPal.windowPanel
-                            radius: ScreenTools.defaultFontPixelWidth * 0.5
+                            Layout.preferredHeight: 1
+                            spacing: ScreenTools.defaultFontPixelWidth
 
-                            ColumnLayout {
-                                anchors.fill: parent
-                                anchors.margins: ScreenTools.defaultFontPixelWidth
-                                spacing: ScreenTools.defaultFontPixelHeight * 0.5
+                            // Left panel: stats + fields list
+                            LogViewerFieldsPanel {
+                                id: fieldsPanel
+                                Layout.fillHeight: true
+                                logParser: logParser
+                                logViewerController: logViewerController
+                                onClearSelectedRequested: logViewerChart.refreshBinChart()
+                            }
 
-                                LogViewerChart {
-                                    id: logViewerChart
-                                    Layout.fillWidth: true
-                                    Layout.fillHeight: true
-                                    visible: isFirmwareLog
-                                    logParser: logParser
-                                    logViewerController: logViewerController
-                                    xAxisShowLocalTime: _xAxisShowLocalTime
+                            // Right panel: chart + MAVLink inspector
+                            Rectangle {
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                color: qgcPal.windowPanel
+                                radius: ScreenTools.defaultFontPixelWidth * 0.5
 
-                                    onCursorMoved: (t) => {
-                                        _mapTab._markerVisible = true
-                                        _mapTab._markerCoord   = logParser.gpsCoordAt(t)
-                                        _mapTab._sharedCursorT = t
-                                        if (_altChart.visible) _altChart.setSharedCursor(t)
+                                ColumnLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: ScreenTools.defaultFontPixelWidth
+                                    spacing: ScreenTools.defaultFontPixelHeight * 0.5
+
+                                    LogViewerChart {
+                                        id: logViewerChart
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        visible: isFirmwareLog
+                                        logParser: logParser
+                                        logViewerController: logViewerController
+                                        xAxisShowLocalTime: _xAxisShowLocalTime
+
+                                        onCursorMoved: (t) => syncChartCursor(t, logViewerChart)
+                                        onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, logViewerChart)
                                     }
-                                    onZoomApplied: (minX, maxX) => {
-                                        _mapTab._setSharedZoom(minX, maxX)
-                                        if (_altChart.visible) _altChart.setSharedZoom(minX, maxX)
+
+                                    Loader {
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        active: logViewerController.sourceType === LogViewerController.TLog
+                                        source: "qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml"
                                     }
                                 }
+                            }
+                        }
+                        Repeater {
+                            id: extraCharts
+                            model: additionalCharts
 
-                                Loader {
+                            RowLayout {
+                                id: extraRow
+                                required property int index
+                                property alias chart: extraChart
+                                Layout.fillWidth: true
+                                Layout.fillHeight: true
+                                Layout.preferredHeight: 1
+                                spacing: ScreenTools.defaultFontPixelWidth
+
+                                LogViewerController {
+                                    id: extraController
+                                }
+
+                                LogViewerFieldsPanel {
+                                    id: extraFields
+                                    Layout.fillHeight: true
+                                    logParser: logParser
+                                    logViewerController: extraController
+                                    onClearSelectedRequested: extraChart.refreshBinChart()
+                                }
+
+                                LogViewerChart {
+                                    id: extraChart
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    active: logViewerController.sourceType === LogViewerController.TLog
-                                    source: "qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml"
+                                    logParser: logParser
+                                    logViewerController: extraController
+                                    xAxisShowLocalTime: _xAxisShowLocalTime
+                                    onCursorMoved: (t) => syncChartCursor(t, extraChart)
+                                    onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, extraChart)
+                                }
+
+                                Component.onCompleted: {
+                                    if (logViewerController.sourceType === LogViewerController.ULog) {
+                                        extraController.openULogFile(logViewerController.currentLogPath)
+                                    } else {
+                                        extraController.openBinLog(logViewerController.currentLogPath)
+                                    }
+                                    extraFields.rebuildGroupedFields()
+                                    extraChart.refreshBinChart()
+                                    extraChart.setSharedZoom(logViewerChart.zoomMinimum, logViewerChart.zoomMaximum)
                                 }
                             }
                         }
@@ -485,8 +547,7 @@ AnalyzePage {
                                     _mapTab._markerVisible = false
                                 }
                                 onZoomApplied: (minX, maxX) => {
-                                    _mapTab._setSharedZoom(minX, maxX)
-                                    logViewerChart.setSharedZoom(minX, maxX)
+                                    syncChartZoom(minX, maxX, _altChart)
                                 }
                             }
 
@@ -539,10 +600,17 @@ AnalyzePage {
                 title: qsTr("Select log file")
                 folder: QGroundControl.settingsManager.appSettings.logSavePath
                 selectFolder: false
+                nameFilters: [qsTr("日志文件 (*.bin *.BIN *.log *.LOG *.ulg *.ULG *.tlog *.TLOG)")]
 
                 onAcceptedForLoad: (file) => {
                     const fileLower = file.toLowerCase()
                     if (fileLower.endsWith(".tlog")) {
+                        const activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
+                        if (activeVehicle && !activeVehicle.isOfflineEditingVehicle) {
+                            QGroundControl.showMessageDialog(logViewerPage, qsTr("Log Viewer"), qsTr("Close active vehicle connections before starting telemetry replay."))
+                            close()
+                            return
+                        }
                         if (logViewerController.hasLoadedLog) {
                             clearLoadedLogState(true)
                         }
@@ -558,8 +626,10 @@ AnalyzePage {
                         }
                         replayController.link = replayLink
                         logViewerController.openTLog(file)
-                    } else {
+                    } else if (fileLower.endsWith(".ulg") || fileLower.endsWith(".bin") || fileLower.endsWith(".log")) {
                         loadBinFile(file)
+                    } else {
+                        QGroundControl.showMessageDialog(logViewerPage, qsTr("Log Viewer"), qsTr("不支持的日志文件类型。请选择 .bin、.log、.ulg 或 .tlog 文件。"))
                     }
                     close()
                 }

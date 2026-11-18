@@ -46,7 +46,7 @@ Item {
                 return Qt.rect(topRightPanel.x, topRightPanel.y, topRightPanel.width, topRightPanel.height)
             }
             const column = topRightColumnLayout
-            return column.visible ? Qt.rect(column.x, column.y, column.width, column.childrenRect.height) : Qt.rect(_root.width, 0, 0, 0)
+            return column.visible ? Qt.rect(column.x, column.y, column.width, column.implicitHeight) : Qt.rect(_root.width, 0, 0, 0)
         }
         bottomRight: {
             const row = bottomRightRowLayout

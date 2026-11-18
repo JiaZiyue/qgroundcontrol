@@ -286,20 +286,52 @@ Item {
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         enabled: _xAxis.max > _xAxis.min
         z: 11
 
+        property bool _isPanning: false
+        property real _panMinX: 0
+        property real _panSpan: 0
         property real _dragStartX: 0
         property bool _isDraggingCursor: false
         property bool _isDraggingZoom: false
         property bool _wasDoubleClick: false
 
+        onWheel: (wheel) => {
+            wheel.accepted = false
+            const plot = _chart.plotArea
+            if (!(wheel.modifiers & Qt.ControlModifier) || plot.width <= 0
+                    || wheel.x < plot.x || wheel.x > plot.x + plot.width
+                    || wheel.y < plot.y || wheel.y > plot.y + plot.height) {
+                return
+            }
+            const delta = wheel.angleDelta.y || wheel.pixelDelta.y
+            const fullSpan = control.fullMaxX - control.fullMinX
+            if (!delta || fullSpan <= 0) {
+                return
+            }
+            const ratio = (wheel.x - plot.x) / plot.width
+            const span = _xAxis.max - _xAxis.min
+            const anchor = _xAxis.min + ratio * span
+            const newSpan = Math.max(fullSpan * 0.000001,
+                Math.min(fullSpan, span * Math.pow(1.2, -delta / 120)))
+            const minX = Math.max(control.fullMinX,
+                Math.min(control.fullMaxX - newSpan, anchor - ratio * newSpan))
+            control.applyZoomRange(minX, minX + newSpan)
+            wheel.accepted = true
+        }
+
         onPressed: (mouse) => {
             _isDraggingCursor = false
             _isDraggingZoom   = false
             _wasDoubleClick   = false
-            if (mouse.modifiers & Qt.ShiftModifier) {
+            _isPanning = mouse.button === Qt.RightButton
+            if (_isPanning) {
+                _dragStartX = mouse.x
+                _panMinX = _xAxis.min
+                _panSpan = _xAxis.max - _xAxis.min
+            } else if (mouse.modifiers & Qt.ShiftModifier) {
                 // Shift pressed — start cursor drag
                 _isDraggingCursor = true
                 control._updateCursorFromInteraction(mouse.x)
@@ -316,7 +348,14 @@ Item {
 
         onPositionChanged: (mouse) => {
             if (!pressed) return
-            if (_isDraggingCursor) {
+            if (_isPanning) {
+                if (_chart.plotArea.width > 0) {
+                    const delta = (mouse.x - _dragStartX) * _panSpan / _chart.plotArea.width
+                    const minX = Math.max(control.fullMinX,
+                        Math.min(control.fullMaxX - _panSpan, _panMinX - delta))
+                    control.applyZoomRange(minX, minX + _panSpan)
+                }
+            } else if (_isDraggingCursor) {
                 control._updateCursorFromInteraction(mouse.x)
             } else {
                 // Plain drag — update zoom selection rect
@@ -331,7 +370,18 @@ Item {
             }
         }
 
+        onCanceled: {
+            _isPanning = false
+            _isDraggingCursor = false
+            _isDraggingZoom = false
+            _zoomRect.visible = false
+        }
+
         onReleased: (mouse) => {
+            if (_isPanning) {
+                _isPanning = false
+                return
+            }
             if (_isDraggingCursor) {
                 _isDraggingCursor = false
                 return
@@ -349,6 +399,7 @@ Item {
         }
 
         onDoubleClicked: (mouse) => {
+            if (mouse.button !== Qt.LeftButton) return
             // onDoubleClicked fires before onReleased for the second click,
             // so this flag prevents onReleased from repositioning the cursor.
             _wasDoubleClick = true

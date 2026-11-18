@@ -6,7 +6,7 @@
 #include "Vehicle.h"
 
 AirframeComponent::AirframeComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownAirframeVehicleComponent, parent)
     , _name(tr("Airframe"))
 {
 

@@ -156,7 +156,7 @@ QQuickItem* QmlUITestBase::findVisibleItem(QQuickItem* root, const QString& obje
     }
 }
 
-void QmlUITestBase::startUI()
+void QmlUITestBase::startUI(bool showFlyView)
 {
     // Initialise subsystems needed for the full QML UI
     // setStyle() must only be called once per process; subsequent calls after
@@ -235,6 +235,9 @@ void QmlUITestBase::startUI()
     _pageDelay = (qApp->platformName() != QLatin1String("offscreen")) ? 400 : 0;
 
     _rootItem = _window->contentItem();
+    if (showFlyView) {
+        QVERIFY(QMetaObject::invokeMethod(_window, "showFlyView"));
+    }
 }
 
 void QmlUITestBase::closeUIWindow()

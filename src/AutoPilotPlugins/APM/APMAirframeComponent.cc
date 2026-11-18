@@ -2,8 +2,8 @@
 #include "ParameterManager.h"
 #include "Vehicle.h"
 
-APMAirframeComponent::APMAirframeComponent(Vehicle *vehicle, AutoPilotPlugin *autopilot, QObject *parent)
-    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+APMAirframeComponent::APMAirframeComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownAirframeVehicleComponent, parent)
 {
     ParameterManager *const paramMgr = vehicle->parameterManager();
 

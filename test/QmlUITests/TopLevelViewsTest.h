@@ -15,6 +15,12 @@ public:
     TopLevelViewsTest() = default;
 
 private slots:
+    void _testVideoNavigation();
+    void _testManualConnection();
+    void _testDashboard();
+    void _testConfiguratorSidebar();
+    void _testDashboardVehicleLifetime_data();
+    void _testDashboardVehicleLifetime();
     void _testNavigateViews();
     void _testSettingsSectionVisibility();
     void _testSettingsHiddenSectionAfterPageSwitch();

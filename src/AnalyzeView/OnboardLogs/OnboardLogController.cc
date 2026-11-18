@@ -687,6 +687,17 @@ void OnboardLogController::setSortAscending(bool ascending)
     emit sortAscendingChanged();
 }
 
+void OnboardLogController::setSortById(bool byId)
+{
+    if (_sortById == byId) {
+        return;
+    }
+
+    _sortById = byId;
+    _sortEntriesByTimestamp();
+    emit sortByIdChanged();
+}
+
 void OnboardLogController::_resetSelection(bool canceled)
 {
     const int num_logs = _logEntriesModel->count();
@@ -721,6 +732,10 @@ void OnboardLogController::_sortEntriesByTimestamp()
         }
         if (!rhs) {
             return true;
+        }
+
+        if (_sortById) {
+            return _sortAscending ? (lhs->id() < rhs->id()) : (lhs->id() > rhs->id());
         }
 
         const bool lhsHasTime = lhs->received() && (lhs->time().toSecsSinceEpoch() > 0);
