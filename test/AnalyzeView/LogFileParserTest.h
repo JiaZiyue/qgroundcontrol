@@ -7,6 +7,7 @@ class LogFileParserTest : public UnitTest
     Q_OBJECT
 
 private slots:
+    void _derivedAttitudeTest();
     void _parseULogNumericTopicTest();
     void _parseULogArrayFieldTest();
     void _parseULogNestedArrayFieldTest();

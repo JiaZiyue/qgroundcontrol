@@ -16,6 +16,7 @@ ColumnLayout {
     required property var logParser
     required property var logViewerController
 
+    property bool dataPanelVisible: false
     property bool xAxisShowLocalTime: false
     readonly property real zoomMinimum: _base.zoomMinX
     readonly property real zoomMaximum: _base.zoomMaxX
@@ -303,6 +304,22 @@ ColumnLayout {
         function onCursorPositionSet(t)     { _queryCursorValues() }
         function onCursorMoved(t)           { cursorMoved(t) }
         function onZoomApplied(minX, maxX)  { zoomApplied(minX, maxX) }
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+
+        QGCButton {
+            text: control.dataPanelVisible ? "−" : "+"
+            Accessible.name: qsTr("添加数据")
+            onClicked: control.dataPanelVisible = !control.dataPanelVisible
+        }
+
+        QGCLabel {
+            Layout.fillWidth: true
+            text: qsTr("点击 ＋ 选择本图显示的数据")
+            visible: control.logViewerController.selectedFields.length === 0
+        }
     }
 
     // -------------------------------------------------------------------------

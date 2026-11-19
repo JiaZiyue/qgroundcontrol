@@ -16,6 +16,14 @@ ColumnLayout {
     required property string page
     property var vehicle: QGroundControl.multiVehicleManager.activeVehicle
 
+    function requestImu() {
+        if (visible && vehicle && page === "imu") inspector.requestRawImu(imuIndex)
+    }
+    Component.onCompleted: Qt.callLater(requestImu)
+    onImuIndexChanged: Qt.callLater(requestImu)
+    onVehicleChanged: Qt.callLater(requestImu)
+    onVisibleChanged: Qt.callLater(requestImu)
+
     function field(names, fieldName) {
         const item = message(names);
         if (!item) {
@@ -101,9 +109,16 @@ ColumnLayout {
             }
         }
 
+        QGCButton {
+            text: qsTr("请求 IMU 数据")
+            visible: root.page === "imu"
+            enabled: root.vehicle !== null
+            onClicked: root.requestImu()
+        }
+
         QGCLabel {
             Layout.fillWidth: true
-            text: root.page === "gps" && root.gps ? qsTr("定位状态：%1 · 卫星数量：%2").arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString) : root.message(root._imuNames) ? qsTr("接收频率：%1 Hz").arg(root.message(root._imuNames).actualRateHz.toFixed(1)) : qsTr("等待 IMU 消息…")
+            text: root.page === "gps" && root.gps ? qsTr("定位状态：%1 · 卫星数量：%2").arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString) : root.message(root._imuNames) ? qsTr("接收频率：%1 Hz").arg(root.message(root._imuNames).actualRateHz.toFixed(1)) : qsTr("等待原始 IMU 消息；姿态角速度不代表已收到原始 IMU 数据。")
         }
     }
 

@@ -277,3 +277,15 @@ uint8_t MAVLinkInspectorController::_selectedComponentID() const
     const QGCMAVLinkMessage *const msg = _activeSystem ? _activeSystem->selectedMsg() : nullptr;
     return (msg ? msg->compId() : 0);
 }
+
+void MAVLinkInspectorController::requestRawImu(int instance) const
+{
+    Vehicle* const vehicle = MultiVehicleManager::instance()->activeVehicle();
+    if (!vehicle || instance < 0 || instance > 2) {
+        return;
+    }
+    const uint16_t messageId = instance == 0   ? MAVLINK_MSG_ID_HIGHRES_IMU
+                               : instance == 1 ? MAVLINK_MSG_ID_SCALED_IMU2
+                                               : MAVLINK_MSG_ID_SCALED_IMU3;
+    vehicle->setMessageRate(MAV_COMP_ID_AUTOPILOT1, messageId, 10);
+}

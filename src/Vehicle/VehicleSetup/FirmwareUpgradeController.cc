@@ -1,20 +1,23 @@
 ﻿#include "FirmwareUpgradeController.h"
-#include "PX4FirmwareUpgradeThread.h"
+
+#include <QtCore/QDir>
+#include <QtCore/QProcess>
+#include <QtCore/QRegularExpression>
+
 #include "Bootloader.h"
-#include "QGCFileDownload.h"
-#include "QGCOptions.h"
-#include "QGCCorePlugin.h"
+#include "Fact.h"
+#include "FirmwareImage.h"
 #include "FirmwarePluginManager.h"
 #include "FirmwareUpgradeSettings.h"
-#include "SettingsManager.h"
 #include "JsonParsing.h"
 #include "LinkManager.h"
 #include "MultiVehicleManager.h"
-#include "FirmwareImage.h"
-#include "Fact.h"
+#include "PX4FirmwareUpgradeThread.h"
+#include "QGCCorePlugin.h"
+#include "QGCFileDownload.h"
 #include "QGCLoggingCategory.h"
-
-#include <QtCore/QDir>
+#include "QGCOptions.h"
+#include "SettingsManager.h"
 
 QGC_LOGGING_CATEGORY(FirmwareUpgradeControllerLog, "Vehicle.VehicleSetup.FirmwareUpgradeController")
 #include <QtCore/QStandardPaths>
@@ -814,4 +817,59 @@ FirmwareUpgradeController::FirmwareVehicleType_t FirmwareUpgradeController::_man
     } else {
         return DefaultVehicleFirmware;
     }
+}
+
+void FirmwareUpgradeController::scanDfuDevices()
+{
+    if (_dfuScan) {
+        return;
+    }
+    const QString executable = QStandardPaths::findExecutable(QStringLiteral("dfu-util"));
+    if (executable.isEmpty()) {
+        _dfuDevices = {tr("未找到 dfu-util，请先安装后刷新")};
+        emit dfuDevicesChanged();
+        return;
+    }
+    auto* process = new QProcess(this);
+    _dfuScan = process;
+    process->setProcessChannelMode(QProcess::MergedChannels);
+    connect(process, &QProcess::finished, this, [this, process] {
+        const QString output = QString::fromLocal8Bit(process->readAll());
+        QStringList devices;
+        const QRegularExpression usb(
+            QString::fromLatin1(R"dfu(Found DFU: \[(.*?)\].*path="([^"]*)".*name="([^"]*)".*serial="([^"]*)")dfu"));
+        for (const QString& line : output.split(QLatin1Char('\n'))) {
+            const auto match = usb.match(line);
+            if (match.hasMatch()) {
+                const QString label =
+                    tr("DFU 设备 [%1] · USB %2 · %3").arg(match.captured(1), match.captured(2), match.captured(4));
+                if (!devices.contains(label)) {
+                    devices.append(label);
+                }
+            }
+        }
+        if (devices.isEmpty()) {
+            devices.append(output.contains(QStringLiteral("LIBUSB_ERROR_ACCESS"))
+                               ? tr("无法访问 DFU 设备，请检查 USB 权限")
+                               : tr("未检测到 DFU 设备，请进入 DFU 模式后刷新"));
+        }
+        _dfuDevices = devices;
+        _dfuScan = nullptr;
+        process->deleteLater();
+        emit dfuDevicesChanged();
+    });
+    connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error) {
+        if (error == QProcess::FailedToStart) {
+            _dfuDevices = {tr("无法启动 dfu-util")};
+            _dfuScan = nullptr;
+            process->deleteLater();
+            emit dfuDevicesChanged();
+        }
+    });
+    QTimer::singleShot(5000, process, [process] {
+        if (process->state() != QProcess::NotRunning) {
+            process->kill();
+        }
+    });
+    process->start(executable, {QStringLiteral("--list")});
 }

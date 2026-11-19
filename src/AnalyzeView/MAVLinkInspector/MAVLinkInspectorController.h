@@ -52,6 +52,7 @@ public:
 
     Q_INVOKABLE void setActiveSystem(quint32 systemId);
     Q_INVOKABLE void setMessageInterval(int32_t rate) const;
+    Q_INVOKABLE void requestRawImu(int instance) const;
 
     QmlObjectListModel *systems() const { return _systems; }
     QGCMAVLinkSystem *activeSystem() const { return _activeSystem; }

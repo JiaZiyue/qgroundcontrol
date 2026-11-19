@@ -10,6 +10,7 @@
 #include "QGCSerialPortInfo.h"
 
 class QGCFileDownload;
+class QProcess;
 
 class PX4FirmwareUpgradeThread;
 class PX4FirmwareUpgradeThreadController;
@@ -23,16 +24,23 @@ class FirmwareUpgradeController : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+    Q_PROPERTY(QStringList dfuDevices READ dfuDevices NOTIFY dfuDevicesChanged)
 #ifdef QGC_UNITTEST_BUILD
     friend class FirmwareUpgradeControllerTest; // Unit test
 #endif
 public:
-        typedef enum {
-            AutoPilotStackPX4 = 0,
-            AutoPilotStackAPM,
-            SiKRadio,
-            SingleFirmwareMode
-        } AutoPilotStackType_t;
+    QStringList dfuDevices() const { return _dfuDevices; }
+
+    Q_INVOKABLE void scanDfuDevices();
+    Q_SIGNAL void dfuDevicesChanged();
+
+    typedef enum
+    {
+        AutoPilotStackPX4 = 0,
+        AutoPilotStackAPM,
+        SiKRadio,
+        SingleFirmwareMode
+    } AutoPilotStackType_t;
 
         typedef enum {
             StableFirmware = 0,
@@ -288,6 +296,8 @@ private:
     Fact*                                   _apmChibiOSSetting;
     Fact*                                   _apmVehicleTypeSetting;
     QVariantList                            _availablePorts;
+    QStringList _dfuDevices;
+    QProcess* _dfuScan = nullptr;
     QPointer<QGCFileDownload>               _activeDownloader;          ///< in-flight firmware download, aborted on cancel
     bool                                    _flashCancelled = false;    ///< cancel was issued; ignore late download completions
 

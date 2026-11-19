@@ -58,6 +58,7 @@ SetupPage {
 
             function setupPageCompleted() {
                 controller.startBoardSearch()
+                controller.scanDfuDevices()
                 _defaultFirmwareIsPX4 = _defaultFirmwareFact.rawValue === _defaultFimwareTypePX4 // we don't want this to be bound and change as radios are selected
                 _lastKnownCount = 0
             }
@@ -491,6 +492,28 @@ SetupPage {
                 } // QGCPopupDialog
             } // Component - firmwareSelectDialogComponent
 
+            QGCGroupBox {
+                heading: qsTr("DFU 设备")
+                RowLayout {
+                    Layout.fillWidth: true
+                    QGCComboBox {
+                        Layout.fillWidth: true
+                        model: controller.dfuDevices
+                    }
+                    QGCButton {
+                        text: qsTr("刷新 DFU 设备")
+                        onClicked: controller.scanDfuDevices()
+                    }
+                }
+                QGCLabel {
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    text: qsTr("DFU 烧录指引\n1. 断开地面站连接，按飞控说明按住 BOOT 按钮并连接 USB，进入 DFU 模式。\n2. 点击刷新，确认列表中出现目标 DFU 设备；没有设备时检查数据线、驱动和 USB 权限。\n3. .px4 是固件封装文件，不能直接交给 dfu-util。需校验板型、解包，并确认该板的应用写入地址。\n4. 当前 DFU 入口提供设备检测；.px4 的 DFU 写入尚未接入。常规 .px4 升级请退出 DFU，使用下方 Bootloader 升级入口。\n5. 烧录完成后退出 DFU 并重新连接，核对固件版本。")
+                }
+            }
+
+            QGCLabel { text: qsTr("常规 Bootloader 升级（不适用于 DFU 模式）"); font.bold: true }
+
             RowLayout {
                 spacing: ScreenTools.defaultFontPixelWidth
                 visible: !flashBootloaderButton.visible
@@ -501,7 +524,7 @@ SetupPage {
                     visible:            !_flashStarted
                     enabled:            controller.availablePorts.length > 0
                     model:              controller.availablePorts
-                    textRole:           "displayName"
+                    textRole:           "description"
 
                     alternateText: {
                         if (_lastKnownCount !== 1) {
@@ -516,7 +539,7 @@ SetupPage {
                         if (p.boardName && p.description) {
                             return p.description + " [" + p.boardName + "]"
                         }
-                        return p.boardName || p.description || p.displayName
+                        return p.boardName || p.description || qsTr("USB 飞控")
                     }
 
                     onActivated: (index) => {

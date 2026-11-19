@@ -1,16 +1,15 @@
 #include "LogFileParserTest.h"
 
-#include "LogFileParser.h"
-#include "LogViewerDataFlashParser.h"
-#include "LogViewerULogParser.h"
-
+#include <cmath>
 #include <cstring>
 #include <functional>
+#include <ulog_cpp/messages.hpp>
+#include <ulog_cpp/writer.hpp>
 #include <vector>
 
 #include <QtCore/QByteArray>
-#include <QtCore/QDir>
 #include <QtCore/QDateTime>
+#include <QtCore/QDir>
 #include <QtCore/QPointF>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QThreadPool>
@@ -18,8 +17,10 @@
 #include <QtCore/QVariantList>
 #include <QtTest/QSignalSpy>
 
-#include <ulog_cpp/messages.hpp>
-#include <ulog_cpp/writer.hpp>
+#include "LogFileParser.h"
+#include "LogViewerDataFlashParser.h"
+#include "LogViewerULogParser.h"
+#include "ULogFullHandler.h"
 
 // ============================================================================
 // In-memory ULog builder helpers
@@ -1382,3 +1383,27 @@ void LogFileParserTest::_clearDuringAsyncParseTest()
 }
 
 UT_REGISTER_TEST(LogFileParserTest, TestLabel::Unit, TestLabel::AnalyzeView)
+
+void LogFileParserTest::_derivedAttitudeTest()
+{
+    LogParseResult result;
+    for (int axis = 0; axis < 4; ++axis) {
+        result.fieldSamples[QStringLiteral("vehicle_attitude.q[%1]").arg(axis)] = {QPointF(1, axis == 0 ? 2 : 0),
+                                                                                   QPointF(2, 0)};
+        result.fieldSamples[QStringLiteral("vehicle_attitude_setpoint.q_d[%1]").arg(axis)] = {
+            QPointF(1, axis == 0 || axis == 3 ? std::sqrt(0.5) : 0)};
+    }
+    ULogFullHandler handler(result);
+    handler.finalize();
+    const auto actual = result.fieldSamples.value(QStringLiteral("自动分析_实际姿态.Yaw_deg"));
+    QCOMPARE(actual.size(), 1);
+    QVERIFY(std::abs(actual.first().y()) < 1e-6);
+    const auto target = result.fieldSamples.value(QStringLiteral("自动分析_设定姿态.Yaw_deg"));
+    QCOMPARE(target.size(), 1);
+    QVERIFY(std::abs(target.first().y() - 90) < 1e-6);
+    const auto error = result.fieldSamples.value(QStringLiteral("自动分析_姿态误差.Yaw_error_deg"));
+    QCOMPARE(error.size(), 1);
+    QVERIFY(std::abs(error.first().y() - 90) < 1e-6);
+    QVERIFY(result.plottableFields.contains(QStringLiteral("自动分析_实际姿态.Yaw_deg")));
+    QVERIFY(result.availableFields.contains(QStringLiteral("自动分析_实际姿态.Yaw_deg")));
+}

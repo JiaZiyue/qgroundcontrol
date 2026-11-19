@@ -15,6 +15,18 @@ RowLayout {
     required property QtObject navigationHost
     property var selectedConfiguration: null
 
+    function connectionType(configuration) {
+        if (!configuration) return ""
+        switch (configuration.linkType) {
+        case LinkConfiguration.TypeSerial: return qsTr("串口")
+        case LinkConfiguration.TypeUdp: return "UDP"
+        case LinkConfiguration.TypeTcp: return "TCP"
+        case LinkConfiguration.TypeBluetooth: return qsTr("蓝牙")
+        case LinkConfiguration.TypeLogReplay: return qsTr("日志回放")
+        default: return qsTr("其他")
+        }
+    }
+
     function connectPort(port, label) {
         const manager = QGroundControl.linkManager;
         for (let i = 0; i < manager.linkConfigurations.count; ++i) {
@@ -64,6 +76,18 @@ RowLayout {
     }
 
     spacing: ScreenTools.defaultFontPixelWidth / 2
+
+    QGCPalette { id: connectionPalette }
+
+    QGCLabel {
+        objectName: "connection_status"
+        text: !root.selectedConfiguration ? qsTr("未连接")
+            : (root.selectedConfiguration.linkActive ? qsTr("链路已连接 · %1") : qsTr("未连接 · %1"))
+                .arg(root.connectionType(root.selectedConfiguration))
+        color: root.selectedConfiguration && root.selectedConfiguration.linkActive
+            ? connectionPalette.successText : connectionPalette.textSecondary
+        font.bold: true
+    }
 
     QGCButton {
         id: selector

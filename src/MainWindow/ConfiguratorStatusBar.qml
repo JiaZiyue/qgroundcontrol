@@ -14,6 +14,46 @@ Rectangle {
     readonly property bool _connected: _vehicle && !_vehicle.vehicleLinkManager.communicationLost
     readonly property var _vehicle: QGroundControl.multiVehicleManager.activeVehicle
     required property QtObject navigationHost
+    property var _armingMessages: []
+    property string _armingNotice: ""
+
+    function rememberArmingMessage(message) {
+        if (!message) return
+        const messages = _armingMessages.filter(item => item !== message)
+        messages.push(message)
+        _armingMessages = messages.slice(-12)
+        _armingNotice = message
+        noticeTimer.restart()
+    }
+
+    on_VehicleChanged: {
+        _armingMessages = []
+        _armingNotice = ""
+        noticeTimer.stop()
+    }
+
+    Timer {
+        id: noticeTimer
+        interval: 10000
+        onTriggered: root._armingNotice = ""
+    }
+
+    Connections {
+        target: root._vehicle
+        function onTextMessageReceived(sysid, componentid, severity, text, description) {
+            if (/pre[ -]?arm|preflight|arming|^arm[: ]|arm(ed|ing)?[ :].*(fail|denied)|解锁/i.test(text)) {
+                root.rememberArmingMessage(text)
+            }
+        }
+        function onPrearmErrorChanged(prearmError) {
+            if (prearmError) root.rememberArmingMessage(prearmError)
+        }
+        function onArmedChanged(armed) {
+            root._armingMessages = []
+            root.rememberArmingMessage(armed ? qsTr("飞控已解锁（Armed）") : qsTr("飞控已上锁（Disarmed）"))
+        }
+    }
+
 
     function flightModeLabel(mode) {
         const labels = {
@@ -39,6 +79,7 @@ Rectangle {
 
     color: qgcPal.windowPanel
     implicitHeight: statusFlow.implicitHeight + ScreenTools.defaultFontPixelHeight
+        + (armingNotice.visible ? armingNotice.implicitHeight + ScreenTools.defaultFontPixelHeight / 2 : 0)
 
     QGCPalette {
         id: qgcPal
@@ -201,6 +242,18 @@ Rectangle {
         }
     }
 
+    QGCLabel {
+        id: armingNotice
+        anchors.top: statusFlow.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: ScreenTools.defaultFontPixelHeight / 2
+        text: qsTr("解锁状态提醒：%1").arg(root._armingNotice)
+        visible: root._armingNotice !== ""
+        color: qgcPal.warningText
+        wrapMode: Text.WordWrap
+    }
+
     Dialog {
         id: armingDetails
 
@@ -219,7 +272,8 @@ Rectangle {
         }
 
         QGCLabel {
-            text: !root._connected ? qsTr("请先连接飞机。") : root._vehicle.prearmError !== "" ? root._vehicle.prearmError : root._vehicle.armed ? qsTr("飞机当前已解锁。") : root._vehicle.readiness.canArm ? qsTr("当前检查通过，可以解锁。") : qsTr("尚未通过解锁检查，请检查传感器与安全配置。")
+            text: (!root._vehicle || !root._connected ? qsTr("请先连接飞机。") : root._vehicle.prearmError !== "" ? root._vehicle.prearmError : root._vehicle.armed ? qsTr("飞机当前已解锁。") : root._vehicle.readiness.canArm ? qsTr("当前检查通过，可以解锁。") : qsTr("尚未通过解锁检查，请检查下方飞控消息。"))
+                + (root._armingMessages.length ? "\n\n" + qsTr("最近的 PreArm／Arming 消息：") + "\n" + root._armingMessages.join("\n") : "")
             width: armingDetails.availableWidth
             wrapMode: Text.WordWrap
         }

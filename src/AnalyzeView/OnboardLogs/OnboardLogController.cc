@@ -1283,6 +1283,11 @@ void OnboardLogController::_ftpDownloadEntry(QGCOnboardLogEntry *entry)
         localFilename = QStringLiteral("log_") + QString::number(entry->id()) + QStringLiteral(".ulg");
     }
 
+    if (_sortById) {
+        const QString directory = entry->ftpPath().section(QLatin1Char('/'), -2, -2);
+        localFilename = QStringLiteral("log_%1_%2_%3").arg(entry->id()).arg(directory, localFilename);
+    }
+
     if (QFile::exists(_downloadPath + localFilename)) {
         const int dotIdx = localFilename.lastIndexOf(QLatin1Char('.'));
         const QString base = (dotIdx > 0) ? localFilename.left(dotIdx) : localFilename;

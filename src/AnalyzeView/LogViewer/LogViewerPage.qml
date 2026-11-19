@@ -143,20 +143,6 @@ AnalyzePage {
                 }
 
                 QGCButton {
-                    objectName: "logViewer_addChart"
-                    text: qsTr("添加图表")
-                    enabled: isFirmwareLog && additionalCharts < 2
-                    onClicked: additionalCharts++
-                }
-
-                QGCButton {
-                    objectName: "logViewer_removeChart"
-                    text: qsTr("移除图表")
-                    enabled: additionalCharts > 0
-                    onClicked: additionalCharts--
-                }
-
-                QGCButton {
                     text: qsTr("Clear")
                     enabled: logViewerController.hasLoadedLog
                     onClicked: {
@@ -193,6 +179,22 @@ AnalyzePage {
                 QGCLabel {
                     visible: logViewerController.hasLoadedLog && logParser.detectedVehicleType.length > 0
                     text: logParser.detectedVehicleType
+                }
+
+                QGCButton {
+                    objectName: "logViewer_removeChart"
+                    text: "−"
+                    Accessible.name: qsTr("移除图表")
+                    enabled: additionalCharts > 0
+                    onClicked: additionalCharts--
+                }
+
+                QGCButton {
+                    objectName: "logViewer_addChart"
+                    text: "+"
+                    Accessible.name: qsTr("添加图表")
+                    enabled: isFirmwareLog && additionalCharts < 2
+                    onClicked: additionalCharts++
                 }
             }
 
@@ -280,104 +282,120 @@ AnalyzePage {
                     title: qsTr("Charting")
                     Layout.fillHeight: true
 
-                    ColumnLayout {
+                    QGCFlickable {
+                        id: chartScroll
                         Layout.fillWidth: true
                         Layout.fillHeight: true
+                        contentWidth: width
+                        contentHeight: chartColumn.implicitHeight
+                        flickableDirection: Flickable.VerticalFlick
+                        acceptedButtons: Qt.MiddleButton
+                        ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
 
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Layout.fillHeight: true
-                            Layout.preferredHeight: 1
-                            spacing: ScreenTools.defaultFontPixelWidth
-
-                            // Left panel: stats + fields list
-                            LogViewerFieldsPanel {
-                                id: fieldsPanel
-                                Layout.fillHeight: true
-                                logParser: logParser
-                                logViewerController: logViewerController
-                                onClearSelectedRequested: logViewerChart.refreshBinChart()
-                            }
-
-                            // Right panel: chart + MAVLink inspector
-                            Rectangle {
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                color: qgcPal.windowPanel
-                                radius: ScreenTools.defaultFontPixelWidth * 0.5
-
-                                ColumnLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: ScreenTools.defaultFontPixelWidth
-                                    spacing: ScreenTools.defaultFontPixelHeight * 0.5
-
-                                    LogViewerChart {
-                                        id: logViewerChart
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        visible: isFirmwareLog
-                                        logParser: logParser
-                                        logViewerController: logViewerController
-                                        xAxisShowLocalTime: _xAxisShowLocalTime
-
-                                        onCursorMoved: (t) => syncChartCursor(t, logViewerChart)
-                                        onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, logViewerChart)
-                                    }
-
-                                    Loader {
-                                        Layout.fillWidth: true
-                                        Layout.fillHeight: true
-                                        active: logViewerController.sourceType === LogViewerController.TLog
-                                        source: "qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml"
-                                    }
-                                }
-                            }
-                        }
-                        Repeater {
-                            id: extraCharts
-                            model: additionalCharts
+                        ColumnLayout {
+                            id: chartColumn
+                            width: chartScroll.width - ScreenTools.defaultFontPixelWidth * 2
+                            spacing: ScreenTools.defaultFontPixelHeight
 
                             RowLayout {
-                                id: extraRow
-                                required property int index
-                                property alias chart: extraChart
                                 Layout.fillWidth: true
                                 Layout.fillHeight: true
-                                Layout.preferredHeight: 1
+                                Layout.minimumHeight: Math.max(chartScroll.height, ScreenTools.defaultFontPixelHeight * 32)
+                                Layout.preferredHeight: Layout.minimumHeight
                                 spacing: ScreenTools.defaultFontPixelWidth
 
-                                LogViewerController {
-                                    id: extraController
-                                }
-
+                                // Left panel: stats + fields list
                                 LogViewerFieldsPanel {
-                                    id: extraFields
+                                    id: fieldsPanel
+                                    visible: isFirmwareLog && logViewerChart.dataPanelVisible
                                     Layout.fillHeight: true
                                     logParser: logParser
-                                    logViewerController: extraController
-                                    onClearSelectedRequested: extraChart.refreshBinChart()
+                                    logViewerController: logViewerController
+                                    onClearSelectedRequested: logViewerChart.refreshBinChart()
                                 }
 
-                                LogViewerChart {
-                                    id: extraChart
+                                // Right panel: chart + MAVLink inspector
+                                Rectangle {
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
-                                    logParser: logParser
-                                    logViewerController: extraController
-                                    xAxisShowLocalTime: _xAxisShowLocalTime
-                                    onCursorMoved: (t) => syncChartCursor(t, extraChart)
-                                    onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, extraChart)
-                                }
+                                    color: qgcPal.windowPanel
+                                    radius: ScreenTools.defaultFontPixelWidth * 0.5
 
-                                Component.onCompleted: {
-                                    if (logViewerController.sourceType === LogViewerController.ULog) {
-                                        extraController.openULogFile(logViewerController.currentLogPath)
-                                    } else {
-                                        extraController.openBinLog(logViewerController.currentLogPath)
+                                    ColumnLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: ScreenTools.defaultFontPixelWidth
+                                        spacing: ScreenTools.defaultFontPixelHeight * 0.5
+
+                                        LogViewerChart {
+                                            id: logViewerChart
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            visible: isFirmwareLog
+                                            logParser: logParser
+                                            logViewerController: logViewerController
+                                            xAxisShowLocalTime: _xAxisShowLocalTime
+
+                                            onCursorMoved: (t) => syncChartCursor(t, logViewerChart)
+                                            onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, logViewerChart)
+                                        }
+
+                                        Loader {
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            active: logViewerController.sourceType === LogViewerController.TLog
+                                            source: "qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml"
+                                        }
                                     }
-                                    extraFields.rebuildGroupedFields()
-                                    extraChart.refreshBinChart()
-                                    extraChart.setSharedZoom(logViewerChart.zoomMinimum, logViewerChart.zoomMaximum)
+                                }
+                            }
+                            Repeater {
+                                id: extraCharts
+                                model: additionalCharts
+
+                                RowLayout {
+                                    id: extraRow
+                                    required property int index
+                                    property alias chart: extraChart
+                                    Layout.fillWidth: true
+                                    Layout.fillHeight: true
+                                    Layout.minimumHeight: Math.max(chartScroll.height, ScreenTools.defaultFontPixelHeight * 32)
+                                    Layout.preferredHeight: Layout.minimumHeight
+                                    spacing: ScreenTools.defaultFontPixelWidth
+
+                                    LogViewerController {
+                                        id: extraController
+                                    }
+
+                                    LogViewerFieldsPanel {
+                                        id: extraFields
+                                        visible: extraChart.dataPanelVisible
+                                        Layout.fillHeight: true
+                                        logParser: logParser
+                                        logViewerController: extraController
+                                        onClearSelectedRequested: extraChart.refreshBinChart()
+                                    }
+
+                                    LogViewerChart {
+                                        id: extraChart
+                                        Layout.fillWidth: true
+                                        Layout.fillHeight: true
+                                        logParser: logParser
+                                        logViewerController: extraController
+                                        xAxisShowLocalTime: _xAxisShowLocalTime
+                                        onCursorMoved: (t) => syncChartCursor(t, extraChart)
+                                        onZoomApplied: (minX, maxX) => syncChartZoom(minX, maxX, extraChart)
+                                    }
+
+                                    Component.onCompleted: {
+                                        if (logViewerController.sourceType === LogViewerController.ULog) {
+                                            extraController.openULogFile(logViewerController.currentLogPath)
+                                        } else {
+                                            extraController.openBinLog(logViewerController.currentLogPath)
+                                        }
+                                        extraFields.rebuildGroupedFields()
+                                        extraChart.refreshBinChart()
+                                        extraChart.setSharedZoom(logViewerChart.zoomMinimum, logViewerChart.zoomMaximum)
+                                    }
                                 }
                             }
                         }

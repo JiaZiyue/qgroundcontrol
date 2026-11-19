@@ -1,15 +1,17 @@
 #include "ULogFullHandler.h"
 
-#include "LogParseResultPrivate.h"
-#include "QGCLoggingCategory.h"
+#include <algorithm>
+#include <array>
+#include <cmath>
+#include <numbers>
+#include <stdexcept>
+#include <ulog_cpp/subscription.hpp>
 
 #include <QtCore/QStringList>
 #include <QtCore/QTimeZone>
 
-#include <algorithm>
-#include <stdexcept>
-
-#include <ulog_cpp/subscription.hpp>
+#include "LogParseResultPrivate.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(ULogFullHandlerLog, "AnalyzeView.ULogFullHandler")
 
@@ -411,6 +413,80 @@ void ULogFullHandler::finalize()
     }
 
     // Sort field lists for consistent display
+    const auto deriveEuler = [this](const QString& topic, const QString& quaternion, const QString& group) {
+        std::array<QVector<QPointF>, 4> components;
+        for (int axis = 0; axis < 4; ++axis) {
+            components[axis] =
+                _result.fieldSamples.value(topic + QLatin1Char('.') + quaternion + QStringLiteral("[%1]").arg(axis));
+        }
+        std::array<QVector<QPointF>, 3> angles;
+        for (qsizetype i = 0; i < components[0].size(); ++i) {
+            std::array<double, 4> q;
+            bool valid = true;
+            const double time = components[0][i].x();
+            double norm = 0;
+            for (int axis = 0; axis < 4; ++axis) {
+                if (i >= components[axis].size() || components[axis][i].x() != time ||
+                    !std::isfinite(components[axis][i].y())) {
+                    valid = false;
+                    break;
+                }
+                q[axis] = components[axis][i].y();
+                norm += q[axis] * q[axis];
+            }
+            if (!valid || norm < 1e-12 || !std::isfinite(norm)) {
+                continue;
+            }
+            for (double& value : q) {
+                value /= std::sqrt(norm);
+            }
+            const double degrees = 180.0 / std::numbers::pi;
+            angles[0].append(QPointF(
+                time, std::atan2(2 * (q[0] * q[1] + q[2] * q[3]), 1 - 2 * (q[1] * q[1] + q[2] * q[2])) * degrees));
+            angles[1].append(
+                QPointF(time, std::asin(std::clamp(2 * (q[0] * q[2] - q[3] * q[1]), -1.0, 1.0)) * degrees));
+            angles[2].append(QPointF(
+                time, std::atan2(2 * (q[0] * q[3] + q[1] * q[2]), 1 - 2 * (q[2] * q[2] + q[3] * q[3])) * degrees));
+        }
+        const QStringList names = {QStringLiteral("Roll_deg"), QStringLiteral("Pitch_deg"), QStringLiteral("Yaw_deg")};
+        for (int axis = 0; axis < 3; ++axis) {
+            if (!angles[axis].isEmpty()) {
+                const QString name = group + QLatin1Char('.') + names[axis];
+                _result.fieldSamples.insert(name, angles[axis]);
+                _fieldSet.insert(name);
+                _plottableFieldSet.insert(name);
+            }
+        }
+        return angles;
+    };
+    const auto actual =
+        deriveEuler(QStringLiteral("vehicle_attitude"), QStringLiteral("q"), QStringLiteral("自动分析_实际姿态"));
+    const auto target = deriveEuler(QStringLiteral("vehicle_attitude_setpoint"), QStringLiteral("q_d"),
+                                    QStringLiteral("自动分析_设定姿态"));
+    const QStringList errorNames = {QStringLiteral("Roll_error_deg"), QStringLiteral("Pitch_error_deg"),
+                                    QStringLiteral("Yaw_error_deg")};
+    for (int axis = 0; axis < 3; ++axis) {
+        QVector<QPointF> errors;
+        qsizetype targetIndex = 0;
+        for (const QPointF& point : actual[axis]) {
+            while (targetIndex + 1 < target[axis].size() && target[axis][targetIndex + 1].x() <= point.x()) {
+                ++targetIndex;
+            }
+            if (target[axis].isEmpty() || target[axis][targetIndex].x() > point.x() ||
+                point.x() - target[axis][targetIndex].x() > 0.5) {
+                continue;
+            }
+            const double error = std::remainder(target[axis][targetIndex].y() - point.y(), 360.0);
+            errors.append(QPointF(point.x(), error));
+        }
+        if (!errors.isEmpty()) {
+            const QString name = QStringLiteral("自动分析_姿态误差.") + errorNames[axis];
+            _result.fieldSamples.insert(name, errors);
+            _fieldSet.insert(name);
+            _plottableFieldSet.insert(name);
+        }
+    }
+
     _result.availableFields = _fieldSet.values();
     std::sort(_result.availableFields.begin(), _result.availableFields.end());
     _result.plottableFields = _plottableFieldSet.values();
