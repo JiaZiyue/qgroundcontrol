@@ -28,11 +28,15 @@ and mission planning for any *MAVLink-enabled* drone, including *PX4* and *ArduP
 
 ## Download
 
-Grab the latest stable build for your platform, or see all assets on the
-[releases page](https://github.com/mavlink/QGroundControl/releases/latest):
+从[本仓库的 Releases 页面](https://github.com/yuxuan20230525/qgroundcontrol/releases)查看 Windows 简体中文版发布。发布后，可在对应版本的 Assets 中下载。Code → Download ZIP 提供的是源码，需要自行编译。
 
 <p align="center">
-  <a href="https://github.com/mavlink/QGroundControl/releases/latest/download/QGroundControl-installer-AMD64.exe"><img src="https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white" alt="Windows"></a>
+  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases"><img src="https://img.shields.io/badge/Windows-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-0078D6?logo=windows&amp;logoColor=white" alt="Windows 简体中文版"></a>
+</p>
+
+上游官方版本见 [QGroundControl Releases](https://github.com/mavlink/QGroundControl/releases/latest)。
+
+<p align="center">
   <a href="https://github.com/mavlink/QGroundControl/releases/latest/download/QGroundControl.dmg"><img src="https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white" alt="macOS"></a>
   <a href="https://github.com/mavlink/QGroundControl/releases/latest/download/QGroundControl-x86_64.AppImage"><img src="https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black" alt="Linux (AppImage)"></a>
   <a href="https://github.com/mavlink/QGroundControl/releases/latest/download/QGroundControl.apk"><img src="https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white" alt="Android"></a>

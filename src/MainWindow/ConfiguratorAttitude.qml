@@ -101,7 +101,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         color: qgcPal.instrumentMark
-        text: root._connected ? qsTr("横滚 %1°   俯仰 %2°   航向 %3°").arg(root._roll.toFixed(1)).arg(root._pitch.toFixed(1)).arg(root._heading.toFixed(0)) : qsTr("暂无姿态遥测")
+        text: root._connected ? qsTr("Roll %1°   Pitch %2°   Heading %3°").arg(root._roll.toFixed(1)).arg(root._pitch.toFixed(1)).arg(root._heading.toFixed(0)) : qsTr("No attitude telemetry")
     }
 
     Connections {

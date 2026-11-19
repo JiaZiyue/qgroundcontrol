@@ -9,7 +9,7 @@ import QtQuick.Layouts
 ColumnLayout {
     id: root
 
-    required property string channelPrefix
+    required property string channelLabelFormat
     property bool connected: false
     required property string title
     property var values: []
@@ -65,7 +65,7 @@ ColumnLayout {
                 QGCLabel {
                     Layout.alignment: Qt.AlignHCenter
                     font.pointSize: ScreenTools.smallFontPointSize
-                    text: root.channelPrefix + (channel.index + 1)
+                    text: root.channelLabelFormat.arg(channel.index + 1)
                 }
             }
         }

@@ -13,36 +13,36 @@ ColumnLayout {
     required property QtObject navigationHost
     property bool sensorMode: false
     readonly property var pages: sensorMode ? [
-        { key: "imu", title: qsTr("惯性传感器（IMU）") },
-        { key: "compass", title: qsTr("罗盘") },
-        { key: "gps", title: qsTr("卫星定位（GPS）") },
-        { key: "vision", title: qsTr("外部视觉") },
-        { key: "flow", title: qsTr("光流") },
-        { key: "range", title: qsTr("测距仪") }
+        { key: "imu", title: qsTr("Inertial Measurement Unit (IMU)") },
+        { key: "compass", title: qsTr("Compass") },
+        { key: "gps", title: qsTr("Satellite Positioning (GPS)") },
+        { key: "vision", title: qsTr("External Vision") },
+        { key: "flow", title: qsTr("Optical Flow") },
+        { key: "range", title: qsTr("Rangefinder") }
     ] : [
         {
             key: "airframe",
-            title: qsTr("机架设置")
+            title: qsTr("Airframe Setup")
         },
         {
             key: "motors",
-            title: qsTr("电机设置")
+            title: qsTr("Motor Setup")
         },
         {
             key: "radio",
-            title: qsTr("遥控器设置")
+            title: qsTr("Radio Setup")
         },
         {
             key: "ports",
-            title: qsTr("端口设置")
+            title: qsTr("Port Setup")
         },
         {
             key: "tuning",
-            title: qsTr("PID 参数")
+            title: qsTr("PID Parameters")
         },
         {
             key: "ekf",
-            title: qsTr("EKF 状态估计")
+            title: qsTr("EKF State Estimation")
         }
     ]
     property string selectedPage: sensorMode ? "imu" : "airframe"
@@ -56,7 +56,7 @@ ColumnLayout {
         Layout.margins: ScreenTools.defaultFontPixelHeight
         font.bold: true
         font.pointSize: ScreenTools.largeFontPointSize
-        text: root.sensorMode ? qsTr("传感器") : qsTr("飞控设置")
+        text: root.sensorMode ? qsTr("Sensors") : qsTr("Flight Controller Setup")
     }
 
     Flow {
@@ -92,9 +92,9 @@ ColumnLayout {
         Layout.rightMargin: ScreenTools.defaultFontPixelHeight
         visible: root.sensorMode && root._vehicle && sensorMask !== 0
         wrapMode: Text.WordWrap
-        text: !root._vehicle || root._vehicle.vehicleLinkManager.communicationLost ? qsTr("连接已断开，等待传感器数据。")
-            : (root._vehicle.sensorsPresentBits & sensorMask) !== sensorMask ? qsTr("尚未检测到该传感器。")
-            : (root._vehicle.sensorsHealthBits & sensorMask) !== sensorMask ? qsTr("传感器需要检查。") : qsTr("传感器状态正常。")
+        text: !root._vehicle || root._vehicle.vehicleLinkManager.communicationLost ? qsTr("Connection lost. Waiting for sensor data.")
+            : (root._vehicle.sensorsPresentBits & sensorMask) !== sensorMask ? qsTr("This sensor has not been detected.")
+            : (root._vehicle.sensorsHealthBits & sensorMask) !== sensorMask ? qsTr("The sensor needs attention.") : qsTr("The sensor is healthy.")
     }
 
     Flow {
@@ -104,24 +104,25 @@ ColumnLayout {
         spacing: ScreenTools.defaultFontPixelHeight
         Repeater {
             model: !root._vehicle ? [] : root.selectedPage === "gps" ? [
-                { title: qsTr("卫星数量"), valueFact: root._vehicle.gps.count },
-                { title: qsTr("水平精度"), valueFact: root._vehicle.gps.horizontalAccuracy },
-                { title: qsTr("垂直精度"), valueFact: root._vehicle.gps.verticalAccuracy }
+                { title: qsTr("Satellite Count"), valueFact: root._vehicle.gps.count },
+                { title: qsTr("Horizontal Accuracy"), valueFact: root._vehicle.gps.horizontalAccuracy },
+                { title: qsTr("Vertical Accuracy"), valueFact: root._vehicle.gps.verticalAccuracy }
             ] : root.selectedPage === "imu" ? [
-                { title: qsTr("横滚角速度"), valueFact: root._vehicle.rollRate },
-                { title: qsTr("俯仰角速度"), valueFact: root._vehicle.pitchRate },
-                { title: qsTr("偏航角速度"), valueFact: root._vehicle.yawRate },
-                { title: qsTr("惯性传感器温度"), valueFact: root._vehicle.imuTemp }
+                { title: qsTr("Roll Rate"), valueFact: root._vehicle.rollRate },
+                { title: qsTr("Pitch Rate"), valueFact: root._vehicle.pitchRate },
+                { title: qsTr("Yaw Rate"), valueFact: root._vehicle.yawRate },
+                { title: qsTr("IMU Temperature"), valueFact: root._vehicle.imuTemp }
             ] : root.selectedPage === "compass" ? [
-                { title: qsTr("航向"), valueFact: root._vehicle.heading }
+                { title: qsTr("Heading"), valueFact: root._vehicle.heading }
             ] : root.selectedPage === "range" ? [
-                { title: qsTr("测距距离"), valueFact: root._vehicle.rangeFinderDist }
+                { title: qsTr("Rangefinder Distance"), valueFact: root._vehicle.rangeFinderDist }
             ] : []
             QGCLabel {
                 required property var modelData
-                text: modelData.title + "：" + (root._vehicle && !root._vehicle.vehicleLinkManager.communicationLost
-                    && !isNaN(Number(modelData.valueFact.rawValue))
-                    ? modelData.valueFact.valueString + " " + modelData.valueFact.units : "—")
+                text: qsTr("%1: %2").arg(modelData.title)
+                    .arg(root._vehicle && !root._vehicle.vehicleLinkManager.communicationLost
+                        && !isNaN(Number(modelData.valueFact.rawValue))
+                        ? modelData.valueFact.valueString + " " + modelData.valueFact.units : "—")
             }
         }
     }
@@ -141,8 +142,8 @@ ColumnLayout {
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
         visible: !root._ready
-        text: root._vehicle ? qsTr("正在下载飞机参数，请等待下载完成后配置。")
-                            : qsTr("请先连接飞机，再选择需要配置的项目。")
+        text: root._vehicle ? qsTr("Wait for vehicle parameters to finish downloading before configuring the vehicle.")
+                            : qsTr("Connect a vehicle to configure its settings.")
     }
     VehicleConfigView {
         id: configView

@@ -28,23 +28,23 @@ Item {
 
     function directoryTitle(name) {
         const titles = {
-            "Standard": qsTr("常用功能"), "Advanced": qsTr("高级功能"),
-            "Other": qsTr("其他功能"), "Miscellaneous": qsTr("其他功能"),
-            "Battery": qsTr("电池与电源"), "Battery Calibration": qsTr("电池校准"),
-            "Commander": qsTr("飞行状态与解锁"), "Flight Modes": qsTr("飞行模式"),
-            "Sensors": qsTr("传感器"), "Sensor Calibration": qsTr("传感器校准"),
-            "GPS": qsTr("卫星定位（GPS）"), "EKF2": qsTr("状态估计（EKF2）"),
-            "EKF3": qsTr("状态估计（EKF3）"), "Radio": qsTr("遥控器"),
-            "RC": qsTr("遥控器"), "Telemetry": qsTr("遥测通信"), "MAVLink": qsTr("MAVLink 通信"),
-            "Multicopter Attitude Control": qsTr("多旋翼姿态控制"),
-            "Multicopter Position Control": qsTr("多旋翼位置控制"),
-            "Multicopter Rate Control": qsTr("多旋翼角速度控制"),
-            "Fixed Wing Attitude Control": qsTr("固定翼姿态控制"),
-            "Fixed Wing Position Control": qsTr("固定翼位置控制"),
-            "Mission": qsTr("任务航线"), "Navigator": qsTr("导航"), "Geofence": qsTr("地理围栏"),
-            "Return Mode": qsTr("返航"), "Land Detector": qsTr("着陆检测"),
-            "Safety": qsTr("安全保护"), "Logging": qsTr("日志记录"), "Logger": qsTr("日志记录"),
-            "Camera": qsTr("相机"), "Gimbal": qsTr("云台"), "System": qsTr("系统设置")
+            "Standard": qsTr("Standard"), "Advanced": qsTr("Advanced"),
+            "Other": qsTr("Other"), "Miscellaneous": qsTr("Miscellaneous"),
+            "Battery": qsTr("Battery"), "Battery Calibration": qsTr("Battery Calibration"),
+            "Commander": qsTr("Commander"), "Flight Modes": qsTr("Flight Modes"),
+            "Sensors": qsTr("Sensors"), "Sensor Calibration": qsTr("Sensor Calibration"),
+            "GPS": qsTr("GPS"), "EKF2": qsTr("EKF2"),
+            "EKF3": qsTr("EKF3"), "Radio": qsTr("Radio"),
+            "RC": qsTr("RC"), "Telemetry": qsTr("Telemetry"), "MAVLink": qsTr("MAVLink"),
+            "Multicopter Attitude Control": qsTr("Multicopter Attitude Control"),
+            "Multicopter Position Control": qsTr("Multicopter Position Control"),
+            "Multicopter Rate Control": qsTr("Multicopter Rate Control"),
+            "Fixed Wing Attitude Control": qsTr("Fixed Wing Attitude Control"),
+            "Fixed Wing Position Control": qsTr("Fixed Wing Position Control"),
+            "Mission": qsTr("Mission"), "Navigator": qsTr("Navigator"), "Geofence": qsTr("Geofence"),
+            "Return Mode": qsTr("Return Mode"), "Land Detector": qsTr("Land Detector"),
+            "Safety": qsTr("Safety"), "Logging": qsTr("Logging"), "Logger": qsTr("Logger"),
+            "Camera": qsTr("Camera"), "Gimbal": qsTr("Gimbal"), "System": qsTr("System")
         }
         return functionalDirectory ? (titles[name] || name) : name
     }
@@ -181,12 +181,12 @@ Item {
 
             QGCTextField {
                 id:                     searchText
-                placeholderText:        (_root.functionalDirectory ? qsTr("搜索参数名称或功能说明…") : qsTr("Search"))
+                placeholderText:        (_root.functionalDirectory ? qsTr("Search parameter names or descriptions…") : qsTr("Search"))
                 onDisplayTextChanged:   controller.searchText = displayText
             }
 
             QGCButton {
-                text: (_root.functionalDirectory ? qsTr("清除") : qsTr("Clear"))
+                text: qsTr("Clear")
                 onClicked: {
                     if(ScreenTools.isMobile) {
                         Qt.inputMethod.hide();
@@ -196,7 +196,7 @@ Item {
             }
 
             QGCCheckBox {
-                text:       (_root.functionalDirectory ? qsTr("隐藏只读参数") : qsTr("Hide read-only"))
+                text:       qsTr("Hide read-only")
                 checked:    controller.hideReadOnly
                 onClicked:  controller.hideReadOnly = checked
             }
@@ -205,7 +205,7 @@ Item {
         QGCButton {
             Layout.alignment:   Qt.AlignRight
             objectName:         "parameterEditor_toolsButton"
-            text:               (_root.functionalDirectory ? qsTr("参数工具") : qsTr("Tools"))
+            text:               (_root.functionalDirectory ? qsTr("Parameter Tools") : qsTr("Tools"))
             onClicked:          toolsMenu.popup()
         }
     }
@@ -224,9 +224,9 @@ Item {
             controller.showFavoritesOnly = (currentIndex === 2)
         }
 
-        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("全部参数") : qsTr("Full List")) }
-        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("已修改") : qsTr("Modified")) }
-        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("收藏") : qsTr("Favorites")) }
+        QGCGroupBoxTab { title: (_root.functionalDirectory ? qsTr("All Parameters") : qsTr("Full List")) }
+        QGCGroupBoxTab { title: qsTr("Modified") }
+        QGCGroupBoxTab { title: qsTr("Favorites") }
 
         Item {
             Layout.fillWidth:   true
@@ -315,7 +315,7 @@ Item {
                         anchors.left:           parent.left
                         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
                         anchors.verticalCenter: parent.verticalCenter
-                        text:                   _root.functionalDirectory ? [qsTr("收藏"), qsTr("参数名称"), qsTr("当前值"), qsTr("功能说明")][column] : display
+                        text:                   _root.functionalDirectory ? [qsTr("Favorites"), qsTr("Parameter Name"), qsTr("Current Value"), qsTr("Description")][column] : display
                         font.bold:              true
                     }
 

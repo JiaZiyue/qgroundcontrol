@@ -493,7 +493,7 @@ SetupPage {
             } // Component - firmwareSelectDialogComponent
 
             QGCGroupBox {
-                heading: qsTr("DFU 设备")
+                heading: qsTr("DFU Devices")
                 RowLayout {
                     Layout.fillWidth: true
                     QGCComboBox {
@@ -501,18 +501,18 @@ SetupPage {
                         model: controller.dfuDevices
                     }
                     QGCButton {
-                        text: qsTr("刷新 DFU 设备")
+                        text: qsTr("Refresh DFU Devices")
                         onClicked: controller.scanDfuDevices()
                     }
                 }
                 QGCLabel {
                     Layout.fillWidth: true
                     wrapMode: Text.WordWrap
-                    text: qsTr("DFU 烧录指引\n1. 断开地面站连接，按飞控说明按住 BOOT 按钮并连接 USB，进入 DFU 模式。\n2. 点击刷新，确认列表中出现目标 DFU 设备；没有设备时检查数据线、驱动和 USB 权限。\n3. .px4 是固件封装文件，不能直接交给 dfu-util。需校验板型、解包，并确认该板的应用写入地址。\n4. 当前 DFU 入口提供设备检测；.px4 的 DFU 写入尚未接入。常规 .px4 升级请退出 DFU，使用下方 Bootloader 升级入口。\n5. 烧录完成后退出 DFU 并重新连接，核对固件版本。")
+                    text: qsTr("DFU instructions\n1. Disconnect from the ground station. Follow the flight controller instructions to hold BOOT while connecting USB to enter DFU mode.\n2. Select Refresh and check that the target DFU device is listed. If it is missing, check the cable, driver and USB permissions.\n3. A .px4 file is a firmware package and cannot be passed directly to dfu-util. Verify the board, unpack the firmware and confirm the application write address for the board.\n4. This DFU section detects devices only. Writing .px4 firmware in DFU mode is not supported. For a normal .px4 update, exit DFU mode and use the bootloader upgrade section below.\n5. After flashing, exit DFU mode, reconnect and check the firmware version.")
                 }
             }
 
-            QGCLabel { text: qsTr("常规 Bootloader 升级（不适用于 DFU 模式）"); font.bold: true }
+            QGCLabel { text: qsTr("Standard bootloader upgrade (unavailable in DFU mode)"); font.bold: true }
 
             RowLayout {
                 spacing: ScreenTools.defaultFontPixelWidth
@@ -539,7 +539,7 @@ SetupPage {
                         if (p.boardName && p.description) {
                             return p.description + " [" + p.boardName + "]"
                         }
-                        return p.boardName || p.description || qsTr("USB 飞控")
+                        return p.boardName || p.description || qsTr("USB flight controller")
                     }
 
                     onActivated: (index) => {

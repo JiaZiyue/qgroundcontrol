@@ -826,7 +826,7 @@ void FirmwareUpgradeController::scanDfuDevices()
     }
     const QString executable = QStandardPaths::findExecutable(QStringLiteral("dfu-util"));
     if (executable.isEmpty()) {
-        _dfuDevices = {tr("未找到 dfu-util，请先安装后刷新")};
+        _dfuDevices = {tr("dfu-util was not found. Install it and refresh the device list.")};
         emit dfuDevicesChanged();
         return;
     }
@@ -842,7 +842,7 @@ void FirmwareUpgradeController::scanDfuDevices()
             const auto match = usb.match(line);
             if (match.hasMatch()) {
                 const QString label =
-                    tr("DFU 设备 [%1] · USB %2 · %3").arg(match.captured(1), match.captured(2), match.captured(4));
+                    tr("DFU device [%1] · USB %2 · %3").arg(match.captured(1), match.captured(2), match.captured(4));
                 if (!devices.contains(label)) {
                     devices.append(label);
                 }
@@ -850,8 +850,8 @@ void FirmwareUpgradeController::scanDfuDevices()
         }
         if (devices.isEmpty()) {
             devices.append(output.contains(QStringLiteral("LIBUSB_ERROR_ACCESS"))
-                               ? tr("无法访问 DFU 设备，请检查 USB 权限")
-                               : tr("未检测到 DFU 设备，请进入 DFU 模式后刷新"));
+                               ? tr("Cannot access DFU devices. Check USB permissions.")
+                               : tr("No DFU devices found. Enter DFU mode and refresh the device list."));
         }
         _dfuDevices = devices;
         _dfuScan = nullptr;
@@ -860,7 +860,7 @@ void FirmwareUpgradeController::scanDfuDevices()
     });
     connect(process, &QProcess::errorOccurred, this, [this, process](QProcess::ProcessError error) {
         if (error == QProcess::FailedToStart) {
-            _dfuDevices = {tr("无法启动 dfu-util")};
+            _dfuDevices = {tr("Unable to start dfu-util")};
             _dfuScan = nullptr;
             process->deleteLater();
             emit dfuDevicesChanged();

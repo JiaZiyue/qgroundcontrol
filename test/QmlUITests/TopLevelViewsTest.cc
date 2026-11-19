@@ -2,6 +2,7 @@
 
 #include <algorithm>
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QScopeGuard>
 #include <QtQuick/QQuickItem>
 #include <QtQuick/QQuickWindow>
@@ -173,12 +174,14 @@ void TopLevelViewsTest::_testManualConnection()
     QVERIFY(clickButton(QStringLiteral("connection_option_Manual connection test")));
     QVERIFY(verifyText(QStringLiteral("connection_selector"), config->name(), QStringLiteral("Selected link")));
     QTRY_VERIFY_WITH_TIMEOUT(config->linkActive(), TestTimeout::mediumMs());
-    QVERIFY(
-        verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("断开"), QStringLiteral("Connected link")));
+    QVERIFY(verifyText(QStringLiteral("connection_toggle"),
+                       QCoreApplication::translate("ConfiguratorConnectionControl", "Disconnect"),
+                       QStringLiteral("Connected link")));
     QVERIFY(clickButton(QStringLiteral("connection_toggle")));
     QTRY_VERIFY_WITH_TIMEOUT(!config->linkActive(), TestTimeout::mediumMs());
     QVERIFY(config->suppressAutoReconnect());
-    QVERIFY(verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("连接"),
+    QVERIFY(verifyText(QStringLiteral("connection_toggle"),
+                       QCoreApplication::translate("ConfiguratorConnectionControl", "Connect"),
                        QStringLiteral("Disconnected link")));
 }
 
@@ -204,7 +207,8 @@ void TopLevelViewsTest::_testDashboard()
     QObject* const dialog = _window->findChild<QObject*>(QStringLiteral("dashboard_quickDialog"));
     QVERIFY(dialog);
     QVERIFY(QMetaObject::invokeMethod(dialog, "accept"));
-    QVERIFY(verifyText(QStringLiteral("dashboard_quick_0"), QString::fromUtf8("油门百分比"),
+    QVERIFY(verifyText(QStringLiteral("dashboard_quick_0"),
+                       QCoreApplication::translate("DashboardView", "Throttle Percentage"),
                        QStringLiteral("Quick telemetry selection")));
     QVERIFY(clickToolSelectDropdownButton(QStringLiteral("toolbar_viewFly")));
     QVERIFY(findVisibleItem(_rootItem, QStringLiteral("mainView_fly")));
@@ -258,7 +262,8 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             QTRY_COMPARE(_rootItem->width(), 1600);
             QVERIFY(verifyText(QStringLiteral("connection_selector"), mockLink->linkConfiguration()->name(),
                                QStringLiteral("Automatically selected active link")));
-            QVERIFY(verifyText(QStringLiteral("connection_toggle"), QString::fromUtf8("断开"),
+            QVERIFY(verifyText(QStringLiteral("connection_toggle"),
+                               QCoreApplication::translate("ConfiguratorConnectionControl", "Disconnect"),
                                QStringLiteral("Active link state")));
             Fact* const indoorPalette = SettingsManager::instance()->appSettings()->indoorPalette();
             const QVariant oldPalette = indoorPalette->rawValue();

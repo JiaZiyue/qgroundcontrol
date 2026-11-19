@@ -243,6 +243,12 @@
             <source>Amount of additional distance to add outside the survey area for vehicle turnaround.</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[Trigger distance].shortDesc</extracomment>
+            <location filename="../src/MissionManager/CorridorScan.SettingsGroup.json" />
+            <source>Distance between each triggering of the camera. 0 specifies no camera trigger.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>SpeedSection.FactMetaData.json</name>
@@ -289,6 +295,12 @@
             <extracomment>.QGC.MetaData.Facts[SideOverlap].shortDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/MissionManager/CameraCalc.FactMetaData.json" />
             <source>Amount of overlap between images in the side facing direction.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ImageDensity].shortDesc</extracomment>
+            <location filename="../src/MissionManager/CameraCalc.FactMetaData.json" />
+            <source>Image density at surface.</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -381,6 +393,12 @@
             <source>Stop taking video</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[UseLoiterToAlt].shortDesc</extracomment>
+            <location filename="../src/MissionManager/FWLandingPattern.FactMetaData.json" />
+            <source>Use a loiter to altitude item for final approach. Otherwise use a regular waypoint.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>Survey.SettingsGroup.json</name>
@@ -402,6 +420,18 @@
             <source>Split mission concave polygons into separate regular, convex polygons.</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[SplitConcavePolygons].shortDesc</extracomment>
+            <location filename="../src/MissionManager/Survey.SettingsGroup.json" />
+            <source>Split transects at concave polygon boundaries.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[SplitConcavePolygons].longDesc</extracomment>
+            <location filename="../src/MissionManager/Survey.SettingsGroup.json" />
+            <source>Transects which cross a concave gap are split into separate segments. The vehicle still flies straight across the gap. Images are only stopped over the gap when images in turnarounds is disabled.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>RallyPoint.FactMetaData.json</name>
@@ -421,6 +451,12 @@
             <extracomment>.QGC.MetaData.Facts[RelativeAltitude].shortDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/MissionManager/RallyPoint.FactMetaData.json" />
             <source>Altitude (rel)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[Altitude].shortDesc</extracomment>
+            <location filename="../src/MissionManager/RallyPoint.FactMetaData.json" />
+            <source>Altitude</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -501,6 +537,12 @@
             <source>Minimum amount of time between each camera trigger.</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[FixedOrientation].shortDesc</extracomment>
+            <location filename="../src/MissionManager/CameraSpec.FactMetaData.json" />
+            <source>Camera orientation is fixed and cannot be changed.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>StructureScan.SettingsGroup.json</name>
@@ -538,6 +580,12 @@
             <extracomment>.QGC.MetaData.Facts[StartFromTop].shortDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/MissionManager/StructureScan.SettingsGroup.json" />
             <source>Start scanning from top of structure.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ScanBottomAlt].shortDesc</extracomment>
+            <location filename="../src/MissionManager/StructureScan.SettingsGroup.json" />
+            <source>Altitude for the bottommost covered area of the scan. You can adjust this value such that the Bottom Layer Alt will fly above obstacles on the ground.</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -2131,6 +2179,12 @@
             <source>Payload control deploy</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_CHANGE_ALT].description</extracomment>
+            <location filename="../src/MissionManager/MavCmdInfoCommon.json" />
+            <source>Delay the mission until the specified altitude is reached.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>MissionSettings.FactMetaData.json</name>
@@ -2207,6 +2261,12 @@
             <extracomment>.QGC.MetaData.Facts[StopTakingVideo].shortDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/MissionManager/VTOLLandingPattern.FactMetaData.json" />
             <source>Stop taking video</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[UseLoiterToAlt].shortDesc</extracomment>
+            <location filename="../src/MissionManager/VTOLLandingPattern.FactMetaData.json" />
+            <source>Use a loiter to altitude item for final approach. Otherwise use a regular waypoint.</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -4511,6 +4571,18 @@
             <source>3d view,memory,scene,alive</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[buildingLevelHeight].shortDesc</extracomment>
+            <location filename="../src/Settings/Viewer3D.SettingsGroup.json" />
+            <source>Average floor-to-floor height used for 3D building visualization.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[altitudeBias].shortDesc</extracomment>
+            <location filename="../src/Settings/Viewer3D.SettingsGroup.json" />
+            <source>Vertical offset for vehicle rendering in the 3D viewer.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>OfflineMaps.SettingsGroup.json</name>
@@ -4662,6 +4734,44 @@
             <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/Settings/PlanView.SettingsGroup.json" />
             <source>vtol transition</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useNewPlanPanel].shortDesc</extracomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>Use the tabbed Plan View panel instead of the tree view.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useNewPlanPanel].label</extracomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>Use tabbed Plan panel (experimental)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useNewPlanPanel].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>plan panel tree tabs experimental</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].shortDesc</extracomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>Use the experimental GeoMap 2D/3D engine for the Plan View map (preview feature). Requires the tabbed Plan panel. Waypoints can be dragged on the map, but fence, rally point and pattern editing on the map is not supported yet.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].label</extracomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>Use GeoMap engine (preview)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/PlanView.SettingsGroup.json" />
+            <source>geomap 3d map engine preview experimental plan</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -5372,6 +5482,118 @@
             <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/Settings/Video.SettingsGroup.json" />
             <source>smoothing,jitter,pacing,latency,obs</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[disableWhenDisarmed].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Disables the video stream when the vehicle is disarmed. Any active recording is also stopped.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[disableWhenDisarmed].label</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Disable Video Stream When Disarmed</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[lowLatencyMode].shortDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Minimize video latency by disabling RTP playout buffering and retransmission recovery.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[lowLatencyMode].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Sets RTP playout latency to zero and disables retransmission recovery. This reduces delay but may increase dropped or corrupted frames on lossy or reordered networks.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtpJitterLatencyMs].shortDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>RTP jitter-buffer playout latency (ms).</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtpJitterLatencyMs].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Latency budget for the RTP jitter buffer (rtspsrc.latency / rtpjitterbuffer.latency). Lower = less glass-to-glass delay; higher = more headroom for packet reordering and retransmission. The default of 80 ms allows RFC 4588 retransmission to recover lost packets before the playout deadline; values &lt;40 ms effectively disable retransmission. Ignored when Low Latency Mode is enabled.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtpJitterLatencyMs].label</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>RTP jitter latency</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtpJitterLatencyMs].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>rtp,jitter,latency,rtsp,rtx,retransmission,advanced</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtspAutoReconnect].shortDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Automatically restart the pipeline on watchdog timeout or pipeline error.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtspAutoReconnect].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>When enabled, the receiver reconnects with exponential backoff (1s → 30s) after a stream timeout or a fatal pipeline error. Disable to fall back to the legacy behaviour of giving up after one failure.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtspAutoReconnect].label</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Auto-reconnect on stream loss</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtspAutoReconnect].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>rtsp,reconnect,watchdog,recovery,advanced</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[videoConversionElement].shortDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Override the GStreamer conversion element at the head of the video sink.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[videoConversionElement].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Leave blank to auto-probe (SoC-native imxvideoconvert_g2d / nvvidconv when present, otherwise videoconvertscale). Set to a specific GStreamer factory name to force that element. Used as a workaround when an SoC's preferred element has a defect; changing it restarts the video stream.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[videoConversionElement].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>videoconvert,videoconvertscale,nvvidconv,imxvideoconvert,gstreamer,advanced</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[disablePixelAspectRatio].shortDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>Let the video sink take non-square pixels instead of scaling them to square ones.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[disablePixelAspectRatio].longDesc</extracomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>QGC normally has the video sink ask for pixel-aspect-ratio=1/1, so non-square-pixel sources (some RTSP cams, DVB) are scaled instead of rendering geometrically distorted. A few v4l2 drivers without VIDIOC_CROPCAP deadlock negotiation when PAR is forced; enable this option as a workaround. Changing it restarts the video stream.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[disablePixelAspectRatio].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/Video.SettingsGroup.json" />
+            <source>pixel aspect ratio,v4l2,workaround,advanced</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -6092,6 +6314,75 @@
             <source>eu,class,ce marking</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[operatorIDEU].shortDesc, .QGC.MetaData.Facts[operatorIDFAA].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Pilot registration code or identification number.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[operatorIDEU].longDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>EU Operator ID. Enter the full 19 or 20 character ID including the 3 secret characters; only the 16 character public part is stored and broadcast.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[selfIDType].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Type of self-ID message to broadcast.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[basicIDType].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Format of the drone ID.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[basicIDUaType].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Undefined,Airplane/FixedWing,Helicopter/Multirotor,Gyroplane,VTOL,Ornithopter,Glider,Kite,Free Balloon,Captive Balloon,Airship,Parachute,Rocket,Tethered powered aircraft,Ground Obstacle,Other</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[region].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Regulatory region for Remote ID compliance.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[locationType].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Takeoff(Not Supported),Live GNSS, Fixed (not for FAA)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[classificationType].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>Classification standard to use for Remote ID.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[classificationType].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>None,EU</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[categoryEU].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>EU classification category for the UAS.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[classEU].shortDesc</extracomment>
+            <location filename="../src/Settings/RemoteID.SettingsGroup.json" />
+            <source>EU equipment class designation.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>Mavlink.SettingsGroup.json</name>
@@ -6314,6 +6605,36 @@
             <source>initial download</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[telemetrySaveNotArmed].longDesc</extracomment>
+            <location filename="../src/Settings/Mavlink.SettingsGroup.json" />
+            <source>If this option is enabled a telemetry log will be saved even if vehicle was never armed.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[gcsMavlinkSystemID].shortDesc</extracomment>
+            <location filename="../src/Settings/Mavlink.SettingsGroup.json" />
+            <source>MAVLink system identifier (1-4294967295) for this ground station.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenArmed].shortDesc</extracomment>
+            <location filename="../src/Settings/Mavlink.SettingsGroup.json" />
+            <source>Skip downloading parameters and missions when connecting to a vehicle that is already armed.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenArmed].longDesc</extracomment>
+            <location filename="../src/Settings/Mavlink.SettingsGroup.json" />
+            <source>When enabled, parameter and mission plan downloads are skipped when connecting to a vehicle that is already armed. This prevents bandwidth-heavy transfers from disrupting an active flight.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenArmed].label</extracomment>
+            <location filename="../src/Settings/Mavlink.SettingsGroup.json" />
+            <source>Skip param/plan download if vehicle is armed on connect</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>NTRIP.SettingsGroup.json</name>
@@ -6470,6 +6791,79 @@
             <source>UDP target port</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripAllowSelfSignedCerts].shortDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Accept self-signed TLS certificates</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripAllowSelfSignedCerts].longDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Allow connections to NTRIP casters with self-signed TLS certificates. Disabling this rejects self-signed certificates to prevent man-in-the-middle attacks.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripAllowSelfSignedCerts].label</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Accept self-signed certificates</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripPinnedCertificate].shortDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Trusted self-signed caster certificate</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripPinnedCertificate].label</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Trusted caster certificate</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaPositionSource].shortDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Position reported to the caster. Network (VRS) mountpoints need it; Auto selects the best available source.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaPositionSource].longDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Position source for NMEA GGA sentences sent to the NTRIP caster. Auto selects the best available source.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaPositionSource].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>Auto,Vehicle GPS,Vehicle EKF,RTK Receiver,GCS Position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaPositionSource].label</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>GGA Position Source</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaIntervalSec].shortDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>How often the position is reported to the caster.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaIntervalSec].longDesc</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>How often to send NMEA GGA sentences upstream to the NTRIP caster. VRS mountpoints typically require 1-10s; set lower for tighter VRS tracking, higher to reduce bandwidth.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[ntripGgaIntervalSec].label</extracomment>
+            <location filename="../src/Settings/NTRIP.SettingsGroup.json" />
+            <source>GGA Send Interval</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>GPSCorrection.SettingsGroup.json</name>
@@ -6538,6 +6932,81 @@
             <extracomment>.QGC.MetaData.Facts[correctionSourceInstance].longDesc</extracomment>
             <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
             <source>Leave empty to choose a fresh stream within the selected source category. A specific endpoint remains pinned when unavailable, without fallback to another stream.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[correctionSource].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Highest priority sends one fresh stream to vehicles, preferring the local base station, then NTRIP, then UDP. Choosing a source never falls back to another. UDP forwarding sends the same stream.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[correctionSource].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Highest priority,Local base station,NTRIP,UDP</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpInputEnabled].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Receive RTCM corrections from another application over UDP.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpInputPort].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Local port that receives the corrections.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputEnabled].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Forward the correction stream selected for vehicles to another application over UDP.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputEnabled].label</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Forward corrections over UDP</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputEnabled].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>udp forward,relay,corrections forward</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputAddress].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>IP address that receives the forwarded corrections.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputAddress].label</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>UDP output address</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputAddress].keywords, .QGC.MetaData.Facts[rtcmUdpOutputPort].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>udp forward,relay</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputPort].shortDesc</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>Port that receives the forwarded corrections.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[rtcmUdpOutputPort].label</extracomment>
+            <location filename="../src/Settings/GPSCorrection.SettingsGroup.json" />
+            <source>UDP output port</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -6645,6 +7114,253 @@
             <extracomment>.QGC.MetaData.Facts[fixedBasePositionAccuracy].longDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/Settings/RTK.SettingsGroup.json" />
             <source>Defines the accuracy of the fixed RTK base position.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[receiverRole].shortDesc, .QGC.MetaData.Facts[receiverRole].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver role</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[receiverRole].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Passive uses the receiver's existing output without configuring it: its NMEA, u-blox UBX or Septentrio SBF position output provides the ground station position, and its RTCM output can be forwarded to vehicles. Configured base sets up a supported receiver as an RTK base station.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[receiverRole].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Passive,Configured base</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[forwardReceiverRtcm].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Makes a passive receiver that already outputs RTCM, such as a pre-configured base station, a correction source for vehicles.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[forwardReceiverRtcm].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Forward receiver RTCM</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[baseReceiverManufacturers].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Detect automatically identifies the receiver each time it connects, by listening to its output and sending read-only identification queries. Until then the settings of every supported receiver are shown.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[baseReceiverManufacturers].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Detect automatically identifies the receiver family on every connection: QGroundControl listens to the receiver's output and sends read-only identification queries at each supported baud rate, then configures the family it found. Until then the settings of every supported receiver are shown. Select a manufacturer to configure only that receiver family.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[baseReceiverManufacturers].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Detect automatically,Trimble,Septentrio,Femtomes,u-blox,Unicore UM980/UM982,Quectel LG290P</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[baseReceiverManufacturers].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver manufacturer</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[connectionType].shortDesc, .QGC.MetaData.Facts[connectionType].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver connection</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[connectionType].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Serial connects a receiver on a local port. TCP connects a receiver's network port or a serial-to-TCP bridge. UDP listens for the output of a receiver QGroundControl does not configure.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[connectionType].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Serial,TCP,UDP</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[tcpHost].shortDesc, .QGC.MetaData.Facts[tcpHost].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver host</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[tcpHost].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Host name or address of the receiver or serial-to-TCP bridge.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[tcpPort].shortDesc, .QGC.MetaData.Facts[tcpPort].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver TCP port</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[tcpPort].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>TCP port of the receiver or serial-to-TCP bridge.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[udpPort].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Listens on this local port for the receiver's output. The first sender is used until it stops sending.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[udpPort].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver UDP port</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[autoConnect].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Connects the saved receiver at startup and reconnects it when the connection is lost or the receiver is plugged back in. Disconnect pauses this until you connect again.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[autoConnect].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Connect the saved receiver when QGroundControl starts, reconnect it with increasing delays when the connection is lost, and reconnect a serial receiver as soon as it is plugged back in. A configured base without a saved serial device connects to an RTK receiver detected on USB instead. Disconnect pauses automatic connection until you connect again. When off, receivers connect only when you select Connect, and a lost connection is reported. Automatic connections never save settings to receiver flash.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[autoConnect].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Connect automatically</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[autoConnect].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>auto connect,reconnect,startup,rtk gps</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[gcsPositionSource].shortDesc, .QGC.MetaData.Facts[gcsPositionSource].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>GCS position source</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[gcsPositionSource].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Source of the ground station position. Best available uses the connected GNSS receiver, then this device, and switches when the preferred source loses its fix.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[gcsPositionSource].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Best available,GNSS receiver,This device</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[gcsPositionSource].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>gcs position,ground station position,gps,gnss,rtk,nmea,location</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[serialDevice].shortDesc, .QGC.MetaData.Facts[serialDevice].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Serial device</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[serialDevice].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Explicitly selected receiver port. Leave it empty for a configured base to connect to an RTK receiver detected on USB; generic USB serial adapters are not automatically identified as GNSS receivers.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[serialBaudRate].shortDesc, .QGC.MetaData.Facts[serialBaudRate].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Baud rate</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[serialBaudRate].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Serial rate for an explicitly selected receiver. Auto (0) lets configurable receivers detect the rate; passive input requires the rate already configured on the receiver.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[surveyInAccuracyLimit].shortDesc, .QGC.MetaData.Facts[surveyInAccuracyLimit].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Survey-In accuracy</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[surveyInAccuracyLimit].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Receiver-specific survey accuracy limit. Quectel applies this limit to individual observations, not to guaranteed final position accuracy.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[surveyInMinObservationDuration].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Defines the minimum observation time for the position calculation. Quectel counts accepted 1 Hz observations; elapsed time can be longer.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[receiverAveragingDuration].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>The receiver averages its position for up to this time. This is not accuracy-controlled survey-in and does not guarantee a position accuracy.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[receiverAveragingDuration].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Maximum averaging time</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useFixedBasePosition].shortDesc, .QGC.MetaData.Facts[useFixedBasePosition].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Base mode</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useFixedBasePosition].longDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Specify the RTK base mode: accuracy-controlled survey-in, fixed position, or receiver-managed averaging without an accuracy guarantee.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useFixedBasePosition].enumStrings</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Survey-In,Fixed position,Receiver-managed averaging</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[compactRtcmCorrections].shortDesc</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Uses about a third less correction bandwidth, for example on slow telemetry radios. Doppler is omitted and measurements use lower resolution.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[compactRtcmCorrections].label</extracomment>
+            <location filename="../src/Settings/RTK.SettingsGroup.json" />
+            <source>Compact RTCM corrections (MSM4)</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -7573,6 +8289,105 @@
             <source>log,time,elapsed,timestamp,console</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[offlineEditingDescentSpeed].longDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>This value defines the descent speed for multi-rotor vehicles for use in calculating mission duration.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[defaultMissionItemAltitude].shortDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Default altitude automatically assigned to new mission items, survey patterns, rally points and the fence breach return point.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[defaultMissionItemAltitude].longDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>This value specifies the default altitude for new waypoints, survey, corridor scan and structure scan patterns, rally points and the GeoFence breach return point.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioMuted].shortDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Mute voice notifications</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioMuted].longDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Mutes voice notifications without changing the volume level.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioMuted].label</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Mute Voice Notifications</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioMuted].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>audio,mute,sound,voice,notifications</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioVolume].shortDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Controls the volume level for voice notifications.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioVolume].longDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Sets the voice notification volume percentage.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioVolume].label</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Voice Notification Volume</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[audioVolume].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>audio,volume,sound,voice,notifications</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[androidUsePosixSerial].shortDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Use the device's built-in serial ports instead of USB serial devices.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[androidUsePosixSerial].longDesc</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>If this option is enabled, the built-in serial ports (/dev/tty*) are used instead of USB serial devices. This requires a device which allows access to the serial ports.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[androidUsePosixSerial].label</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Use built-in serial ports</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[androidUsePosixSerial].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>serial,posix,uart,tty,android</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[lastNotifiedStableVersion].shortDesc, .QGC.MetaData.Facts[lastNotifiedStableVersion].label</extracomment>
+            <location filename="../src/Settings/App.SettingsGroup.json" />
+            <source>Newest stable version the user has already been notified about.</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>FlyView.SettingsGroup.json</name>
@@ -7846,6 +8661,69 @@
             <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json" />
             <source>mission popup</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].shortDesc</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Use the experimental GeoMap 2D/3D engine for the Fly View map (preview feature).</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].label</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Use GeoMap engine (preview)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[useGeoMapEngine].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>geomap,3d map,map engine,preview,experimental</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[geoMapDebugUI].shortDesc</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Show the GeoMap engine debug controls and terrain stats overlay.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[geoMapDebugUI].label</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Show GeoMap engine debug UI</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[geoMapDebugUI].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>geomap,debug,stats,diagnostics</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[forwardFlightGoToLocationLoiterRad].shortDesc</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Loiter radius when circling a go-to destination during fixed-wing flight. (ArduPilot only)</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[allowForceArm].shortDesc</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Show a Force Arm button in the main status indicator. Force arming bypasses pre-arm checks. Use with caution.</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[allowForceArm].label</extracomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>Allow Force Arm</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.QGC.MetaData.Facts[allowForceArm].keywords</extracomment>
+            <translatorcomment>Only use english comma ',' to separate strings</translatorcomment>
+            <location filename="../src/Settings/FlyView.SettingsGroup.json" />
+            <source>force arm,arming,pre-arm</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -9505,6 +10383,30 @@
             <source>nose up</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.groups[General].keywords[9]</extracomment>
+            <location filename="../src/AppSettings/pages/FlyView.SettingsUI.json" />
+            <source>3d map</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[General].keywords[10]</extracomment>
+            <location filename="../src/AppSettings/pages/FlyView.SettingsUI.json" />
+            <source>map engine</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[General].keywords[11]</extracomment>
+            <location filename="../src/AppSettings/pages/FlyView.SettingsUI.json" />
+            <source>debug</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[General].keywords[12]</extracomment>
+            <location filename="../src/AppSettings/pages/FlyView.SettingsUI.json" />
+            <source>force arm</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>Telemetry.SettingsUI.json</name>
@@ -9847,6 +10749,12 @@
             <source>add link</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.groups[Android Serial].heading</extracomment>
+            <location filename="../src/AppSettings/pages/CommLinks.SettingsUI.json" />
+            <source>Android Serial</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>Maps.SettingsUI.json</name>
@@ -10159,6 +11067,18 @@
             <source>Palette Test</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.pages[GNSS Receiver].name</extracomment>
+            <location filename="../src/AppSettings/pages/SettingsPages.json" />
+            <source>GNSS Receiver</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.pages[RTK Corrections].name</extracomment>
+            <location filename="../src/AppSettings/pages/SettingsPages.json" />
+            <source>RTK Corrections</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>Viewer3D.SettingsUI.json</name>
@@ -10226,6 +11146,12 @@
             <extracomment>.groups[Data].keywords[4]</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/AppSettings/pages/Viewer3D.SettingsUI.json" />
             <source>altitude bias</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[General].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/Viewer3D.SettingsUI.json" />
+            <source>deprecated</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -10592,6 +11518,18 @@
             <extracomment>.groups[EU Vehicle Info].keywords[4]</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/AppSettings/pages/RemoteID.SettingsUI.json" />
             <source>ce marking</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GroundStation Location].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RemoteID.SettingsUI.json" />
+            <source>position source</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GroundStation Location].keywords[7]</extracomment>
+            <location filename="../src/AppSettings/pages/RemoteID.SettingsUI.json" />
+            <source>accuracy</source>
             <translation type="unfinished" />
         </message>
     </context>
@@ -11419,6 +12357,18 @@
             <source>meters</source>
             <translation type="unfinished" />
         </message>
+        <message>
+            <extracomment>.groups[Units].keywords[9]</extracomment>
+            <location filename="../src/AppSettings/pages/General.SettingsUI.json" />
+            <source>coordinates</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Units].keywords[10]</extracomment>
+            <location filename="../src/AppSettings/pages/General.SettingsUI.json" />
+            <source>dms</source>
+            <translation type="unfinished" />
+        </message>
     </context>
     <context>
         <name>PlanView.SettingsUI.json</name>
@@ -11468,6 +12418,426 @@
             <extracomment>.groups[General].keywords[6]</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/AppSettings/pages/PlanView.SettingsUI.json" />
             <source>waypoint</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Experimental].heading</extracomment>
+            <location filename="../src/AppSettings/pages/PlanView.SettingsUI.json" />
+            <source>Experimental</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Experimental].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/PlanView.SettingsUI.json" />
+            <source>plan panel</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Experimental].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/PlanView.SettingsUI.json" />
+            <source>tabs</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Experimental].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/PlanView.SettingsUI.json" />
+            <source>tree view</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Experimental].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/PlanView.SettingsUI.json" />
+            <source>3d map</source>
+            <translation type="unfinished" />
+        </message>
+    </context>
+    <context>
+        <name>GNSSReceiver.SettingsUI.json</name>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>GNSS Receiver Status</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[3], .groups[GNSS Receiver].keywords[5]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>base station</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[4], .groups[GNSS Receiver].keywords[6]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>receiver</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[5]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>status</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[6]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>fix</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[7]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>satellites</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[8]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>jamming</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver Status].keywords[9]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>spoofing</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>GNSS Receiver</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>external gps</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[7]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>role</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[8]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>passive</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[9]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>position only</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[10]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>survey-in</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[11]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>fixed position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[14]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>automatic</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[15]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>detection</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[16]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>serial</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[19]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>startup</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GNSS Receiver].keywords[20]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>auto connect</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>GCS Position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>gcs position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>ground station position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>position source</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>internal gps</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GCS Position].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/GNSSReceiver.SettingsUI.json" />
+            <source>this device</source>
+            <translation type="unfinished" />
+        </message>
+    </context>
+    <context>
+        <name>RTKCorrections.SettingsUI.json</name>
+        <message>
+            <extracomment>.groups[Corrections Status].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>Corrections Status</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Corrections Status].keywords[0], .groups[NTRIP Connection].keywords[3], .groups[UDP RTCM Input].keywords[2], .groups[Correction Routing].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>corrections</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Corrections Status].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>status</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Corrections Status].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>selected stream</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Corrections Status].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>data rate</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Connection].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>NTRIP Connection</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Connection].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>connection status</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>NTRIP Server</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>ntrip server</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>caster</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>host</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>port</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[5]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>username</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Server].keywords[6]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>password</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Mountpoint].sectionName</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>NTRIP Mountpoint</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Mountpoint].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>mountpoint</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Mountpoint].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>browse</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Mountpoint].keywords[2], .groups[Correction Routing].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>stream</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Mountpoint].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>source table</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GGA Position Reporting].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>GGA Position Reporting</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GGA Position Reporting].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>position</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[GGA Position Reporting].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>network rtk</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Message Filter].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>NTRIP Message Filter</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Message Filter].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>whitelist</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Message Filter].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>message filter</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[NTRIP Message Filter].controls[0].placeholder</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>e.g. 1005,1077,1087</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP RTCM Input].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>UDP RTCM Input</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP RTCM Input].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>udp input</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP Forwarding].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>UDP Forwarding</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP Forwarding].keywords[0]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>udp forward</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP Forwarding].keywords[1]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>udp output</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP Forwarding].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>relay</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[UDP Forwarding].keywords[3]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>corrections forward</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Correction Routing].heading</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>Correction Routing</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Correction Routing].keywords[2]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>source</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Correction Routing].keywords[4]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>routing</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Correction Routing].keywords[5]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>automatic</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
+            <extracomment>.groups[Correction Routing].keywords[6]</extracomment>
+            <location filename="../src/AppSettings/pages/RTKCorrections.SettingsUI.json" />
+            <source>priority</source>
             <translation type="unfinished" />
         </message>
     </context>

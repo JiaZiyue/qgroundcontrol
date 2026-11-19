@@ -19,7 +19,7 @@ QString AirframeComponent::name(void) const
 
 QString AirframeComponent::description(void) const
 {
-    return tr("配置机架类型并应用默认调参。");
+    return tr("Select the airframe type and apply default tuning.");
 }
 
 QString AirframeComponent::iconResource(void) const

@@ -207,7 +207,7 @@ AnalyzePage {
                     objectName: "onboardLog_sortButton"
                     Layout.fillWidth: true
                     enabled: onboardLogPage._actionsAllowed && (OnboardLogController.model.count > 1)
-                    text: OnboardLogController.sortById ? (OnboardLogController.sortAscending ? qsTr("编号降序") : qsTr("编号升序")) : (OnboardLogController.sortAscending ? qsTr("Sort Descending") : qsTr("Sort Ascending"))
+                    text: OnboardLogController.sortById ? (OnboardLogController.sortAscending ? qsTr("Sort by ID descending") : qsTr("Sort by ID ascending")) : (OnboardLogController.sortAscending ? qsTr("Sort Descending") : qsTr("Sort Ascending"))
                     onClicked: OnboardLogController.toggleSortByDate()
                 }
 

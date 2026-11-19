@@ -93,7 +93,7 @@ ColumnLayout {
         visible: root.page === "imu" || root.page === "gps"
 
         QGCLabel {
-            text: root.page === "imu" ? qsTr("传感器实例") : qsTr("GPS 接收机")
+            text: root.page === "imu" ? qsTr("Sensor Instance") : qsTr("GPS Receiver")
         }
 
         QGCComboBox {
@@ -110,7 +110,7 @@ ColumnLayout {
         }
 
         QGCButton {
-            text: qsTr("请求 IMU 数据")
+            text: qsTr("Request IMU Data")
             visible: root.page === "imu"
             enabled: root.vehicle !== null
             onClicked: root.requestImu()
@@ -118,7 +118,7 @@ ColumnLayout {
 
         QGCLabel {
             Layout.fillWidth: true
-            text: root.page === "gps" && root.gps ? qsTr("定位状态：%1 · 卫星数量：%2").arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString) : root.message(root._imuNames) ? qsTr("接收频率：%1 Hz").arg(root.message(root._imuNames).actualRateHz.toFixed(1)) : qsTr("等待原始 IMU 消息；姿态角速度不代表已收到原始 IMU 数据。")
+            text: root.page === "gps" && root.gps ? qsTr("Fix status: %1 · Satellites: %2").arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString) : root.message(root._imuNames) ? qsTr("Receive rate: %1 Hz").arg(root.message(root._imuNames).actualRateHz.toFixed(1)) : qsTr("Waiting for raw IMU messages. Attitude angular rates alone do not indicate that raw IMU data has been received.")
         }
     }
 
@@ -131,14 +131,14 @@ ColumnLayout {
             Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 13
             series: root.imuSeries("acc")
             objectName: "sensor_plot_acceleration"
-            title: qsTr("加速度计")
+            title: qsTr("Accelerometer")
         }
 
         ConfiguratorTelemetryPlot {
             Layout.fillWidth: true
             Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 13
             series: root.imuSeries("gyro")
-            title: qsTr("陀螺仪")
+            title: qsTr("Gyroscope")
         }
     }
 
@@ -146,7 +146,7 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 13
         series: root.imuSeries("mag")
-        title: qsTr("磁场三轴实时波形")
+        title: qsTr("Live Three-Axis Magnetic Field Plot")
         visible: root.page === "compass"
     }
 
@@ -159,11 +159,11 @@ ColumnLayout {
             Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 14
             series: root.gps ? [
                 {
-                    title: qsTr("卫星数量"),
+                    title: qsTr("Satellite Count"),
                     fact: root.gps.count
                 }
             ] : []
-            title: qsTr("卫星数量趋势")
+            title: qsTr("Satellite Count History")
         }
 
         Rectangle {
@@ -185,31 +185,31 @@ ColumnLayout {
         Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 14
         series: [
             {
-                title: qsTr("光流 X"),
+                title: qsTr("Optical Flow X"),
                 field: root.field(["OPTICAL_FLOW_RAD"], "integrated_x"),
                 scale: 1,
                 units: "rad"
             },
             {
-                title: qsTr("光流 Y"),
+                title: qsTr("Optical Flow Y"),
                 field: root.field(["OPTICAL_FLOW_RAD"], "integrated_y"),
                 scale: 1,
                 units: "rad"
             },
             {
-                title: qsTr("陀螺仪 X"),
+                title: qsTr("Gyroscope X"),
                 field: root.field(["OPTICAL_FLOW_RAD"], "integrated_xgyro"),
                 scale: 1,
                 units: "rad"
             },
             {
-                title: qsTr("陀螺仪 Y"),
+                title: qsTr("Gyroscope Y"),
                 field: root.field(["OPTICAL_FLOW_RAD"], "integrated_ygyro"),
                 scale: 1,
                 units: "rad"
             }
         ]
-        title: qsTr("光流实时波形")
+        title: qsTr("Live Optical Flow Plot")
         visible: root.page === "flow"
     }
 
@@ -218,11 +218,11 @@ ColumnLayout {
         Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 14
         series: root.vehicle ? [
             {
-                title: qsTr("距离"),
+                title: qsTr("Distance"),
                 fact: root.vehicle.rangeFinderDist
             }
         ] : []
-        title: qsTr("测距仪实时波形")
+        title: qsTr("Live Rangefinder Plot")
         visible: root.page === "range"
     }
 }
