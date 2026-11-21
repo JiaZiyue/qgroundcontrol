@@ -28,10 +28,10 @@ and mission planning for any *MAVLink-enabled* drone, including *PX4* and *ArduP
 
 ## Download
 
-从[本仓库的 Releases 页面](https://github.com/yuxuan20230525/qgroundcontrol/releases)查看 Windows 简体中文版发布。发布后，可在对应版本的 Assets 中下载。Code → Download ZIP 提供的是源码，需要自行编译。
+点击下方按钮直接下载 Windows 简体中文预览版。版本信息和校验文件见[发布页面](https://github.com/yuxuan20230525/qgroundcontrol/releases/tag/v5.2.0-zh.1)。
 
 <p align="center">
-  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases"><img src="https://img.shields.io/badge/Windows-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-0078D6?logo=windows&amp;logoColor=white" alt="Windows 简体中文版"></a>
+  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases/download/v5.2.0-zh.1/QGroundControl-zh-CN-Windows-x64.exe"><img src="https://img.shields.io/badge/Windows-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-0078D6?logo=windows&amp;logoColor=white" alt="下载 Windows x64 简体中文版"></a>
 </p>
 
 上游官方版本见 [QGroundControl Releases](https://github.com/mavlink/QGroundControl/releases/latest)。
