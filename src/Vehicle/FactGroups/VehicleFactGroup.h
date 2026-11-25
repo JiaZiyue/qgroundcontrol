@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QtCore/QTimer>
+
 #include "FactGroup.h"
 
 class VehicleFactGroup : public FactGroup
@@ -127,6 +129,15 @@ protected:
 
 private:
     void _handleAttitudeWorker(double rollRadians, double pitchRadians, double yawRadians);
+    void _handleDistanceSensorRange(const mavlink_message_t &message);
+    void _updateRangefinderDistance();
+
+    QTimer _downwardRangeTimer;
+    QTimer _legacyRangeTimer;
+    float _downwardDistance = 0.0f;
+    float _legacyDistance = 0.0f;
+    uint8_t _downwardRangeComponentId = 0;
+    uint8_t _downwardRangeSensorId = 0;
 
     bool _receivingAttitudeQuaternion = false;
 

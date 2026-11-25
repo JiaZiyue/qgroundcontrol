@@ -23953,6 +23953,11 @@ Source: %6 (session %7); destination: %8 (session %9)</source>
 <context>
     <name>ConfiguratorSensorPlots</name>
     <message>
+        <location filename="../src/MainWindow/ConfiguratorSensorPlots.qml" line="104"/>
+        <source>raw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow/ConfiguratorSensorPlots.qml" line="96" />
         <source>Sensor Instance</source>
         <translation type="unfinished" />

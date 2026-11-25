@@ -9574,6 +9574,12 @@
             <translation type="unfinished" />
         </message>
         <message>
+            <extracomment>.QGC.MetaData.Facts[rangeFinderDist].shortDesc</extracomment>
+            <location filename="../src/Vehicle/FactGroups/VehicleFact.json" />
+            <source>Rangefinder Distance</source>
+            <translation type="unfinished" />
+        </message>
+        <message>
             <extracomment>.QGC.MetaData.Facts[flightDistance].shortDesc</extracomment>
             <location filename="/home/runner/work/qgroundcontrol/qgroundcontrol/src/Vehicle/FactGroups/VehicleFact.json" />
             <source>Flight Distance</source>

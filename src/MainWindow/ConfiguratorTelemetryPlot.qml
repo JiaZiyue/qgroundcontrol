@@ -26,7 +26,7 @@ Rectangle {
     }
 
     function sample(entry) {
-        return entry.fact ? Number(entry.fact.rawValue) : entry.field && entry.field.value !== "" ? Number(entry.field.value) * (entry.scale === undefined ? 1 : entry.scale) : NaN;
+        return entry.fact ? Number(entry.fact.value) : entry.field && entry.field.value !== "" ? Number(entry.field.value) * (entry.scale === undefined ? 1 : entry.scale) : NaN;
     }
 
     border.color: qgcPal.borderSubtle

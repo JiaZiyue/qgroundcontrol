@@ -88,7 +88,14 @@ Rectangle {
     signal toolsRequested
 
     function displayValue(valueFact) {
-        return _connected && valueFact && !isNaN(Number(valueFact.rawValue)) ? valueFact.valueString + " " + valueFact.units : "—";
+        if (!_connected || !valueFact) {
+            return "—";
+        }
+        const rawValue = Number(valueFact.rawValue);
+        if (isNaN(rawValue) || (valueFact === _vehicle.rcRSSI && (rawValue < 0 || rawValue > 100))) {
+            return "—";
+        }
+        return valueFact.valueString + " " + valueFact.units;
     }
 
     function fact(path) {

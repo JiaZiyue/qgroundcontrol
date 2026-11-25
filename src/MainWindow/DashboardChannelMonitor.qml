@@ -36,7 +36,10 @@ ColumnLayout {
                 id: channel
 
                 required property int index
-                readonly property int value: root.connected && index < root.values.length ? root.values[index] : -1
+                readonly property int value: {
+                    const sample = root.connected && index < root.values.length ? root.values[index] : 0;
+                    return sample > 0 && sample < 65535 ? sample : -1;
+                }
 
                 Layout.fillWidth: true
                 spacing: ScreenTools.defaultFontPixelHeight / 4

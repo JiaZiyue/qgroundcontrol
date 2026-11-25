@@ -1,6 +1,7 @@
 #include "TopLevelViewsTest.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QScopeGuard>
@@ -253,7 +254,7 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
     QFETCH(bool, px4);
     runWithMockLink(
         [px4] { return px4 ? MockLink::startPX4MockLink() : MockLink::startAPMArduCopterMockLink(); },
-        [this](QPointer<MockLink> mockLink, Vehicle* vehicle) {
+        [this, px4](QPointer<MockLink> mockLink, Vehicle* vehicle) {
             const QPointer<Fact> roll = vehicle->roll();
             const QPointer<Fact> satellites = vehicle->gpsFactGroup()->count();
             QVERIFY(QMetaObject::invokeMethod(_window, "showDashboardView"));
@@ -285,13 +286,14 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             QVERIFY(clickButton(QStringLiteral("sidebar_sensors")));
             QQuickItem* const accelerationPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_acceleration"));
             QVERIFY(accelerationPlot);
-            mavlink_scaled_imu_t imu{};
-            imu.xacc = 1000;
-            imu.yacc = -1000;
-            imu.xgyro = 1000;
+            mavlink_highres_imu_t imu{};
+            imu.xacc = 1.25F;
+            imu.yacc = -0.5F;
+            imu.zacc = 9.8F;
+            imu.fields_updated = 0x07;
             mavlink_message_t imuMessage{};
-            mavlink_msg_scaled_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
-                                               &imuMessage, &imu);
+            mavlink_msg_highres_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                &imuMessage, &imu);
             mockLink->respondWithMavlinkMessage(imuMessage);
             QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
             if (qEnvironmentVariableIsSet("QGC_REFERENCE_CAPTURE")) {
@@ -303,10 +305,58 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             QCOMPARE(accelerationPlot->property("sampleCount").toInt(), 0);
             QVERIFY(accelerationPlot->setProperty("paused", false));
             QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
-            for (const QString& page : {QStringLiteral("compass"), QStringLiteral("gps"), QStringLiteral("vision"),
-                                        QStringLiteral("flow"), QStringLiteral("range")}) {
+            for (const QString& page : {QStringLiteral("compass"), QStringLiteral("gps"), QStringLiteral("vision")}) {
                 QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
             }
+
+            QVERIFY(clickButton(QStringLiteral("configurator_tab_flow")));
+            QQuickItem* const flowPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_optical_flow"));
+            QVERIFY(flowPlot);
+            mavlink_message_t flowMessage{};
+            if (px4) {
+                mavlink_optical_flow_rad_t flow{};
+                flow.integration_time_us = 100000;
+                flow.integrated_x = 0.25F;
+                flow.sensor_id = 2;
+                flow.quality = 180;
+                mavlink_msg_optical_flow_rad_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                        &flowMessage, &flow);
+            } else {
+                mavlink_optical_flow_t flow{};
+                flow.flow_rate_x = 0.6F;
+                flow.flow_rate_y = -0.2F;
+                flow.quality = 180;
+                mavlink_msg_optical_flow_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                    &flowMessage, &flow);
+            }
+            mockLink->respondWithMavlinkMessage(flowMessage);
+            QTRY_VERIFY_WITH_TIMEOUT(flowPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
+
+            QVERIFY(clickButton(QStringLiteral("configurator_tab_range")));
+            QQuickItem* const rangePlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_rangefinder"));
+            QVERIFY(rangePlot);
+            QVERIFY(std::isnan(vehicle->rangeFinderDist()->rawValue().toDouble()));
+            QCOMPARE(rangePlot->property("sampleCount").toInt(), 0);
+
+            mavlink_rangefinder_t legacyRange{};
+            legacyRange.distance = 0.75F;
+            mavlink_message_t legacyRangeMessage{};
+            mavlink_msg_rangefinder_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                &legacyRangeMessage, &legacyRange);
+            mockLink->respondWithMavlinkMessage(legacyRangeMessage);
+            QTRY_COMPARE_WITH_TIMEOUT(vehicle->rangeFinderDist()->rawValue().toFloat(), 0.75F, TestTimeout::mediumMs());
+
+            mavlink_distance_sensor_t distance{};
+            distance.min_distance = 2;
+            distance.max_distance = 600;
+            distance.current_distance = 125;
+            distance.orientation = MAV_SENSOR_ROTATION_PITCH_270;
+            mavlink_message_t distanceMessage{};
+            mavlink_msg_distance_sensor_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                    &distanceMessage, &distance);
+            mockLink->respondWithMavlinkMessage(distanceMessage);
+            QTRY_COMPARE_WITH_TIMEOUT(vehicle->rangeFinderDist()->rawValue().toFloat(), 1.25F, TestTimeout::mediumMs());
+            QTRY_VERIFY_WITH_TIMEOUT(rangePlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
             QVERIFY(clickButton(QStringLiteral("sidebar_parameters")));
             QQuickItem* const editor = findVisibleItem(_rootItem, QStringLiteral("configurator_parameters"));
             QVERIFY(editor);
