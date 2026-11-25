@@ -28,11 +28,11 @@ and mission planning for any *MAVLink-enabled* drone, including *PX4* and *ArduP
 
 ## Download
 
-点击下方按钮直接下载简体中文预览版。版本信息和校验文件见[发布页面](https://github.com/yuxuan20230525/qgroundcontrol/releases/tag/v5.2.0-zh.1)。
+点击下方按钮直接下载简体中文预览版。本版修复了 IMU、光流和测距数据显示。更新说明和校验文件见[发布页面](https://github.com/yuxuan20230525/qgroundcontrol/releases/tag/v5.2.0-zh.3)。
 
 <p align="center">
-  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases/download/v5.2.0-zh.1/QGroundControl-zh-CN-Windows-x64.exe"><img src="https://img.shields.io/badge/Windows-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-0078D6?logo=windows&amp;logoColor=white" alt="下载 Windows x64 简体中文版"></a>
-  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases/download/v5.2.0-zh.1/QGroundControl-zh-CN-Linux-x86_64.AppImage"><img src="https://img.shields.io/badge/Linux-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-FCC624?logo=linux&amp;logoColor=black" alt="下载 Linux x86_64 简体中文版"></a>
+  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases/download/v5.2.0-zh.3/QGroundControl-zh-CN-Windows-x64.exe"><img src="https://img.shields.io/badge/Windows-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-0078D6?logo=windows&amp;logoColor=white" alt="下载 Windows x64 简体中文版"></a>
+  <a href="https://github.com/yuxuan20230525/qgroundcontrol/releases/download/v5.2.0-zh.3/QGroundControl-zh-CN-Linux-x86_64.AppImage"><img src="https://img.shields.io/badge/Linux-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88-FCC624?logo=linux&amp;logoColor=black" alt="下载 Linux x86_64 简体中文版"></a>
 </p>
 
 在 Linux 上，下载 AppImage 后为它添加执行权限，再启动应用。
