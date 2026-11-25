@@ -180,9 +180,8 @@ Item {
                 // Action label
                 QGCLabel {
                     font.pointSize:         ScreenTools.defaultFontPointSize * 1.1
-                    text:                   qsTr("Reverting back to takeover not allowed if GCS ") + requestSysIdRequestingControl +
-                                            qsTr(" doesn't take control in ") + revertTakeoverProgressTracker.progressLabel +
-                                            qsTr(" seconds ...")
+                    text:                   qsTr("If GCS %1 does not take control within %2 seconds, takeover will be disabled again.")
+                                                .arg(requestSysIdRequestingControl).arg(revertTakeoverProgressTracker.progressLabel)
                 }
                 QGCButton {
                     id:                     ignoreButton

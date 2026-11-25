@@ -20,7 +20,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewDashboard"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("仪表盘")
+                text: qsTr("Dashboard")
                 imageResource: "/qmlimages/Analyze.svg"
                 onClicked: {
                     if (mainWindow.allowViewSwitch()) {
@@ -34,7 +34,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewFly"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("飞行")
+                text: qsTr("Fly")
                 imageResource: "/res/FlyingPaperPlane.svg"
                 onClicked: {
                     if (mainWindow.allowViewSwitch()) {
@@ -48,7 +48,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewPlan"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("任务规划")
+                text: qsTr("Plan")
                 imageResource: "/qmlimages/Plan.svg"
                 onClicked: {
                     if (mainWindow.allowViewSwitch()) {
@@ -62,7 +62,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewAnalyze"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("分析工具")
+                text: qsTr("Analyze")
                 imageResource: "/qmlimages/Analyze.svg"
                 visible: QGroundControl.corePlugin.showAdvancedUI
                 onClicked: {
@@ -78,7 +78,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewConfigure"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("飞机配置")
+                text: qsTr("Configure")
                 imageResource: "/res/GearWithPaperPlane.svg"
                 onClicked: {
                     if (mainWindow.allowViewSwitch()) {
@@ -93,7 +93,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewSettings"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("应用设置")
+                text: qsTr("Settings")
                 imageResource: "/res/QGCLogoWhite.svg"
                 visible: !QGroundControl.corePlugin.options.combineSettingsAndSetup
                 onClicked: {
@@ -109,7 +109,7 @@ ToolIndicatorPage {
                 objectName: "toolbar_viewClose"
                 implicitHeight: root._toolButtonHeight
                 Layout.fillWidth: true
-                text: qsTr("退出")
+                text: qsTr("Close")
                 imageResource: "/res/OpenDoor.svg"
                 onClicked: {
                     if (mainWindow.allowViewSwitch()) {
@@ -133,7 +133,7 @@ ToolIndicatorPage {
                     small: true
                     Layout.alignment: Qt.AlignHCenter
                     Layout.bottomMargin: ScreenTools.defaultFontPixelHeight / 2
-                    text: qsTr("更新")
+                    text: qsTr("Update")
                     primary: true
                     visible: QGroundControl.newStableVersion !== ""
                     onClicked: {
@@ -146,7 +146,7 @@ ToolIndicatorPage {
                     id: versionLabel
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
-                    text: qsTr("%1 版本").arg(QGroundControl.appName)
+                    text: qsTr("%1 Version").arg(QGroundControl.appName)
                     font.pointSize: ScreenTools.smallFontPointSize
                     wrapMode: QGCLabel.WordWrap
                 }

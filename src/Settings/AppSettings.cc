@@ -38,7 +38,7 @@ AppSettings::LanguageInfo_t AppSettings::_rgLanguageInfo[] = {
     { QLocale::AnyLanguage,     "System" },                     // Must be first
     { QLocale::Azerbaijani,     "Azerbaijani (Azerbaijani)" },
     { QLocale::Bulgarian,       "български (Bulgarian)" },
-    { QLocale::Chinese,         "中文 (Chinese)" },
+    { QLocale::Chinese,         "简体中文 (Simplified Chinese)" },
     { QLocale::Dutch,           "Nederlands (Dutch)" },
     { QLocale::English,         "English" },
     { QLocale::Finnish,         "Suomi (Finnish)" },
@@ -237,7 +237,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, qLocaleLanguage)
         QVariantList    rgEnumValues;
 
         // System is always an available selection
-        rgEnumStrings.append(_rgLanguageInfo[0].languageName);
+        rgEnumStrings.append(AppSettings::tr("System"));
         rgEnumValues.append(_rgLanguageInfo[0].languageId);
 
         for (const auto& languageInfo: _rgLanguageInfo) {
@@ -255,7 +255,9 @@ DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, qLocaleLanguage)
 #ifdef QGC_DAILY_BUILD
         // Only daily builds include full set of languages for testing purposes
         for (const auto& languageInfo: _rgLanguageInfo) {
-            if (!_rgReleaseLanguages.contains(languageInfo.languageId) && !_rgPartialLanguages.contains(languageInfo.languageId)) {
+            if (languageInfo.languageId != QLocale::AnyLanguage
+                && !_rgReleaseLanguages.contains(languageInfo.languageId)
+                && !_rgPartialLanguages.contains(languageInfo.languageId)) {
                 rgEnumStrings.append(QString(languageInfo.languageName) + AppSettings::tr(" (Test Only)"));
                 rgEnumValues.append(languageInfo.languageId);
             }

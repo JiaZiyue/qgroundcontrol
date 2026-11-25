@@ -35,7 +35,7 @@ ColumnLayout {
 
         QGCLabel {
             Layout.fillWidth: true
-            text: qsTr("GPS 打点轨迹 · %1 点").arg(root._positions.length)
+            text: qsTr("GPS Track · Points: %1").arg(root._positions.length)
         }
 
         QGCComboBox {
@@ -48,7 +48,7 @@ ColumnLayout {
         }
 
         QGCButton {
-            text: qsTr("清空")
+            text: qsTr("Clear")
 
             onClicked: root.clear()
         }
@@ -97,7 +97,7 @@ ColumnLayout {
 
         QGCLabel {
             anchors.centerIn: parent
-            text: qsTr("等待有效 GPS 定位…")
+            text: qsTr("Waiting for a valid GPS fix…")
             visible: root._positions.length === 0
         }
     }

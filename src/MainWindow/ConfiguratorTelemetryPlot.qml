@@ -26,7 +26,7 @@ Rectangle {
     }
 
     function sample(entry) {
-        return entry.fact ? Number(entry.fact.rawValue) : entry.field && entry.field.value !== "" ? Number(entry.field.value) * (entry.scale === undefined ? 1 : entry.scale) : NaN;
+        return entry.fact ? Number(entry.fact.value) : entry.field && entry.field.value !== "" ? Number(entry.field.value) * (entry.scale === undefined ? 1 : entry.scale) : NaN;
     }
 
     border.color: qgcPal.borderSubtle
@@ -58,13 +58,13 @@ Rectangle {
             }
 
             QGCButton {
-                text: root.paused ? qsTr("继续") : qsTr("暂停")
+                text: root.paused ? qsTr("Resume") : qsTr("Pause")
 
                 onClicked: root.paused = !root.paused
             }
 
             QGCButton {
-                text: qsTr("清空")
+                text: qsTr("Clear")
 
                 onClicked: root.clear()
             }
@@ -82,7 +82,11 @@ Rectangle {
                     required property var modelData
 
                     color: root._colors[index % root._colors.length]
-                    text: modelData.title + "：" + (root._connected && isFinite(root.sample(modelData)) ? (modelData.fact ? modelData.fact.valueString + " " + modelData.fact.units : root.sample(modelData).toFixed(3) + " " + modelData.units) : "—")
+                    text: qsTr("%1: %2").arg(modelData.title)
+                        .arg(root._connected && isFinite(root.sample(modelData))
+                            ? (modelData.fact ? modelData.fact.valueString + " " + modelData.fact.units
+                                : root.sample(modelData).toFixed(3) + " " + modelData.units)
+                            : "—")
                 }
             }
         }
@@ -159,7 +163,7 @@ Rectangle {
 
             QGCLabel {
                 anchors.centerIn: parent
-                text: qsTr("等待传感器数据…")
+                text: qsTr("Waiting for sensor data…")
                 visible: root._history.length === 0
             }
         }

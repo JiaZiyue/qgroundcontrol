@@ -1,6 +1,7 @@
 #include "VehicleFactGroup.h"
 
 #include <cmath>
+#include <limits>
 
 #include <QtGui/QQuaternion>
 #include <QtGui/QVector3D>
@@ -49,6 +50,14 @@ VehicleFactGroup::VehicleFactGroup(QObject *parent)
     // Match the legacy sentinel so QML `rcRSSI > 0 && rcRSSI <= 100` checks read "unavailable"
     // until the first RC_CHANNELS message arrives.
     _rcRSSIFact.setRawValue(255);
+
+    // PX4's normal telemetry profile can send distance at 0.5 Hz.
+    constexpr int RANGE_TIMEOUT_MS = 5000;
+    for (QTimer *timer : {&_downwardRangeTimer, &_legacyRangeTimer}) {
+        timer->setInterval(RANGE_TIMEOUT_MS);
+        timer->setSingleShot(true);
+        (void) connect(timer, &QTimer::timeout, this, &VehicleFactGroup::_updateRangefinderDistance);
+    }
 }
 
 void VehicleFactGroup::updateRCRSSI(uint8_t rssi)
@@ -99,6 +108,9 @@ void VehicleFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &
     case MAVLINK_MSG_ID_RAW_IMU:
         _handleRawImuTemp(message);
         break;
+    case MAVLINK_MSG_ID_DISTANCE_SENSOR:
+        _handleDistanceSensorRange(message);
+        break;
     case MAVLINK_MSG_ID_RANGEFINDER:
         _handleRangefinder(message);
         break;
@@ -142,6 +154,9 @@ void VehicleFactGroup::_handleAttitude(Vehicle *vehicle, const mavlink_message_t
     mavlink_msg_attitude_decode(&message, &attitude);
 
     _handleAttitudeWorker(attitude.roll, attitude.pitch, attitude.yaw);
+    rollRate()->setRawValue(qRadiansToDegrees(attitude.rollspeed));
+    pitchRate()->setRawValue(qRadiansToDegrees(attitude.pitchspeed));
+    yawRate()->setRawValue(qRadiansToDegrees(attitude.yawspeed));
 
     _setTelemetryAvailable(true);
 }
@@ -237,12 +252,56 @@ void VehicleFactGroup::_handleRawImuTemp(const mavlink_message_t &message)
     _setTelemetryAvailable(true);
 }
 
+void VehicleFactGroup::_handleDistanceSensorRange(const mavlink_message_t &message)
+{
+    mavlink_distance_sensor_t sensor{};
+    mavlink_msg_distance_sensor_decode(&message, &sensor);
+    if (sensor.orientation != MAV_SENSOR_ROTATION_PITCH_270) {
+        return;
+    }
+
+    // MAVLink uses 1 for invalid signal and 0 when the signal quality is unknown.
+    const bool valid = sensor.signal_quality != 1 && sensor.current_distance > 0
+        && sensor.current_distance >= sensor.min_distance
+        && (sensor.max_distance == 0 || sensor.current_distance <= sensor.max_distance);
+    if (valid) {
+        _downwardDistance = sensor.current_distance / 100.0f;
+        _downwardRangeComponentId = message.compid;
+        _downwardRangeSensorId = sensor.id;
+        _downwardRangeTimer.start();
+        _setTelemetryAvailable(true);
+    } else if (_downwardRangeComponentId == message.compid && _downwardRangeSensorId == sensor.id) {
+        _downwardRangeTimer.stop();
+    }
+
+    _updateRangefinderDistance();
+}
+
 void VehicleFactGroup::_handleRangefinder(const mavlink_message_t &message)
 {
     mavlink_rangefinder_t rangefinder{};
     mavlink_msg_rangefinder_decode(&message, &rangefinder);
+    if (qIsFinite(rangefinder.distance) && rangefinder.distance > 0) {
+        _legacyDistance = rangefinder.distance;
+        _legacyRangeTimer.start();
+        _setTelemetryAvailable(true);
+    } else {
+        _legacyRangeTimer.stop();
+    }
 
-    rangeFinderDist()->setRawValue(qIsNaN(rangefinder.distance) ? 0 : rangefinder.distance);
+    _updateRangefinderDistance();
+}
 
-    _setTelemetryAvailable(true);
+void VehicleFactGroup::_updateRangefinderDistance()
+{
+    float distance = std::numeric_limits<float>::quiet_NaN();
+    if (_downwardRangeTimer.isActive()) {
+        distance = _downwardDistance;
+    } else if (_legacyRangeTimer.isActive()) {
+        distance = _legacyDistance;
+    }
+
+    if (!qIsNaN(distance) || !qIsNaN(_rangeFinderDistFact.rawValue().toFloat())) {
+        _rangeFinderDistFact.setRawValue(distance);
+    }
 }

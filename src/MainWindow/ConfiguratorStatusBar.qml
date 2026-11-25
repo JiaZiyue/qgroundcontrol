@@ -50,25 +50,25 @@ Rectangle {
         }
         function onArmedChanged(armed) {
             root._armingMessages = []
-            root.rememberArmingMessage(armed ? qsTr("飞控已解锁（Armed）") : qsTr("飞控已上锁（Disarmed）"))
+            root.rememberArmingMessage(armed ? qsTr("Flight controller armed") : qsTr("Flight controller disarmed"))
         }
     }
 
 
     function flightModeLabel(mode) {
         const labels = {
-            "Unknown": qsTr("未知模式"),
-            "Manual": qsTr("手动"),
-            "Stabilized": qsTr("自稳"),
-            "Acro": qsTr("特技"),
-            "Altitude": qsTr("定高"),
-            "Position": qsTr("定点"),
-            "Hold": qsTr("悬停"),
-            "Mission": qsTr("任务"),
-            "Return": qsTr("返航"),
-            "Land": qsTr("降落"),
-            "Takeoff": qsTr("起飞"),
-            "Offboard": qsTr("外部控制")
+            "Unknown": qsTr("Unknown Mode"),
+            "Manual": qsTr("Manual"),
+            "Stabilized": qsTr("Stabilized"),
+            "Acro": qsTr("Acro"),
+            "Altitude": qsTr("Altitude"),
+            "Position": qsTr("Position"),
+            "Hold": qsTr("Hold"),
+            "Mission": qsTr("Mission"),
+            "Return": qsTr("Return"),
+            "Land": qsTr("Land"),
+            "Takeoff": qsTr("Takeoff"),
+            "Offboard": qsTr("Offboard")
         };
         return labels[mode] || mode;
     }
@@ -101,7 +101,7 @@ Rectangle {
 
             backRadius: ScreenTools.defaultFontPixelHeight
             small: true
-            text: !root._connected ? qsTr("未连接") : root._vehicle.armed ? qsTr("已解锁") : qsTr("未解锁")
+            text: !root._connected ? qsTr("Not Connected") : root._vehicle.armed ? qsTr("Armed") : qsTr("Disarmed")
             textColor: root._connected ? qgcPal.successText : qgcPal.textSecondary
 
             onClicked: armingDetails.open()
@@ -110,7 +110,7 @@ Rectangle {
         QGCButton {
             small: true
             enabled: root._connected && root._vehicle.flightModeSetAvailable
-            text: root._connected ? root.flightModeLabel(root._vehicle.flightMode) : qsTr("飞行模式")
+            text: root._connected ? root.flightModeLabel(root._vehicle.flightMode) : qsTr("Flight Mode")
 
             onClicked: modeMenu.open()
 
@@ -139,38 +139,38 @@ Rectangle {
 
         QGCLabel {
             height: armedButton.height
-            text: qsTr("电池：%1 · %2").arg(root.value(root._battery ? root._battery.percentRemaining : null)).arg(root.value(root._battery ? root._battery.voltage : null))
+            text: qsTr("Battery: %1 · %2").arg(root.value(root._battery ? root._battery.percentRemaining : null)).arg(root.value(root._battery ? root._battery.voltage : null))
             verticalAlignment: Text.AlignVCenter
         }
 
         QGCLabel {
             height: armedButton.height
-            text: qsTr("高度：%1").arg(root.value(root._vehicle ? root._vehicle.altitudeRelative : null))
+            text: qsTr("Altitude: %1").arg(root.value(root._vehicle ? root._vehicle.altitudeRelative : null))
             verticalAlignment: Text.AlignVCenter
         }
 
         QGCLabel {
             height: armedButton.height
-            text: qsTr("航向：%1").arg(root.value(root._vehicle ? root._vehicle.heading : null))
+            text: qsTr("Heading: %1").arg(root.value(root._vehicle ? root._vehicle.heading : null))
             verticalAlignment: Text.AlignVCenter
         }
 
         QGCLabel {
             height: armedButton.height
-            text: qsTr("卫星：%1").arg(root.value(root._vehicle ? root._vehicle.gps.count : null))
+            text: qsTr("Satellites: %1").arg(root.value(root._vehicle ? root._vehicle.gps.count : null))
             verticalAlignment: Text.AlignVCenter
         }
 
         QGCLabel {
             height: armedButton.height
-            text: qsTr("遥控信号：%1").arg(root._vehicle && root._vehicle.rcRSSI.rawValue >= 0 && root._vehicle.rcRSSI.rawValue <= 100 ? root.value(root._vehicle.rcRSSI) : "—")
+            text: qsTr("RC Signal: %1").arg(root._vehicle && root._vehicle.rcRSSI.rawValue >= 0 && root._vehicle.rcRSSI.rawValue <= 100 ? root.value(root._vehicle.rcRSSI) : "—")
             verticalAlignment: Text.AlignVCenter
         }
 
         QGCButton {
             small: true
             backRadius: ScreenTools.defaultFontPixelHeight
-            text: qsTr("设置引导")
+            text: qsTr("Setup Guide")
 
             onClicked: {
                 setupGuide.open();
@@ -181,7 +181,7 @@ Rectangle {
             small: true
             backRadius: ScreenTools.defaultFontPixelHeight
             enabled: root._connected
-            text: !root._connected ? qsTr("等待连接") : root._vehicle.readiness.canArm ? qsTr("可以解锁") : qsTr("解锁检查")
+            text: !root._connected ? qsTr("Waiting for Connection") : root._vehicle.readiness.canArm ? qsTr("Ready to Arm") : qsTr("Arming Checks")
 
             onClicked: armingDetails.open()
         }
@@ -195,7 +195,7 @@ Rectangle {
 
         anchors.centerIn: Overlay.overlay
         modal: true
-        title: qsTr("设置引导")
+        title: qsTr("Setup Guide")
         width: Math.min(ScreenTools.defaultFontPixelWidth * 60, root.width * 0.9)
 
         footer: DialogButtonBox {
@@ -203,7 +203,7 @@ Rectangle {
 
             QGCButton {
                 DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-                text: qsTr("关闭")
+                text: qsTr("Close")
             }
         }
 
@@ -212,7 +212,7 @@ Rectangle {
 
             QGCLabel {
                 Layout.fillWidth: true
-                text: !root._vehicle ? qsTr("请连接飞机以检查设置进度。") : qsTr("已完成 %1 / %2 项设置").arg(setupGuide.completed).arg(setupGuide.components.length)
+                text: !root._vehicle ? qsTr("Connect a vehicle to check setup progress.") : qsTr("Completed %1 of %2 setup steps").arg(setupGuide.completed).arg(setupGuide.components.length)
             }
 
             ProgressBar {
@@ -248,7 +248,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: ScreenTools.defaultFontPixelHeight / 2
-        text: qsTr("解锁状态提醒：%1").arg(root._armingNotice)
+        text: qsTr("Arming status: %1").arg(root._armingNotice)
         visible: root._armingNotice !== ""
         color: qgcPal.warningText
         wrapMode: Text.WordWrap
@@ -259,7 +259,7 @@ Rectangle {
 
         anchors.centerIn: Overlay.overlay
         modal: true
-        title: qsTr("解锁检查")
+        title: qsTr("Arming Checks")
         width: Math.min(ScreenTools.defaultFontPixelWidth * 64, root.width * 0.85)
 
         footer: DialogButtonBox {
@@ -267,13 +267,13 @@ Rectangle {
 
             QGCButton {
                 DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-                text: qsTr("关闭")
+                text: qsTr("Close")
             }
         }
 
         QGCLabel {
-            text: (!root._vehicle || !root._connected ? qsTr("请先连接飞机。") : root._vehicle.prearmError !== "" ? root._vehicle.prearmError : root._vehicle.armed ? qsTr("飞机当前已解锁。") : root._vehicle.readiness.canArm ? qsTr("当前检查通过，可以解锁。") : qsTr("尚未通过解锁检查，请检查下方飞控消息。"))
-                + (root._armingMessages.length ? "\n\n" + qsTr("最近的 PreArm／Arming 消息：") + "\n" + root._armingMessages.join("\n") : "")
+            text: (!root._vehicle || !root._connected ? qsTr("Connect a vehicle first.") : root._vehicle.prearmError !== "" ? root._vehicle.prearmError : root._vehicle.armed ? qsTr("The vehicle is armed.") : root._vehicle.readiness.canArm ? qsTr("Arming checks passed. The vehicle can be armed.") : qsTr("Arming checks have not passed. Review the vehicle messages below."))
+                + (root._armingMessages.length ? "\n\n" + qsTr("Recent prearm and arming messages:") + "\n" + root._armingMessages.join("\n") : "")
             width: armingDetails.availableWidth
             wrapMode: Text.WordWrap
         }

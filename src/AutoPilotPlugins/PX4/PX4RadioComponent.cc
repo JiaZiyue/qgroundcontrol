@@ -17,7 +17,7 @@ QString PX4RadioComponent::name(void) const
 
 QString PX4RadioComponent::description(void) const
 {
-    return tr("配置并校准遥控器，分配控制通道。");
+    return tr("Set up and calibrate the radio and assign control channels.");
 }
 
 QString PX4RadioComponent::iconResource(void) const

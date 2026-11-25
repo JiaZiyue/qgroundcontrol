@@ -72,8 +72,8 @@ ColumnLayout {
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("比例增益 P (MC_ROLLRATE_P)")
-                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    title:          qsTr("Proportional Gain P (MC_ROLLRATE_P)")
+                    description:    qsTr("The proportional term responds to angular rate error. K scales the P, I and D terms.")
                     param:          "MC_ROLLRATE_P"
                     min:            0.01
                     max:            0.5
@@ -113,8 +113,8 @@ ColumnLayout {
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("比例增益 P (MC_PITCHRATE_P)")
-                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    title:          qsTr("Proportional Gain P (MC_PITCHRATE_P)")
+                    description:    qsTr("The proportional term responds to angular rate error. K scales the P, I and D terms.")
                     param:          "MC_PITCHRATE_P"
                     min:            0.01
                     max:            0.6
@@ -154,8 +154,8 @@ ColumnLayout {
                     step:           0.05
                 }
                 ListElement {
-                    title:          qsTr("比例增益 P (MC_YAWRATE_P)")
-                    description:    qsTr("比例项：根据角速度误差产生控制输出。K 会同时缩放 P、I、D 三项。")
+                    title:          qsTr("Proportional Gain P (MC_YAWRATE_P)")
+                    description:    qsTr("The proportional term responds to angular rate error. K scales the P, I and D terms.")
                     param:          "MC_YAWRATE_P"
                     min:            0.0
                     max:            0.6

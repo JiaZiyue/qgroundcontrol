@@ -18,12 +18,12 @@ RowLayout {
     function connectionType(configuration) {
         if (!configuration) return ""
         switch (configuration.linkType) {
-        case LinkConfiguration.TypeSerial: return qsTr("串口")
+        case LinkConfiguration.TypeSerial: return qsTr("Serial")
         case LinkConfiguration.TypeUdp: return "UDP"
         case LinkConfiguration.TypeTcp: return "TCP"
-        case LinkConfiguration.TypeBluetooth: return qsTr("蓝牙")
-        case LinkConfiguration.TypeLogReplay: return qsTr("日志回放")
-        default: return qsTr("其他")
+        case LinkConfiguration.TypeBluetooth: return qsTr("Bluetooth")
+        case LinkConfiguration.TypeLogReplay: return qsTr("Log Replay")
+        default: return qsTr("Other")
         }
     }
 
@@ -81,8 +81,8 @@ RowLayout {
 
     QGCLabel {
         objectName: "connection_status"
-        text: !root.selectedConfiguration ? qsTr("未连接")
-            : (root.selectedConfiguration.linkActive ? qsTr("链路已连接 · %1") : qsTr("未连接 · %1"))
+        text: !root.selectedConfiguration ? qsTr("Not Connected")
+            : (root.selectedConfiguration.linkActive ? qsTr("Connected · %1") : qsTr("Not Connected · %1"))
                 .arg(root.connectionType(root.selectedConfiguration))
         color: root.selectedConfiguration && root.selectedConfiguration.linkActive
             ? connectionPalette.successText : connectionPalette.textSecondary
@@ -93,7 +93,7 @@ RowLayout {
         id: selector
 
         objectName: "connection_selector"
-        text: root.selectedConfiguration ? root.selectedConfiguration.name : qsTr("选择连接")
+        text: root.selectedConfiguration ? root.selectedConfiguration.name : qsTr("Select Connection")
 
         onClicked: connectionMenu.open()
 
@@ -116,7 +116,7 @@ RowLayout {
                 model: root.detectedPorts
                 delegate: QGCMenuItem {
                     required property var modelData
-                    text: qsTr("串口：%1").arg(modelData.label)
+                    text: qsTr("Serial: %1").arg(modelData.label)
                     onTriggered: root.connectPort(modelData.port, modelData.label)
                 }
                 onObjectAdded: (index, item) => connectionMenu.addItem(item)
@@ -124,7 +124,7 @@ RowLayout {
             }
 
             QGCMenuItem {
-                text: qsTr("未检测到串口设备")
+                text: qsTr("No serial devices detected")
                 enabled: false
                 visible: root.detectedPorts.length === 0
             }
@@ -143,7 +143,7 @@ RowLayout {
                     checkable: true
                     checked: root.selectedConfiguration === object
                     objectName: "connection_option_" + object.name
-                    text: object.name + (object.linkActive ? qsTr("（已启用）") : "")
+                    text: object.name + (object.linkActive ? qsTr(" (Active)") : "")
 
                     onTriggered: {
                         root._userSelected = true;
@@ -179,7 +179,7 @@ RowLayout {
             }
 
             QGCMenuItem {
-                text: qsTr("管理连接…")
+                text: qsTr("Manage Connections…")
 
                 onTriggered: {
                     if (root.navigationHost.allowViewSwitch()) {
@@ -193,7 +193,7 @@ RowLayout {
     QGCButton {
         enabled: true
         objectName: "connection_toggle"
-        text: root.selectedConfiguration && root.selectedConfiguration.linkActive ? qsTr("断开") : qsTr("连接")
+        text: root.selectedConfiguration && root.selectedConfiguration.linkActive ? qsTr("Disconnect") : qsTr("Connect")
 
         onClicked: {
             const configuration = root.selectedConfiguration;

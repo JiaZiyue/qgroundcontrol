@@ -311,13 +311,13 @@ ColumnLayout {
 
         QGCButton {
             text: control.dataPanelVisible ? "−" : "+"
-            Accessible.name: qsTr("添加数据")
+            Accessible.name: qsTr("Add data")
             onClicked: control.dataPanelVisible = !control.dataPanelVisible
         }
 
         QGCLabel {
             Layout.fillWidth: true
-            text: qsTr("点击 ＋ 选择本图显示的数据")
+            text: qsTr("Select the data to display in this chart with the + button")
             visible: control.logViewerController.selectedFields.length === 0
         }
     }

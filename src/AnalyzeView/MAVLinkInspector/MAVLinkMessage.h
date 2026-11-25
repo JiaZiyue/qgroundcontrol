@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtCore/QElapsedTimer>
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QList>
@@ -22,6 +23,7 @@ class QGCMAVLinkMessage : public QObject
     Q_PROPERTY(qreal                actualRateHz    READ actualRateHz   NOTIFY actualRateHzChanged)
     Q_PROPERTY(int32_t              targetRateHz    READ targetRateHz   NOTIFY targetRateHzChanged)
     Q_PROPERTY(quint64              count           READ count          NOTIFY countChanged)
+    Q_PROPERTY(bool                 recentData      READ recentData     NOTIFY recentDataChanged)
     Q_PROPERTY(QmlObjectListModel   *fields         READ fields         CONSTANT)
     Q_PROPERTY(bool                 fieldSelected   READ fieldSelected  NOTIFY fieldSelectedChanged)
     Q_PROPERTY(bool                 selected        READ selected       NOTIFY selectedChanged)
@@ -46,6 +48,7 @@ public:
     QmlObjectListModel *fields() const { return _fields; }
     bool fieldSelected() const { return _fieldSelected; }
     bool selected() const { return _selected; }
+    bool recentData() const { return _recentData; }
 
     void updateFieldSelection();
     void update(const mavlink_message_t &message);
@@ -55,6 +58,7 @@ public:
 
 signals:
     void countChanged();
+    void recentDataChanged();
     void actualRateHzChanged();
     void targetRateHzChanged();
     void fieldSelectedChanged();
@@ -75,10 +79,12 @@ private:
     QList<FieldMapping> _fieldMappings;
     QString _name;
     QString _instanceValue;
+    QElapsedTimer _lastReceived;
     qreal _actualRateHz = 0.0;
     int32_t _targetRateHz = 0;
     uint64_t _count = 1;
     uint64_t _lastCount = 0;
     bool _fieldSelected = false;
     bool _selected = false;
+    bool _recentData = true;
 };

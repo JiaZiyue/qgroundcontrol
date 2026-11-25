@@ -28,8 +28,8 @@ SetupPage {
             }
             function labels(fact) {
                 if (!fact) return []
-                const names = {"Unassigned": "未分配", "Disabled": "禁用", "Position": "定点", "Position / Cruise": "定点／巡航", "Altitude": "定高", "Manual": "手动", "Stabilized": "自稳", "Acro": "特技", "Hold": "悬停", "Mission": "任务", "Return": "返航", "Land": "降落", "Offboard": "外部控制"}
-                return fact.enumStrings.map(text => names[text] || text.replace(/^Channel /, "通道 "))
+                const names = {"Unassigned": qsTr("Unassigned"), "Disabled": qsTr("Disabled"), "Position": qsTr("Position"), "Position / Cruise": qsTr("Position / Cruise"), "Altitude": qsTr("Altitude"), "Manual": qsTr("Manual"), "Stabilized": qsTr("Stabilized"), "Acro": qsTr("Acro"), "Hold": qsTr("Hold"), "Mission": qsTr("Mission"), "Return": qsTr("Return"), "Land": qsTr("Land"), "Offboard": qsTr("Offboard")}
+                return fact.enumStrings.map(text => names[text] || text.replace(/^Channel (.+)$/, (_, channel) => qsTr("Channel %1").arg(channel)))
             }
 
             Connections {
@@ -38,19 +38,19 @@ SetupPage {
             }
 
             QGCGroupBox {
-                heading: qsTr("接收机设置")
+                heading: qsTr("Receiver Setup")
                 GridLayout {
                     Layout.fillWidth: true
                     columns: 4
-                    QGCLabel { text: qsTr("接收机协议") }
+                    QGCLabel { text: qsTr("Receiver Protocol") }
                     FactComboBox {
                         fact: overview.fact("RC_INPUT_PROTO")
                         visible: fact !== null
                         Layout.fillWidth: true
                         indexModel: false; model: overview.labels(fact)
                     }
-                    QGCLabel { text: qsTr("协议由飞控自动检测或由接收机配置决定"); visible: !settingsController.parameterExists(-1, "RC_INPUT_PROTO") }
-                    QGCLabel { text: qsTr("接收机端口") }
+                    QGCLabel { text: qsTr("The protocol is detected by the flight controller or set by the receiver configuration."); visible: !settingsController.parameterExists(-1, "RC_INPUT_PROTO") }
+                    QGCLabel { text: qsTr("Receiver Port") }
                     FactComboBox {
                         fact: overview.fact("RC_PORT_CONFIG")
                         visible: fact !== null
@@ -61,9 +61,9 @@ SetupPage {
             }
 
             QGCGroupBox {
-                heading: qsTr("遥控器通道")
+                heading: qsTr("RC Channels")
                 QGCButton {
-                    text: overview.calibrating ? qsTr("收起校准面板") : qsTr("校准遥控器")
+                    text: overview.calibrating ? qsTr("Hide Calibration Panel") : qsTr("Calibrate Radio")
                     onClicked: overview.calibrating = !overview.calibrating
                 }
                 GridLayout {
@@ -76,7 +76,7 @@ SetupPage {
                             readonly property int channel: (index % 2) * 8 + Math.floor(index / 2)
                             readonly property int value: channel < overview.channelValues.length ? overview.channelValues[channel] : -1
                             Layout.fillWidth: true
-                            QGCLabel { text: qsTr("通道 %1").arg(parent.channel + 1); Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 9 }
+                            QGCLabel { text: qsTr("Channel %1").arg(parent.channel + 1); Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 9 }
                             ProgressBar { Layout.fillWidth: true; from: 800; to: 2200; value: parent.value > 0 ? parent.value : 800 }
                             QGCLabel { text: parent.value > 0 ? parent.value : "—"; Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6 }
                         }
@@ -87,7 +87,7 @@ SetupPage {
             QGCPalette { id: radioPalette }
 
             QGCGroupBox {
-                heading: qsTr("飞行模式")
+                heading: qsTr("Flight Modes")
                 RowLayout {
                     Layout.fillWidth: true
                     QGCLabel {
@@ -96,7 +96,7 @@ SetupPage {
                         color: radioPalette.accent
                     }
                     Item { Layout.fillWidth: true }
-                    QGCLabel { text: qsTr("模式通道"); font.bold: true }
+                    QGCLabel { text: qsTr("Mode Channel"); font.bold: true }
                     FactComboBox {
                         objectName: "radio_modeChannel"
                         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 20
@@ -131,7 +131,7 @@ SetupPage {
                                 spacing: ScreenTools.defaultFontPixelHeight / 2
                                 RowLayout {
                                     Layout.fillWidth: true
-                                    QGCLabel { text: qsTr("模式 %1").arg(modeCard.index + 1); font.bold: true }
+                                    QGCLabel { text: qsTr("Mode %1").arg(modeCard.index + 1); font.bold: true }
                                     Item { Layout.fillWidth: true }
                                 }
                                 FactComboBox {
@@ -147,18 +147,18 @@ SetupPage {
             }
 
             QGCGroupBox {
-                heading: qsTr("开关设置")
+                heading: qsTr("Switch Setup")
                 GridLayout {
                     Layout.fillWidth: true
                     columns: 2
                     Repeater {
                         model: [
-                            {name: "RC_MAP_ARM_SW", label: qsTr("解锁开关通道")},
-                            {name: "RC_MAP_GEAR_SW", label: qsTr("起落架开关通道")},
-                            {name: "RC_MAP_KILL_SW", label: qsTr("紧急停机开关通道")},
-                            {name: "RC_MAP_LOITER_SW", label: qsTr("悬停开关通道")},
-                            {name: "RC_MAP_OFFB_SW", label: qsTr("外部控制开关通道")},
-                            {name: "RC_MAP_RETURN_SW", label: qsTr("返航开关通道")}
+                            {name: "RC_MAP_ARM_SW", label: qsTr("Arming Switch Channel")},
+                            {name: "RC_MAP_GEAR_SW", label: qsTr("Landing Gear Switch Channel")},
+                            {name: "RC_MAP_KILL_SW", label: qsTr("Kill Switch Channel")},
+                            {name: "RC_MAP_LOITER_SW", label: qsTr("Hold Switch Channel")},
+                            {name: "RC_MAP_OFFB_SW", label: qsTr("Offboard Switch Channel")},
+                            {name: "RC_MAP_RETURN_SW", label: qsTr("Return Switch Channel")}
                         ]
                         RowLayout {
                             required property var modelData

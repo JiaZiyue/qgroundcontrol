@@ -164,6 +164,10 @@ QGCApplication::QGCApplication(int& argc, char* argv[], const QGCCommandLinePars
                                                                   true);
     }
 
+    if (!_runningUnitTests && !settings.contains(AppSettings::qLocaleLanguageName)) {
+        settings.setValue(AppSettings::qLocaleLanguageName, static_cast<int>(QLocale::Chinese));
+    }
+
     // We need to set language as early as possible prior to loading on JSON files.
     setLanguage();
 
@@ -197,8 +201,8 @@ void QGCApplication::setLanguage()
     removeTranslator(JsonParsing::translator());
     removeTranslator(&_qgcTranslatorSourceCode);
     removeTranslator(&_qgcTranslatorQtLibs);
+    QLocale::setDefault(_locale);
     if (_locale.name() != "en_US") {
-        QLocale::setDefault(_locale);
         if (_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
             installTranslator(&_qgcTranslatorQtLibs);
         } else {

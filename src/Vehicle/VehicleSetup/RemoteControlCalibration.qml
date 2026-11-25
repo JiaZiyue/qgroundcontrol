@@ -39,14 +39,14 @@ ColumnLayout {
                 Layout.fillWidth: true
                 spacing: ScreenTools.defaultFontPixelHeight
 
-                QGCLabel { text: qsTr("姿态控制") }
+                QGCLabel { text: qsTr("Attitude Controls") }
 
                 Repeater {
                     model: [
-                        { name: qsTr("俯仰"),      mapped: controller.pitchChannelMapped,      value: controller.adjustedPitchChannelValue,      deadband: controller.pitchDeadband },
-                        { name: qsTr("横滚"),       mapped: controller.rollChannelMapped,       value: controller.adjustedRollChannelValue,       deadband: controller.rollDeadband },
-                        { name: qsTr("偏航"),        mapped: controller.yawChannelMapped,        value: controller.adjustedYawChannelValue,        deadband: controller.yawDeadband },
-                        { name: qsTr("油门"),   mapped: controller.throttleChannelMapped,   value: controller.adjustedThrottleChannelValue,   deadband: controller.throttleDeadband }
+                        { name: qsTr("Pitch"),      mapped: controller.pitchChannelMapped,      value: controller.adjustedPitchChannelValue,      deadband: controller.pitchDeadband },
+                        { name: qsTr("Roll"),       mapped: controller.rollChannelMapped,       value: controller.adjustedRollChannelValue,       deadband: controller.rollDeadband },
+                        { name: qsTr("Yaw"),        mapped: controller.yawChannelMapped,        value: controller.adjustedYawChannelValue,        deadband: controller.yawDeadband },
+                        { name: qsTr("Throttle"),   mapped: controller.throttleChannelMapped,   value: controller.adjustedThrottleChannelValue,   deadband: controller.throttleDeadband }
                     ]
 
                     RowLayout {
@@ -77,8 +77,8 @@ ColumnLayout {
 
                 Repeater {
                     model: [
-                        { name: qsTr("俯仰"),  extensionEnabled: controller.pitchExtensionEnabled, mapped: controller.pitchExtensionChannelMapped, value: controller.adjustedPitchExtensionChannelValue,   deadband: controller.pitchExtensionDeadband },
-                        { name: qsTr("横滚"),   extensionEnabled: controller.rollExtensionEnabled,  mapped: controller.rollExtensionChannelMapped,  value: controller.adjustedRollExtensionChannelValue,    deadband: controller.rollExtensionDeadband },
+                        { name: qsTr("Pitch"),  extensionEnabled: controller.pitchExtensionEnabled, mapped: controller.pitchExtensionChannelMapped, value: controller.adjustedPitchExtensionChannelValue,   deadband: controller.pitchExtensionDeadband },
+                        { name: qsTr("Roll"),   extensionEnabled: controller.rollExtensionEnabled,  mapped: controller.rollExtensionChannelMapped,  value: controller.adjustedRollExtensionChannelValue,    deadband: controller.rollExtensionDeadband },
                     ]
 
                     RowLayout {
@@ -173,7 +173,7 @@ ColumnLayout {
 
                         QGCComboBox {
                             id: transmitterModeComboBox
-                            model: [ qsTr("模式 1"), qsTr("模式 2"), qsTr("模式 3"), qsTr("模式 4") ]
+                            model: [ qsTr("Mode 1"), qsTr("Mode 2"), qsTr("Mode 3"), qsTr("Mode 4") ]
                             enabled: !controller.calibrating
 
                             onActivated: (index) => controller.transmitterMode = index + 1
@@ -183,7 +183,7 @@ ColumnLayout {
 
                         QGCCheckBox {
                             id: centeredThrottleCheckBox
-                            text: qsTr("油门自动回中")
+                            text: qsTr("Self-centering throttle")
                             checked: controller.centeredThrottle
                             enabled: !controller.calibrating
                             visible: !controller.joystickMode
@@ -253,7 +253,7 @@ ColumnLayout {
 
         QGCButton {
             id: cancelButton
-            text: qsTr("取消")
+            text: qsTr("Cancel")
             onClicked: controller.cancelButtonClicked()
         }
 
@@ -266,10 +266,10 @@ ColumnLayout {
         QGCButton {
             id: nextButton
             primary: true
-            text: qsTr("开始校准")
+            text: qsTr("Start Calibration")
 
             onClicked: {
-                if (text === qsTr("开始校准")) {
+                if (!controller.calibrating) {
                     if (controller.channelCount < controller.minChannelCount) {
                         let errorMessage = ""
                         let title = ""

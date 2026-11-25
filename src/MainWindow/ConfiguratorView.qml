@@ -97,7 +97,7 @@ Rectangle {
                         iconName: "dashboard"
                         objectName: "sidebar_dashboard"
                         primary: !root.settingsSelected && !root.sensorsSelected && !root.parametersSelected && root.extraPage === ""
-                        text: qsTr("仪表盘")
+                        text: qsTr("Dashboard")
 
                         onClicked: {
                             if (root.navigationHost.allowViewSwitch()) {
@@ -114,7 +114,7 @@ Rectangle {
                         iconName: "settings"
                         objectName: "sidebar_settings"
                         primary: root.settingsSelected
-                        text: qsTr("设置")
+                        text: qsTr("Settings")
 
                         onClicked: {
                             if (root.navigationHost.allowViewSwitch()) {
@@ -131,7 +131,7 @@ Rectangle {
                         iconName: "sensors"
                         objectName: "sidebar_sensors"
                         primary: root.sensorsSelected
-                        text: qsTr("传感器")
+                        text: qsTr("Sensors")
 
                         onClicked: {
                             if (root.navigationHost.allowViewSwitch()) {
@@ -148,7 +148,7 @@ Rectangle {
                         iconName: "parameters"
                         objectName: "sidebar_parameters"
                         primary: root.parametersSelected
-                        text: qsTr("参数")
+                        text: qsTr("Parameters")
 
                         onClicked: {
                             if (root.navigationHost.allowViewSwitch()) {
@@ -164,27 +164,27 @@ Rectangle {
                         model: [
                             {
                                 key: "messages",
-                                title: qsTr("消息")
+                                title: qsTr("Messages")
                             },
                             {
                                 key: "mission",
-                                title: qsTr("航线")
+                                title: qsTr("Mission")
                             },
                             {
                                 key: "logs",
-                                title: qsTr("日志")
+                                title: qsTr("Logs")
                             },
                             {
                                 key: "waveforms",
-                                title: qsTr("波形")
+                                title: qsTr("Plots")
                             },
                             {
                                 key: "firmware",
-                                title: qsTr("固件")
+                                title: qsTr("Firmware")
                             },
                             {
                                 key: "hardware",
-                                title: qsTr("硬件")
+                                title: qsTr("Hardware")
                             }
                         ]
 
@@ -218,7 +218,7 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth: true
-                        text: qsTr("全部工具")
+                        text: qsTr("All Tools")
                     small: true
                     leftPadding: ScreenTools.defaultFontPixelWidth / 2
                     rightPadding: leftPadding
@@ -240,7 +240,7 @@ Rectangle {
 
                 QGCButton {
                     objectName: "toolbar_qgcLogo"
-                    text: qsTr("QGroundControl 地面站")
+                    text: qsTr("QGroundControl Ground Station")
 
                     onClicked: root.toolsRequested()
                 }
@@ -250,21 +250,21 @@ Rectangle {
                 }
 
                 QGCButton {
-                    text: qgcPal.globalTheme === QGCPalette.Light ? qsTr("深色") : qsTr("浅色")
+                    text: qgcPal.globalTheme === QGCPalette.Light ? qsTr("Dark") : qsTr("Light")
 
                     onClicked: QGroundControl.settingsManager.appSettings.indoorPalette.rawValue = qgcPal.globalTheme === QGCPalette.Light
                 }
 
                 QGCButton {
                     objectName: "configurator_reboot"
-                    text: qsTr("重启飞控")
+                    text: qsTr("Restart Flight Controller")
                     enabled: root._vehicle && !root._vehicle.armed
                         && !root._vehicle.vehicleLinkManager.communicationLost
 
                     onClicked: {
                         const vehicle = root._vehicle;
-                        QGroundControl.showMessageDialog(root, qsTr("重启飞控"),
-                            qsTr("确定重启当前飞控吗？重启期间连接会暂时中断。"),
+                        QGroundControl.showMessageDialog(root, qsTr("Restart Flight Controller"),
+                            qsTr("Restart the flight controller? The connection will be interrupted during the restart."),
                             Dialog.Cancel | Dialog.Ok, function() {
                                 if (vehicle && vehicle === root._vehicle && !vehicle.armed
                                         && !vehicle.vehicleLinkManager.communicationLost) {
@@ -362,7 +362,7 @@ Rectangle {
                 }
 
                 QGCLabel {
-                    text: root._vehicle ? qsTr("飞机 %1 · %2 · %3 msg/s").arg(root._vehicle.id).arg(root._vehicle.firmwareTypeString).arg(root._receiveRate) : qsTr("未连接")
+                    text: root._vehicle ? qsTr("Vehicle %1 · %2 · %3 msg/s").arg(root._vehicle.id).arg(root._vehicle.firmwareTypeString).arg(root._receiveRate) : qsTr("Not Connected")
                 }
             }
         }

@@ -18,6 +18,7 @@ QGCMAVLinkMessage::QGCMAVLinkMessage(const mavlink_message_t &message, const QSt
     , _instanceValue(instanceValue)
 {
     qCDebug(MAVLinkMessageLog) << this;
+    _lastReceived.start();
 
     const mavlink_message_info_t* const msgInfo = MAVLinkMessageInfo::byId(message.msgid);
     if (!msgInfo) {
@@ -200,6 +201,12 @@ void QGCMAVLinkMessage::updateFieldSelection()
 
 void QGCMAVLinkMessage::updateFreq()
 {
+    constexpr int recentDataTimeoutMs = 5000;  // Also allow the PX4 0.5 Hz distance stream.
+    if (_recentData && _lastReceived.hasExpired(recentDataTimeoutMs)) {
+        _recentData = false;
+        emit recentDataChanged();
+    }
+
     const quint64 msgCount = _count - _lastCount;
     const qreal lastRateHz = _actualRateHz;
     _actualRateHz = (0.2 * _actualRateHz) + (0.8 * msgCount);
@@ -230,10 +237,15 @@ void QGCMAVLinkMessage::update(const mavlink_message_t &message)
 {
     _count++;
     _message = message;
+    _lastReceived.restart();
 
     if (_selected || _fieldSelected) {
         // Don't update field info unless selected to reduce perf hit of message processing
         _updateFields();
+    }
+    if (!_recentData) {
+        _recentData = true;
+        emit recentDataChanged();
     }
     emit countChanged();
 }

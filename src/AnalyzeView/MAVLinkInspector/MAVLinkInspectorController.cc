@@ -1,5 +1,6 @@
 #include "MAVLinkInspectorController.h"
 #include "MAVLinkChartController.h"
+#include "MAVLinkLib.h"
 #include "MAVLinkMessage.h"
 #include "MAVLinkProtocol.h"
 #include "MAVLinkSystem.h"
@@ -41,6 +42,14 @@ MAVLinkInspectorController::MAVLinkInspectorController(QObject *parent)
     (void) connect(multiVehicleManager, &MultiVehicleManager::vehicleAdded,   this, &MAVLinkInspectorController::_vehicleAdded);
     (void) connect(multiVehicleManager, &MultiVehicleManager::vehicleRemoved, this, &MAVLinkInspectorController::_vehicleRemoved);
     (void) connect(multiVehicleManager, &MultiVehicleManager::activeVehicleChanged, this, &MAVLinkInspectorController::_setActiveVehicle);
+
+    const QmlObjectListModel* const vehicles = multiVehicleManager->vehicles();
+    for (int i = 0; i < vehicles->count(); ++i) {
+        if (auto* const vehicle = vehicles->value<Vehicle*>(i)) {
+            _vehicleAdded(vehicle);
+        }
+    }
+    _setActiveVehicle(multiVehicleManager->activeVehicle());
 
     MAVLinkProtocol *const mavlinkProtocol = MAVLinkProtocol::instance();
     (void) connect(mavlinkProtocol, &MAVLinkProtocol::messageReceived, this, &MAVLinkInspectorController::_receiveMessage);
@@ -188,6 +197,10 @@ void MAVLinkInspectorController::_vehicleRemoved(const Vehicle *vehicle)
         return;
     }
 
+    if (_activeSystem == system) {
+        _activeSystem = nullptr;
+        emit activeSystemChanged();
+    }
     system->deleteLater();
     (void) _systems->removeOne(system);
 
@@ -278,14 +291,38 @@ uint8_t MAVLinkInspectorController::_selectedComponentID() const
     return (msg ? msg->compId() : 0);
 }
 
-void MAVLinkInspectorController::requestRawImu(int instance) const
+int MAVLinkInspectorController::autopilotComponentId(Vehicle* vehicle) const
 {
-    Vehicle* const vehicle = MultiVehicleManager::instance()->activeVehicle();
-    if (!vehicle || instance < 0 || instance > 2) {
+    return vehicle && vehicle->defaultComponentId() > MAV_COMP_ID_ALL
+        ? vehicle->defaultComponentId()
+        : MAV_COMP_ID_AUTOPILOT1;
+}
+
+void MAVLinkInspectorController::requestSensorData(Vehicle* vehicle, const QString& page, int imuInstance) const
+{
+    if (!vehicle) {
         return;
     }
-    const uint16_t messageId = instance == 0   ? MAVLINK_MSG_ID_HIGHRES_IMU
-                               : instance == 1 ? MAVLINK_MSG_ID_SCALED_IMU2
-                                               : MAVLINK_MSG_ID_SCALED_IMU3;
-    vehicle->setMessageRate(MAV_COMP_ID_AUTOPILOT1, messageId, 10);
+
+    uint16_t messageId;
+    int rate = 10;
+    if (page == QLatin1String("imu") || page == QLatin1String("compass")) {
+        constexpr uint16_t imuMessageIds[] = {
+            MAVLINK_MSG_ID_HIGHRES_IMU, MAVLINK_MSG_ID_SCALED_IMU2, MAVLINK_MSG_ID_SCALED_IMU3
+        };
+        if (imuInstance < 0 || imuInstance >= 3) {
+            return;
+        }
+        messageId = page == QLatin1String("compass") && imuInstance == 0 && vehicle->apmFirmware()
+            ? MAVLINK_MSG_ID_SCALED_IMU : imuMessageIds[imuInstance];
+    } else if (page == QLatin1String("flow")) {
+        messageId = vehicle->apmFirmware() ? MAVLINK_MSG_ID_OPTICAL_FLOW : MAVLINK_MSG_ID_OPTICAL_FLOW_RAD;
+        rate = 5;
+    } else if (page == QLatin1String("range")) {
+        messageId = MAVLINK_MSG_ID_DISTANCE_SENSOR;
+        rate = 5;
+    } else {
+        return;
+    }
+    vehicle->setMessageRate(autopilotComponentId(vehicle), messageId, rate);
 }

@@ -184,7 +184,7 @@ AnalyzePage {
                 QGCButton {
                     objectName: "logViewer_removeChart"
                     text: "−"
-                    Accessible.name: qsTr("移除图表")
+                    Accessible.name: qsTr("Remove chart")
                     enabled: additionalCharts > 0
                     onClicked: additionalCharts--
                 }
@@ -192,7 +192,7 @@ AnalyzePage {
                 QGCButton {
                     objectName: "logViewer_addChart"
                     text: "+"
-                    Accessible.name: qsTr("添加图表")
+                    Accessible.name: qsTr("Add chart")
                     enabled: isFirmwareLog && additionalCharts < 2
                     onClicked: additionalCharts++
                 }
@@ -618,7 +618,7 @@ AnalyzePage {
                 title: qsTr("Select log file")
                 folder: QGroundControl.settingsManager.appSettings.logSavePath
                 selectFolder: false
-                nameFilters: [qsTr("日志文件 (*.bin *.BIN *.log *.LOG *.ulg *.ULG *.tlog *.TLOG)")]
+                nameFilters: [qsTr("Log files (*.bin *.BIN *.log *.LOG *.ulg *.ULG *.tlog *.TLOG)")]
 
                 onAcceptedForLoad: (file) => {
                     const fileLower = file.toLowerCase()
@@ -647,7 +647,7 @@ AnalyzePage {
                     } else if (fileLower.endsWith(".ulg") || fileLower.endsWith(".bin") || fileLower.endsWith(".log")) {
                         loadBinFile(file)
                     } else {
-                        QGroundControl.showMessageDialog(logViewerPage, qsTr("Log Viewer"), qsTr("不支持的日志文件类型。请选择 .bin、.log、.ulg 或 .tlog 文件。"))
+                        QGroundControl.showMessageDialog(logViewerPage, qsTr("Log Viewer"), qsTr("Unsupported log type. Select a .bin, .log, .ulg or .tlog file."))
                     }
                     close()
                 }

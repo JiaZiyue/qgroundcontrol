@@ -88,6 +88,14 @@
     "units":            "vertical m"
 },
 {
+    "name":             "rangeFinderDist",
+    "shortDesc":        "Rangefinder Distance",
+    "type":             "float",
+    "default":          null,
+    "decimalPlaces":    2,
+    "units":            "m"
+},
+{
     "name":             "flightDistance",
     "shortDesc": "Flight Distance",
     "type":             "double",

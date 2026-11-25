@@ -14,7 +14,7 @@ SetupPage {
     readonly property string _unknownImage:     "qrc:/qmlimages/Airframe/AirframeUnknown.svg"
     // Keys match AirframeType::category
     readonly property var _categoryKeys:        [ "", "Copter", "Plane", "VTOL", "Rover", "Other" ]
-    readonly property var _categoryLabels:      [ qsTr("全部"), qsTr("旋翼机"), qsTr("固定翼"), qsTr("垂直起降"), qsTr("地面车"), qsTr("其他") ]
+    readonly property var _categoryLabels:      [ qsTr("All"), qsTr("Rotorcraft"), qsTr("Fixed Wing"), qsTr("VTOL"), qsTr("Rover"), qsTr("Other") ]
     readonly property real _cardWidth:          ScreenTools.defaultFontPixelWidth * 22
     readonly property real _detailPanelWidth:   ScreenTools.defaultFontPixelWidth * 40
     // The airframe picker sits beside the cards when two card columns and the picker fit, otherwise it stacks below
@@ -42,13 +42,13 @@ SetupPage {
         return type ? Math.max(_categoryKeys.indexOf(type.category), 0) : 0
     }
 
-    function chineseAirframeName(name) {
+    function displayAirframeName(name) {
         const names = {
-            "Quadrotor x": "四旋翼 X 型", "Quadrotor +": "四旋翼十字型", "Quadrotor H": "四旋翼 H 型",
-            "Hexarotor +": "六旋翼十字型", "Hexarotor x": "六旋翼 X 型", "Hexarotor Coaxial": "六旋翼共轴型",
-            "Octorotor +": "八旋翼十字型", "Octorotor x": "八旋翼 X 型", "Octorotor Coaxial": "八旋翼共轴型",
-            "Dodecarotor cox": "十二旋翼共轴型", "Helicopter": "直升机", "Tricopter Y+": "三旋翼 Y 型",
-            "Generic Quadcopter": "通用四旋翼", "Generic 250 Racer": "通用 250 竞速机"
+            "Quadrotor x": qsTr("Quadrotor x"), "Quadrotor +": qsTr("Quadrotor +"), "Quadrotor H": qsTr("Quadrotor H"),
+            "Hexarotor +": qsTr("Hexarotor +"), "Hexarotor x": qsTr("Hexarotor x"), "Hexarotor Coaxial": qsTr("Hexarotor Coaxial"),
+            "Octorotor +": qsTr("Octorotor +"), "Octorotor x": qsTr("Octorotor x"), "Octorotor Coaxial": qsTr("Octorotor Coaxial"),
+            "Dodecarotor cox": qsTr("Dodecarotor cox"), "Helicopter": qsTr("Helicopter"), "Tricopter Y+": qsTr("Tricopter Y+"),
+            "Generic Quadcopter": qsTr("Generic Quadcopter"), "Generic 250 Racer": qsTr("Generic 250 Racer")
         };
         return names[name] || name;
     }
@@ -99,12 +99,12 @@ SetupPage {
                 width:      parent.width * 0.5
                 height:     ScreenTools.defaultFontPixelHeight * 4
                 wrapMode:   Text.WordWrap
-                text:       qsTr("当前飞控使用自定义机架配置。") +
-                            qsTr("此配置只能通过参数编辑器修改。\n\n") +
-                            qsTr("如需恢复并选择标准机架配置，请点击下方“重置”。")
+                text:       qsTr("The flight controller is using a custom airframe configuration.") +
+                            qsTr("This configuration can only be changed in the parameter editor.\n\n") +
+                            qsTr("To restore a standard airframe configuration, select Reset below.")
             }
             QGCButton {
-                text:       qsTr("重置")
+                text:       qsTr("Reset")
                 enabled:    sys_autostart
                 anchors.horizontalCenter: parent.horizontalCenter
                 property Fact sys_autostart: controller.getParameterFact(-1, "SYS_AUTOSTART")
@@ -157,7 +157,7 @@ SetupPage {
                         spacing:            ScreenTools.defaultFontPixelHeight * 0.25
 
                         QGCLabel {
-                            text:                   qsTr("当前机架")
+                            text:                   qsTr("Current Airframe")
                             font.pointSize:         ScreenTools.smallFontPointSize
                             font.bold:              true
                             font.capitalization:    Font.AllUppercase
@@ -169,7 +169,7 @@ SetupPage {
                             wrapMode:           Text.WordWrap
                             font.bold:          true
                             font.pointSize:     ScreenTools.largeFontPointSize
-                            text:               airframePage._currentType ? airframePage.chineseAirframeName(controller.currentVehicleName) : qsTr("尚未设置机架")
+                            text:               airframePage._currentType ? airframePage.displayAirframeName(controller.currentVehicleName) : qsTr("No airframe configured")
                         }
 
                         QGCLabel {
@@ -178,8 +178,8 @@ SetupPage {
                             font.family:        airframePage._currentType ? ScreenTools.fixedFontFamily : ScreenTools.normalFontFamily
                             color:              qgcPal.textSecondary
                             text:               airframePage._currentType ?
-                                                    qsTr("SYS_AUTOSTART %1 - %2").arg(controller.currentAutostartId).arg(airframePage.chineseAirframeName(controller.currentAirframeType)) :
-                                                    qsTr("请先选择下方机架类型，再选择具体机型。")
+                                                    qsTr("SYS_AUTOSTART %1 - %2").arg(controller.currentAutostartId).arg(airframePage.displayAirframeName(controller.currentAirframeType)) :
+                                                    qsTr("Select an airframe type below, then select a model.")
                         }
                     }
                 }
@@ -190,7 +190,7 @@ SetupPage {
                     objectName:         "airframe_filter"
                     filterLabels:       airframePage._categoryLabels
                     filterIndex:        airframePage._categoryIndex
-                    summary:            qsTr("显示 %1 / %2 种机架类型。").arg(airframePage._visibleTypes.length).arg(controller.airframeTypes.length)
+                    summary:            qsTr("Showing %1 of %2 airframe types.").arg(airframePage._visibleTypes.length).arg(controller.airframeTypes.length)
                     onFilterActivated:  (index) => { airframePage._categoryIndex = index }
                 }
             }
@@ -209,7 +209,7 @@ SetupPage {
                         Layout.fillWidth:   true
                         color:              qgcPal.textSecondary
                         visible:            airframePage._visibleTypes.length === 0
-                        text:               qsTr("没有匹配的机架类型。")
+                        text:               qsTr("No matching airframe types.")
                     }
 
                     QGCFlickable {
@@ -270,7 +270,7 @@ SetupPage {
                                             QGCChip {
                                                 x:          _margins
                                                 y:          _margins
-                                                text:       qsTr("当前")
+                                                text:       qsTr("Current")
                                                 textColor:  qgcPal.colorGreen
                                                 visible:    card.modelData.name === controller.currentAirframeType
                                             }
@@ -280,14 +280,14 @@ SetupPage {
                                             Layout.fillWidth:   true
                                             elide:              Text.ElideRight
                                             font.bold:          true
-                                            text:               airframePage.chineseAirframeName(card.modelData.name)
+                                            text:               airframePage.displayAirframeName(card.modelData.name)
                                         }
 
                                         QGCLabel {
                                             color:          qgcPal.textSecondary
                                             font.pointSize: ScreenTools.smallFontPointSize
                                             text:           airframePage._categoryLabel(card.modelData.category) + " - " +
-                                                            qsTr("%n 个机型", "", card.modelData.airframes.length)
+                                                            qsTr("%n model(s)", "", card.modelData.airframes.length)
                                         }
                                     }
                                 }
@@ -314,7 +314,7 @@ SetupPage {
                         wrapMode:               Text.WordWrap
                         font.bold:              true
                         font.capitalization:    Font.AllUppercase
-                        text:                   airframePage._selectedType ? airframePage.chineseAirframeName(airframePage._selectedType.name) : qsTr("机架")
+                        text:                   airframePage._selectedType ? airframePage.displayAirframeName(airframePage._selectedType.name) : qsTr("Airframe")
                     }
 
                     QGCLabel {
@@ -323,8 +323,8 @@ SetupPage {
                         color:              qgcPal.textSecondary
                         text:               airframePage._selectedType ?
                                                 airframePage._categoryLabel(airframePage._selectedType.category) + " - " +
-                                                    qsTr("%n 个机型", "", airframePage._selectedType.airframes.length) :
-                                                qsTr("请选择机架类型，再选择机型。")
+                                                    qsTr("%n model(s)", "", airframePage._selectedType.airframes.length) :
+                                                qsTr("Select an airframe type, then select a model.")
                     }
 
                     QGCFlickable {
@@ -378,11 +378,11 @@ SetupPage {
                                         QGCLabel {
                                             Layout.fillWidth:   true
                                             wrapMode:           Text.WordWrap
-                                            text:               airframePage.chineseAirframeName(option.modelData.text)
+                                            text:               airframePage.displayAirframeName(option.modelData.text)
                                         }
 
                                         QGCChip {
-                                            text:       qsTr("当前")
+                                            text:       qsTr("Current")
                                             textColor:  qgcPal.colorGreen
                                             visible:    option.autostartId === controller.currentAutostartId
                                         }
@@ -405,10 +405,10 @@ SetupPage {
                         wrapMode:           Text.WordWrap
                         color:              airframePage._pendingAirframe ? qgcPal.warningText : qgcPal.textSecondary
                         text:               airframePage._pendingAirframe ?
-                                                qsTr("已选择：%1（%2）。点击“应用并重启”更改机架。")
+                                                qsTr("Selected: %1 (%2). Select Apply and Restart to change the airframe.")
                                                     .arg(airframePage._pendingAirframe.text)
                                                     .arg(airframePage._pendingAirframe.autostartId) :
-                                                qsTr("请选择机型，然后点击“应用并重启”。")
+                                                qsTr("Select a model, then select Apply and Restart.")
                     }
 
                     RowLayout {
@@ -421,18 +421,18 @@ SetupPage {
 
                         QGCButton {
                             objectName: "airframeSetup_discardButton"
-                            text:       qsTr("放弃修改")
+                            text:       qsTr("Discard Changes")
                             visible:    airframePage._pendingAirframe !== null
                             onClicked:  airframePage._clearPending()
                         }
 
                         QGCButton {
                             objectName: "airframeSetup_applyButton"
-                            text:       qsTr("应用并重启")
+                            text:       qsTr("Apply and Restart")
                             primary:    true
                             visible:    airframePage._pendingAirframe !== null
-                            onClicked:  QGroundControl.showMessageDialog(airframePage, qsTr("应用并重启"),
-                                                                         qsTr("点击“应用”将保存机架配置修改。<br><br>除遥控器校准外，所有飞控参数都将重置。<br><br>飞控将重新启动以完成设置。"),
+                            onClicked:  QGroundControl.showMessageDialog(airframePage, qsTr("Apply and Restart"),
+                                                                         qsTr("Select Apply to save the new airframe configuration.<br><br>All flight controller parameters except radio calibration will be reset.<br><br>The flight controller will restart to finish setup."),
                                                                          Dialog.Apply | Dialog.Cancel,
                                                                          function() { controller.changeAutostart() })
                         }
