@@ -86,7 +86,7 @@ ColumnLayout {
     }
 
     QGCLabel {
-        readonly property int sensorMask: ({ imu: 3, compass: 4, gps: 32, flow: 64, range: 256 })[root.selectedPage] || 0
+        readonly property int sensorMask: ({ imu: 3, compass: 4, gps: 32 })[root.selectedPage] || 0
         Layout.fillWidth: true
         Layout.leftMargin: ScreenTools.defaultFontPixelHeight
         Layout.rightMargin: ScreenTools.defaultFontPixelHeight

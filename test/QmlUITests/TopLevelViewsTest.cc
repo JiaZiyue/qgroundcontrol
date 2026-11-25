@@ -286,16 +286,21 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             QVERIFY(clickButton(QStringLiteral("sidebar_sensors")));
             QQuickItem* const accelerationPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_acceleration"));
             QVERIFY(accelerationPlot);
+            QQuickItem* const gyroPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_gyroscope"));
+            QVERIFY(gyroPlot);
             mavlink_highres_imu_t imu{};
             imu.xacc = 1.25F;
             imu.yacc = -0.5F;
             imu.zacc = 9.8F;
-            imu.fields_updated = 0x07;
+            imu.xgyro = 0.5F;
+            imu.xmag = 0.25F;
+            imu.fields_updated = 0x01FF;
             mavlink_message_t imuMessage{};
             mavlink_msg_highres_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
                                                 &imuMessage, &imu);
             mockLink->respondWithMavlinkMessage(imuMessage);
             QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
+            QTRY_VERIFY_WITH_TIMEOUT(gyroPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
             if (qEnvironmentVariableIsSet("QGC_REFERENCE_CAPTURE")) {
                 _window->grabWindow().save(qEnvironmentVariable("QGC_REFERENCE_CAPTURE") +
                                            QStringLiteral("-sensors.png"));
@@ -305,11 +310,40 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             QCOMPARE(accelerationPlot->property("sampleCount").toInt(), 0);
             QVERIFY(accelerationPlot->setProperty("paused", false));
             QTRY_VERIFY_WITH_TIMEOUT(accelerationPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
-            for (const QString& page : {QStringLiteral("compass"), QStringLiteral("gps"), QStringLiteral("vision")}) {
-                QVERIFY(clickButton(QStringLiteral("configurator_tab_") + page));
+            QVERIFY(clickButton(QStringLiteral("configurator_tab_compass")));
+            QQuickItem* const magPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_magnetic_field"));
+            QVERIFY(magPlot);
+            mavlink_message_t magMessage{};
+            if (px4) {
+                mavlink_msg_highres_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                    &magMessage, &imu);
+            } else {
+                mavlink_scaled_imu_t scaledImu{};
+                scaledImu.xmag = 250;
+                mavlink_msg_scaled_imu_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                   &magMessage, &scaledImu);
             }
+            mockLink->respondWithMavlinkMessage(magMessage);
+            QTRY_VERIFY_WITH_TIMEOUT(magPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
 
+            QVERIFY(clickButton(QStringLiteral("configurator_tab_gps")));
+            QQuickItem* const gpsPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_satellites"));
+            QVERIFY(gpsPlot);
+            mavlink_gps_raw_int_t gps{};
+            gps.fix_type = GPS_FIX_TYPE_3D_FIX;
+            gps.satellites_visible = 12;
+            mavlink_message_t gpsMessage{};
+            mavlink_msg_gps_raw_int_encode_chan(vehicle->id(), MAV_COMP_ID_AUTOPILOT1, mockLink->mavlinkChannel(),
+                                                &gpsMessage, &gps);
+            mockLink->respondWithMavlinkMessage(gpsMessage);
+            QTRY_COMPARE_WITH_TIMEOUT(satellites->rawValue().toInt(), 12, TestTimeout::mediumMs());
+            QTRY_VERIFY_WITH_TIMEOUT(gpsPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
+            QVERIFY(clickButton(QStringLiteral("configurator_tab_vision")));
+
+            const int beforeFlow = mockLink->receivedMavCommandCount(MAV_CMD_SET_MESSAGE_INTERVAL);
             QVERIFY(clickButton(QStringLiteral("configurator_tab_flow")));
+            QTRY_VERIFY_WITH_TIMEOUT(mockLink->receivedMavCommandCount(MAV_CMD_SET_MESSAGE_INTERVAL) > beforeFlow,
+                                     TestTimeout::mediumMs());
             QQuickItem* const flowPlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_optical_flow"));
             QVERIFY(flowPlot);
             mavlink_message_t flowMessage{};
@@ -332,7 +366,10 @@ void TopLevelViewsTest::_testDashboardVehicleLifetime()
             mockLink->respondWithMavlinkMessage(flowMessage);
             QTRY_VERIFY_WITH_TIMEOUT(flowPlot->property("sampleCount").toInt() > 0, TestTimeout::mediumMs());
 
+            const int beforeRange = mockLink->receivedMavCommandCount(MAV_CMD_SET_MESSAGE_INTERVAL);
             QVERIFY(clickButton(QStringLiteral("configurator_tab_range")));
+            QTRY_VERIFY_WITH_TIMEOUT(mockLink->receivedMavCommandCount(MAV_CMD_SET_MESSAGE_INTERVAL) > beforeRange,
+                                     TestTimeout::mediumMs());
             QQuickItem* const rangePlot = findVisibleItem(_rootItem, QStringLiteral("sensor_plot_rangefinder"));
             QVERIFY(rangePlot);
             QVERIFY(std::isnan(vehicle->rangeFinderDist()->rawValue().toDouble()));

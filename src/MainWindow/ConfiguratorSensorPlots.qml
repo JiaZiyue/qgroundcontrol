@@ -15,7 +15,10 @@ ColumnLayout {
     required property string page
     readonly property var gps: vehicle ? (gpsIndex === 0 ? vehicle.gps : vehicle.gps2) : null
 
-    readonly property int _autopilotComponent: MAVLinkEnums.MAV_COMP_ID_AUTOPILOT1
+    readonly property int _autopilotComponent: inspector.autopilotComponentId(vehicle)
+    readonly property bool _connected: vehicle && !vehicle.vehicleLinkManager.communicationLost
+    readonly property bool _usesMessages: page === "imu" || page === "compass" || page === "flow"
+    readonly property bool _canRequest: _usesMessages || page === "range"
     readonly property var _scaledImuIds: [26, 116, 129]
     readonly property int _rawImuId: 27
     readonly property int _highresImuId: 105
@@ -33,9 +36,17 @@ ColumnLayout {
     readonly property var _targetMessage: page === "flow" ? _flowMessage
         : page === "imu" ? _imuMessage : page === "compass" ? _magMessage : null
 
-    function requestImu() {
-        if (visible && vehicle && page === "imu") {
-            inspector.requestRawImu(imuIndex)
+    function requestData() {
+        if (visible && _connected && _canRequest) {
+            inspector.requestSensorData(vehicle, page, imuIndex)
+        }
+    }
+
+    function requestMissingData() {
+        const hasDistance = page === "range" && vehicle
+            && isFinite(Number(vehicle.rangeFinderDist.rawValue))
+        if (!_targetMessage && !hasDistance) {
+            requestData()
         }
     }
 
@@ -51,13 +62,13 @@ ColumnLayout {
     }
 
     function findMessage(messageId, componentId, instance) {
-        if (!_system) {
+        if (!_system || !_connected) {
             return null
         }
         const messages = _system.messages
         for (let index = 0; index < messages.count; ++index) {
             const candidate = messages.get(index)
-            if (candidate && candidate.id === messageId
+            if (candidate && candidate.id === messageId && candidate.recentData
                     && (componentId === undefined || candidate.compId === componentId)
                     && (instance === undefined || candidate.instanceValue === instance)) {
                 return candidate
@@ -151,17 +162,18 @@ ColumnLayout {
     }
 
     on_TargetMessageChanged: Qt.callLater(selectTargetMessage)
-    onImuIndexChanged: Qt.callLater(requestImu)
-    onPageChanged: Qt.callLater(requestImu)
-    onVehicleChanged: Qt.callLater(requestImu)
+    onImuIndexChanged: Qt.callLater(requestMissingData)
+    onPageChanged: Qt.callLater(requestMissingData)
+    onVehicleChanged: Qt.callLater(requestMissingData)
+    on_ConnectedChanged: Qt.callLater(requestMissingData)
     onVisibleChanged: {
         Qt.callLater(selectTargetMessage)
-        Qt.callLater(requestImu)
+        Qt.callLater(requestMissingData)
     }
 
     Component.onCompleted: {
         Qt.callLater(selectTargetMessage)
-        Qt.callLater(requestImu)
+        Qt.callLater(requestMissingData)
     }
 
     MAVLinkInspectorController {
@@ -170,13 +182,15 @@ ColumnLayout {
 
     RowLayout {
         Layout.fillWidth: true
-        visible: root.page === "imu" || root.page === "gps"
+        visible: root.page === "gps" || root._canRequest
 
         QGCLabel {
+            visible: root.page === "imu" || root.page === "gps"
             text: root.page === "imu" ? qsTr("Sensor Instance") : qsTr("GPS Receiver")
         }
 
         QGCComboBox {
+            visible: root.page === "imu" || root.page === "gps"
             model: root.page === "imu" ? ["IMU 1", "IMU 2", "IMU 3"] : ["GPS 1", "GPS 2"]
             currentIndex: root.page === "imu" ? root.imuIndex : root.gpsIndex
 
@@ -190,21 +204,33 @@ ColumnLayout {
         }
 
         QGCButton {
-            text: qsTr("Request IMU Data")
-            visible: root.page === "imu"
-            enabled: root.vehicle !== null
-            onClicked: root.requestImu()
+            text: root.page === "imu" ? qsTr("Request IMU Data") : qsTr("Request Sensor Data")
+            visible: root._canRequest
+            enabled: root._connected
+            onClicked: root.requestData()
         }
 
         QGCLabel {
             Layout.fillWidth: true
+            wrapMode: Text.WordWrap
             text: {
                 if (root.page === "gps") {
-                    return root.gps ? qsTr("Fix status: %1 · Satellites: %2")
-                        .arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString) : ""
+                    return root.gps && root.gps.telemetryAvailable ? qsTr("Fix status: %1 · Satellites: %2")
+                        .arg(root.gps.lock.enumOrValueString).arg(root.gps.count.valueString)
+                        : qsTr("Waiting for GPS data.")
                 }
-                if (root._imuMessage) {
-                    return qsTr("Receive rate: %1 Hz").arg(root._imuMessage.actualRateHz.toFixed(1))
+                if (root._targetMessage) {
+                    return qsTr("Receive rate: %1 Hz").arg(root._targetMessage.actualRateHz.toFixed(1))
+                }
+                if (root.page === "range") {
+                    return root.vehicle && isFinite(Number(root.vehicle.rangeFinderDist.rawValue)) ? ""
+                        : qsTr("Waiting for downward distance data (DISTANCE_SENSOR or RANGEFINDER).")
+                }
+                if (root.page === "flow") {
+                    return qsTr("Waiting for optical flow data (OPTICAL_FLOW_RAD or OPTICAL_FLOW).")
+                }
+                if (root.page === "compass") {
+                    return qsTr("Waiting for IMU magnetometer data.")
                 }
                 return qsTr("Waiting for raw IMU messages. Attitude angular rates alone do not indicate that raw IMU data has been received.")
             }
@@ -224,6 +250,7 @@ ColumnLayout {
         }
 
         ConfiguratorTelemetryPlot {
+            objectName: "sensor_plot_gyroscope"
             Layout.fillWidth: true
             Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 13
             series: root.imuSeries("gyro")
@@ -232,6 +259,7 @@ ColumnLayout {
     }
 
     ConfiguratorTelemetryPlot {
+        objectName: "sensor_plot_magnetic_field"
         Layout.fillWidth: true
         Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 13
         series: root.imuSeries("mag")
@@ -244,9 +272,10 @@ ColumnLayout {
         visible: root.page === "gps"
 
         ConfiguratorTelemetryPlot {
+            objectName: "sensor_plot_satellites"
             Layout.fillWidth: true
             Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 14
-            series: root.gps ? [
+            series: root.gps && root.gps.telemetryAvailable ? [
                 {
                     title: qsTr("Satellite Count"),
                     fact: root.gps.count

@@ -23953,6 +23953,26 @@ Source: %6 (session %7); destination: %8 (session %9)</source>
 <context>
     <name>ConfiguratorSensorPlots</name>
     <message>
+      <source>Request Sensor Data</source>
+      <translation type="unfinished"></translation>
+    </message>
+    <message>
+      <source>Waiting for GPS data.</source>
+      <translation type="unfinished"></translation>
+    </message>
+    <message>
+      <source>Waiting for downward distance data (DISTANCE_SENSOR or RANGEFINDER).</source>
+      <translation type="unfinished"></translation>
+    </message>
+    <message>
+      <source>Waiting for optical flow data (OPTICAL_FLOW_RAD or OPTICAL_FLOW).</source>
+      <translation type="unfinished"></translation>
+    </message>
+    <message>
+      <source>Waiting for IMU magnetometer data.</source>
+      <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/MainWindow/ConfiguratorSensorPlots.qml" line="104"/>
         <source>raw</source>
         <translation type="unfinished"></translation>

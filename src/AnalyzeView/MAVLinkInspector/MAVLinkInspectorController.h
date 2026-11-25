@@ -52,7 +52,8 @@ public:
 
     Q_INVOKABLE void setActiveSystem(quint32 systemId);
     Q_INVOKABLE void setMessageInterval(int32_t rate) const;
-    Q_INVOKABLE void requestRawImu(int instance) const;
+    Q_INVOKABLE int autopilotComponentId(Vehicle* vehicle) const;
+    Q_INVOKABLE void requestSensorData(Vehicle* vehicle, const QString& page, int imuInstance) const;
 
     QmlObjectListModel *systems() const { return _systems; }
     QGCMAVLinkSystem *activeSystem() const { return _activeSystem; }

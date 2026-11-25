@@ -24028,6 +24028,26 @@ Source: %6 (session %7); destination: %8 (session %9)</translation>
   <context>
     <name>ConfiguratorSensorPlots</name>
     <message>
+      <source>Request Sensor Data</source>
+      <translation>请求传感器数据</translation>
+    </message>
+    <message>
+      <source>Waiting for GPS data.</source>
+      <translation>等待 GPS 数据。</translation>
+    </message>
+    <message>
+      <source>Waiting for downward distance data (DISTANCE_SENSOR or RANGEFINDER).</source>
+      <translation>等待向下测距数据（DISTANCE_SENSOR 或 RANGEFINDER）。</translation>
+    </message>
+    <message>
+      <source>Waiting for optical flow data (OPTICAL_FLOW_RAD or OPTICAL_FLOW).</source>
+      <translation>等待光流数据（OPTICAL_FLOW_RAD 或 OPTICAL_FLOW）。</translation>
+    </message>
+    <message>
+      <source>Waiting for IMU magnetometer data.</source>
+      <translation>等待 IMU 磁力计数据。</translation>
+    </message>
+    <message>
       <location filename="../src/MainWindow/ConfiguratorSensorPlots.qml" line="104"/>
       <source>raw</source>
       <translation>原始值</translation>
